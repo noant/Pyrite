@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CustomRemote</string>
+    <string name="command_getAllCommands">getallcommands</string>
+    <string name="action_settings">__</string>
+    <string name="title_activity_change_address">ChangeAddressActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="address_parse_error">Неверный адрес</string>
+    <string name="address_parse_ok">Данные успешно изменены</string>
+    <string name="ok">Ввод</string>
+    <string name="settings">Настройки</string>
+</resources>

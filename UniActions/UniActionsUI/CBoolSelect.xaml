@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="UniActionsUI.CBoolSelect"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="30"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <RadioButton GroupName="g" Content="Да" Name="rbYes" VerticalAlignment="Center" HorizontalAlignment="Center"></RadioButton>
+        <RadioButton GroupName="g" IsChecked="True" Grid.Column="1" Content="Нет" Name="rbNo" VerticalAlignment="Center" HorizontalAlignment="Center"></RadioButton>
+    </Grid>
+</UserControl>

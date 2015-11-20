@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="UniActionsUI.CSavior"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel>
+                <TextBlock Margin="0,0,0,5" HorizontalAlignment="Center" Text="Для применения измений требуется перезапустить сервер и поток задач" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="200" Height="30" Content="Сохранение и перезапуск" Name="btRestart"/>
+                    <Button Margin="10,0,0,0" Width="200" Height="30" Content="Отключить UniActions" Name="btClose"></Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

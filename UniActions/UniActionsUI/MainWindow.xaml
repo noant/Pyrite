@@ -1,0 +1,41 @@
+﻿<Window x:Class="UniActionsUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:UniActionsUI"
+        Title="UniActions" Height="400" Width="700">
+    <Grid>
+        <TabControl>
+            <TabItem Name="tabTasks" Header="Сценарии">
+                <local:CItems></local:CItems>
+            </TabItem>
+            <TabItem Name="tabTasksSettings" Header="Настройки сценариев">
+                <local:CActions></local:CActions>
+            </TabItem>
+            <TabItem Name="tabSettings" Header="Настройки">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TabControl>
+                        <TabItem Header="Модули проверки">
+                            <local:CCheckerModules></local:CCheckerModules>
+                        </TabItem>
+                        <TabItem Header="Модули действия">
+                            <local:CActionModules></local:CActionModules>
+                        </TabItem>
+                        <TabItem Header="IP фильтр">
+                            <local:CIpList></local:CIpList>
+                        </TabItem>
+                        <TabItem Header="Настройки">
+                            <local:CSettings></local:CSettings>
+                        </TabItem>
+                    </TabControl>
+                    <Grid Grid.Row="1">
+                        <local:CSavior></local:CSavior>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

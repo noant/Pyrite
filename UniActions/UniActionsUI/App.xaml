@@ -1,0 +1,14 @@
+﻿<Application x:Class="UniActionsUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:UniActionsUI">
+    <Application.Resources>
+        <Style TargetType="Window">
+            <!--<Setter Property="Icon" Value="../img/logo_32.ico"></Setter>-->
+            <!--<Setter Property="Background" Value="{Binding Path=App.WindowBackground}"></Setter>-->
+        </Style>
+        <Style TargetType="{x:Type TabControl}">
+            <EventSetter Event="SelectionChanged" Handler="SelectedTabChanged"></EventSetter>
+        </Style>
+    </Application.Resources>
+</Application>

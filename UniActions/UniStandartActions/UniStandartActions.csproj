@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4BFE95B0-D94F-4022-A120-FDE11392229C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UniStandartActions</RootNamespace>
+    <AssemblyName>UniStandartActions</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\MessageShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\MessageShow.Designer.cs">
+      <DependentUpon>MessageShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\MessageShowAction.cs" />
+    <Compile Include="Actions\MessageShowActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\MessageShowActionView.Designer.cs">
+      <DependentUpon>MessageShowActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\PowerOffAction.cs" />
+    <Compile Include="Actions\PowerOffActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\PowerOffActionView.Designer.cs">
+      <DependentUpon>PowerOffActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\PowerOffForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\PowerOffForm.Designer.cs">
+      <DependentUpon>PowerOffForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\ProcessAction.cs" />
+    <Compile Include="Actions\ProcessActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ProcessActionView.Designer.cs">
+      <DependentUpon>ProcessActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\ComputerStartChecker.cs" />
+    <Compile Include="Checkers\DateTimeChecker.cs" />
+    <Compile Include="Checkers\DateTimeCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\DateTimeCheckerView.Designer.cs">
+      <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\MinuteTimerChecker.cs" />
+    <Compile Include="Checkers\MinuteTimerCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\MinuteTimerCheckerView.Designer.cs">
+      <DependentUpon>MinuteTimerCheckerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\NeverChecker.cs" />
+    <Compile Include="NotUsedClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UniActionsClientIntefaces\UniActionsClientIntefaces.csproj">
+      <Project>{683527b0-3d6e-4fd3-b549-588bfdd43119}</Project>
+      <Name>UniActionsClientIntefaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\MessageShow.resx">
+      <DependentUpon>MessageShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\MessageShowActionView.resx">
+      <DependentUpon>MessageShowActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\PowerOffActionView.resx">
+      <DependentUpon>PowerOffActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\PowerOffForm.resx">
+      <DependentUpon>PowerOffForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\ProcessActionView.resx">
+      <DependentUpon>ProcessActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\DateTimeCheckerView.resx">
+      <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\MinuteTimerCheckerView.resx">
+      <DependentUpon>MinuteTimerCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
