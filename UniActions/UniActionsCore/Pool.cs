@@ -79,49 +79,75 @@ namespace UniActionsCore
         {
             return ActionItems.Where(x => x.Category != "").Select(x => x.Category);
         }
+
         internal static void Initialize()
         {
             _actionItems = new List<ActionItem>();
         }
+
         internal static void Clear() {
             _actionItems.Clear();
         }
+
         private static Thread _thread;
-        public static VoidResult Start()
+        public static VoidResult BeginStart()
         {
+            _prepareToStop = false;
+            IsStopped = false;
+            var executiongNowCount = 0;
             var result = new VoidResult();
             try
             {
-                _thread = new Thread(() =>
+                _thread = Helper.AlterThread(() =>
                 {
-                    while (true)
+                    while (!_prepareToStop)
                     {
                         lock (ActionItems)
-                            foreach (var action in ActionItems.Where(x=>x.IsActive))
+                        {
+                            foreach (var action in ActionItems.Where(x => x.IsActive))
+                            {
+                                if (_prepareToStop)
+                                    break;
                                 if (action.Checker.IsCanDoNow())
                                 {
-                                    Thread t = new Thread(() =>
+                                    Helper.AlterHardThread(() =>
                                     {
-                                        action.ExecuteWithoutRetval();                                        
-                                        if (action.IsOnlyOnce)
+                                        _isInActionNow = true;
+                                        executiongNowCount++;
+                                        try
                                         {
-                                            lock (ActionItems)
+                                            action.Execute();
+                                            if (action.IsOnlyOnce)
                                             {
-                                                Pool.RemoveItem(action);
-                                                SAL.Save();
+                                                lock (ActionItems)
+                                                {
+                                                    Pool.RemoveItem(action);
+                                                    SAL.Save();
+                                                }
                                             }
                                         }
+                                        catch (Exception e)
+                                        {
+                                            Log.Write(e);
+                                        }
+                                        executiongNowCount--;
+                                        if (executiongNowCount==0 )
+                                        {
+                                            _isInActionNow = false;
+                                            if (_prepareToStop)
+                                                IsStopped = true;
+                                        }
                                     });
-                                    t.IsBackground = true;
-                                    t.Start();                                    
                                 }
-
+                            }
+                        }
                         Thread.Sleep(TimeSpan.FromSeconds(Settings.SecondsBetweenActions));
                     }
-                });
-                _thread.SetApartmentState(ApartmentState.STA);
-                _thread.IsBackground = true;
-                _thread.Start();
+                    //end
+                    IsStopped = true;
+                }, 
+                true, 
+                ApartmentState.MTA);
             }
             catch (Exception e)
             {
@@ -130,15 +156,40 @@ namespace UniActionsCore
             }
             return result;
         }
+        
+        public static event Action WhenStopped;
 
-        public static VoidResult Restart()
+        private static volatile bool _isInActionNow;
+        private static bool _prepareToStop;
+        private static Action _whenStoppedCallback;
+        public static void BeginStop(Action callback)
         {
-            if (_thread != null)
+            _prepareToStop = true;
+            _whenStoppedCallback = callback;
+            if (!_isInActionNow)
             {
                 _thread.Abort();
-                _thread = null;
+                IsStopped = true;
             }
-            return Start();
+        }
+        private static bool _isStopped;
+        public static bool IsStopped
+        {
+            get
+            {
+                return _isStopped;
+            }
+            set
+            {
+                _isStopped = value;
+                if (value && _whenStoppedCallback != null)
+                {
+                    _whenStoppedCallback();
+                    _whenStoppedCallback = null;
+                }
+                if (value && WhenStopped != null)
+                    WhenStopped();
+            }
         }
     }
 }

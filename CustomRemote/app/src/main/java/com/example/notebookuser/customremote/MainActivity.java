@@ -66,16 +66,18 @@ public class MainActivity extends AppCompatActivity {
 
                 b.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Button b = (Button) v;
+                        final Button b = (Button) v;
                         if (!actionPair.getIsCategory()) {
-                            Delegate cback = new Delegate(b) {
-                                @Override
-                                void invoke(Object state) {
-                                    Button b = (Button) this.getTag();
-                                    b.setText((String)state);
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    final String result = new TcpHelper().Do(((ActionPair) b.getTag()).getCommand(), b.getText().toString());
+                                    b.post(new Runnable() {
+                                        public void run() {
+                                            b.setText(result);
+                                        }
+                                    });
                                 }
-                            };
-                            new RemoteAction(((ActionPair) b.getTag()).getCommand(), b.getText().toString(), cback).execute();
+                            }).start();
                         }
                         else
                         {

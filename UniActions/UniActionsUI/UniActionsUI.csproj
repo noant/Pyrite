@@ -73,6 +73,9 @@
     <Compile Include="CItems.xaml.cs">
       <DependentUpon>CItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CPorts.xaml.cs">
+      <DependentUpon>CPorts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Starter.cs" />
     <Compile Include="WCreateAction.xaml.cs">
       <DependentUpon>WCreateAction.xaml</DependentUpon>
@@ -105,6 +108,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CPorts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

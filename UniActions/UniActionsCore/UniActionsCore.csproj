@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ActionItem.cs" />
     <Compile Include="ClassesExtensions.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="ModulesControl.cs" />
     <Compile Include="Other.cs" />
     <Compile Include="Pool.cs" />

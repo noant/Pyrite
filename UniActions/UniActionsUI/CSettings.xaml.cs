@@ -26,32 +26,26 @@ namespace UniActionsUI
             Refresh();
             
             tbPort.TextChanged += (o, e) => {
-                UniActionsCore.ServerThreading.Settings.ServerListenerPort = tbPort.GetInt();
+                UniActionsCore.ServerThreading.Settings.DistributionPort = tbPort.GetUShort();
             };
 
             tbSecondsBetweenActions.TextChanged += (o, e) => {
                 UniActionsCore.Pool.Settings.SecondsBetweenActions = tbSecondsBetweenActions.GetInt();
             };
 
-            tbThreadsCnt.TextChanged += (o, e) => {
-                UniActionsCore.ServerThreading.Settings.ServerThreadCount = tbThreadsCnt.GetInt();
-            };
-
             cbResolveAllIp.SelectionChanged += (o, e) => {
-                UniActionsCore.ServerThreading.Settings.ResolveAll = cbResolveAllIp.SelectedIndex == 0;
+                UniActionsCore.ServerThreading.Settings.ResolveAllIp = cbResolveAllIp.SelectedIndex == 0;
             };            
         }
 
         public void Refresh()
         {             
-            tbPort.Text = UniActionsCore.ServerThreading.Settings.ServerListenerPort.ToString();
-            tbThreadsCnt.Text = UniActionsCore.ServerThreading.Settings.ServerThreadCount.ToString();
+            tbPort.Text = UniActionsCore.ServerThreading.Settings.DistributionPort.ToString();
             tbSecondsBetweenActions.Text = UniActionsCore.Pool.Settings.SecondsBetweenActions.ToString();
-            cbResolveAllIp.SelectedIndex = UniActionsCore.ServerThreading.Settings.ResolveAll ? 0 : 1;
+            cbResolveAllIp.SelectedIndex = UniActionsCore.ServerThreading.Settings.ResolveAllIp ? 0 : 1;
 
             ControlsHelper.AppendOnlyInteger(tbPort, 0 , 255*255 -1);
             ControlsHelper.AppendOnlyInteger(tbSecondsBetweenActions, UniActionsCore.Pool.Settings.Default.MaxSecondsBetweenActions, 0);
-            ControlsHelper.AppendOnlyInteger(tbThreadsCnt, 60, 1);
         }
     }
 }

@@ -32,13 +32,14 @@ public class TcpHelper {
         try {
             Statics pars = new Statics();
 
-            Socket socket = new Socket(InetAddress.getByName(pars.getAddress()), Integer.parseInt(pars.getPort()));
+            InetAddress address = InetAddress.getByName(pars.getAddress());
 
-            OutputStream out = socket.getOutputStream();
+            Socket socketAction = new Socket(address, getNextActionPort());
 
-            InputStream in = socket.getInputStream();
+            InputStream in = socketAction.getInputStream();
+            OutputStream out = socketAction.getOutputStream();
 
-            sendString(out,command);
+            sendString(out, command);
             sendString(out, state);
 
             String nextState = getNextString(in);
@@ -52,6 +53,29 @@ public class TcpHelper {
             e1.printStackTrace();
         }
         return command;
+    }
+
+    public int getNextActionPort()
+    {
+        try {
+            Statics pars = new Statics();
+
+            //get action port
+            InetAddress address = InetAddress.getByName(pars.getAddress());
+            Socket socketGetActionPort = new Socket(address, Integer.parseInt(pars.getPort()));
+            InputStream inGetActionPort = socketGetActionPort.getInputStream();
+            int port = Integer.parseInt(getNextString(inGetActionPort));
+            //
+
+            return port;
+        }
+        catch (UnknownHostException e1){
+            e1.printStackTrace();
+        }
+        catch (IOException e1){
+            e1.printStackTrace();
+        }
+        return -1;
     }
 
     public String getNextString(InputStream in)
@@ -93,7 +117,7 @@ public class TcpHelper {
 
             Statics pars = new Statics();
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), Integer.parseInt(pars.getPort())), 1000);
+            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 1000);
 
             OutputStream out = socket.getOutputStream();
 

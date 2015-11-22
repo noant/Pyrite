@@ -13,6 +13,11 @@ namespace UniActionsCore
 {
     public class ActionItem
     {
+        private static class Defaults
+        {
+            public static readonly DispatcherPriority DispatcherPriority = System.Windows.Threading.DispatcherPriority.Background;
+        }
+
         public ActionItem()
         {
             this.IsActive = true;
@@ -47,35 +52,67 @@ namespace UniActionsCore
             {
                 lock (_locker)
                     return this.Action.CheckState();
-            }), null);
-            return result.ToString();            
+            }), Defaults.DispatcherPriority, null);
+            return result.ToString();
         }
 
-        public string BeginExecute(string inputState)
+        public void CheckStateAsync(Action<string> callback)
+        {
+            var result = this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                lock (_locker)
+                    callback(this.Action.CheckState());
+            }), Defaults.DispatcherPriority, null);
+        }
+
+        public string Execute(string inputState)
         {
             var result = this.Dispatcher.Invoke(new Func<string>(() =>
             {
                 lock (_locker)
                     return this.Action.Do(inputState);
-            }), null);
-            return result.ToString();         
+            }), Defaults.DispatcherPriority, null);
+            return result.ToString();
         }
-        public string BeginExecute()
+
+        public void ExecuteAsync(string inputState, Action<string> callback)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var state = "";
+                lock (_locker)
+                    state = this.Action.Do(inputState);
+                callback(state);
+            }), Defaults.DispatcherPriority ,null);
+        }
+
+        public void ExecuteAsync(Action<string> callback)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var state = "";
+                lock (_locker)
+                    state = this.Action.Do(this.Action.CheckState());
+                callback(state);
+            }), Defaults.DispatcherPriority, null);
+        }
+
+        public string Execute()
         {
             var result = this.Dispatcher.Invoke(new Func<string>(() =>
             {
                 lock (_locker)
                     return this.Action.Do(this.Action.CheckState());
-            }), null);
+            }), Defaults.DispatcherPriority, null);
             return result.ToString();
         }
 
         public void ExecuteWithoutRetval()
         {
-            this.Dispatcher.Invoke(new Action(() =>
+            this.Dispatcher.BeginInvoke(new Action(() =>
             {
                 this.Action.Do(this.Action.CheckState());
-            }), null);
+            }), Defaults.DispatcherPriority, null);
         }
 
         public ActionItem Clone()

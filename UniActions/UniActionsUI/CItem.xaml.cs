@@ -54,11 +54,21 @@ namespace UniActionsUI
         public void Refresh()
         {
             this.Background = this._bg = GetFromString(_actionItem.Category);
-            this.lblContent.Content = _actionItem.CheckState();
+            this.lblContent.Content = "Получение статуса...";
+            this.IsEnabled = false;
+            _actionItem.CheckStateAsync(new Action<string>((state) => {
+                this.Dispatcher.BeginInvoke(new Action(() => {
+                    try
+                    {
+                        this.IsEnabled = true; //can throws exception when control is not exist already
+                        this.lblContent.Content = state;
+                    }
+                    catch { }
+                }));
+            }));
         }
 
-        private Brush CurrBrush;
-
+        #region color helper
         private Brush SelectBrush = Brushes.Tomato;
 
         private Brush GetFromString(string str)
@@ -113,11 +123,24 @@ namespace UniActionsUI
             if (b > 255) b = 255;
             return Color.FromArgb(color.A, (byte)r, (byte)g, (byte)b);
         }
+        #endregion
 
         public void Run()
         {
-            this.Background = Brushes.AliceBlue;
-            this.lblContent.Content = _actionItem.BeginExecute(this.lblContent.Content.ToString());
+            this.lblContent.Content = "Получение статуса...";
+            this.IsEnabled = false;
+            _actionItem.ExecuteAsync(new Action<string>((state) => {
+                this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    try
+                    {
+                        this.IsEnabled = true; //can throws exception when control is not exist already
+                        this.lblContent.Content = state;
+                    }
+                    catch { }
+                }));
+            }));
+
             if (Clicked != null)
                 Clicked();
         }

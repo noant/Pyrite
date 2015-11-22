@@ -59,7 +59,11 @@ namespace UniActionsUI
                     if (_mainWindow == null)
                     {
                         _mainWindow = new MainWindow();
-                        _mainWindow.Show();
+                        App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                _mainWindow.Show();
+                            }), 
+                        System.Windows.Threading.DispatcherPriority.Normal, null);
                         _mainWindow.Closing += (oo, ee) =>
                         {
                             _mainWindow = null;

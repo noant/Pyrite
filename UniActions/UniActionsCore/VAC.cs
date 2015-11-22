@@ -10,8 +10,8 @@ namespace UniActionsCore
     {
         public static class AppSettingsNames
         {
-            public static readonly string ServerThreadCount = "serverThreadsCount";
-            public static readonly string ServerPort = "serverPort";
+            public static readonly string ActionsPorts = "action_ports";
+            public static readonly string DistributionPort = "serverPort";
             public static readonly string UsedActionCustomSettings = "use_actioncustomsettings_#1";
             public static readonly string UsedActionCheckerCustomSettings = "use_actioncheckercustomsettings_#1";
             public static readonly string UsedActionServerCommand = "use_actionservercommand_#1";
@@ -27,6 +27,8 @@ namespace UniActionsCore
             public static readonly string ResolvedIp = "resolvedip_#1";
             public static readonly string ResolveAll = "resolveall";
             public static readonly string SecondsBetweenActions = "secondsbetweenactions";
+
+            public static readonly string Splitter = "#";
         }
 
         public static class ServerCommands

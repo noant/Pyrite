@@ -45,8 +45,18 @@ namespace UniActionsUI
 
             int res;
             if (!int.TryParse(tb.Text, out res))
-                throw new Exception("Not a number");
+                throw new Exception("Not an int");
             else return res;
+        }
+        public static ushort GetUShort(this TextBox tb)
+        {
+            if (tb.Text == "")
+                return 0;
+
+            ushort res;
+            if (!ushort.TryParse(tb.Text, out res))
+                throw new Exception("Not an short");
+            else return res;   
         }
     }
 

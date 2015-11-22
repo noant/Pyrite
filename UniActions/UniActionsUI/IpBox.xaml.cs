@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,16 +28,38 @@ namespace UniActionsUI
             ControlsHelper.AppendOnlyInteger(tbNum2, 255, 0);
             ControlsHelper.AppendOnlyInteger(tbNum3, 255, 0);
             ControlsHelper.AppendOnlyInteger(tbNum4, 255, 0);
+
+            this.tbNum1.TextChanged += (o, e) => {
+                if (IpChanged != null)
+                    IpChanged(this);
+            }; 
+            this.tbNum2.TextChanged += (o, e) =>
+            {
+                if (IpChanged != null)
+                    IpChanged(this);
+            }; 
+            this.tbNum3.TextChanged += (o, e) =>
+            {
+                if (IpChanged != null)
+                    IpChanged(this);
+            }; 
+            this.tbNum4.TextChanged += (o, e) =>
+            {
+                if (IpChanged != null)
+                    IpChanged(this);
+            };
         }
-        public string Ip
+        public IPAddress Ip
         {
             get
             {
-                return tbNum1.GetInt() + "." + tbNum2.GetInt() + "." + tbNum3.GetInt() + "." + tbNum4.GetInt();
+                return new IPAddress(new byte[] {(byte)tbNum1.GetInt(), (byte)tbNum2.GetInt(), (byte)tbNum3.GetInt(), (byte)tbNum4.GetInt() });
             }
         }
         public void RemoveIp() {
             tbNum1.Text = tbNum2.Text = tbNum3.Text = tbNum4.Text = "0";
         }
+
+        public event Action<IpBox> IpChanged;
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UniActionsCore;
 
 namespace UniActionsUI
 {
@@ -24,15 +25,46 @@ namespace UniActionsUI
         {
             InitializeComponent();
             this.btRestart.Click += (o, e) => {
-                var res1 = V.Process(UniActionsCore.SAL.Save());
-                var res2 = V.Process(UniActionsCore.Actions.ReIntialize());
+                var btText = this.btRestart.Content.ToString();
+                this.btRestart.Content = "Перезагрузка...";
 
-                if (res1.Exceptions.Count()==0 && res2.Exceptions.Count()==0)
-                    MessageBox.Show("Потоки сервера и поток задач перезапущены.");
+                if (BeforeRestart != null)
+                    BeforeRestart();
+
+                var res1 = V.Process(UniActionsCore.SAL.Save());
+                UniActionsCore.Actions.ReIntialize(new Action<VoidResult>((res2) => {
+                    V.Process(res2);
+
+                    this.Dispatcher.BeginInvoke(new Action(() => { 
+                        this.btRestart.Content = btText;                        
+                    }));
+
+                    if (AfterRestart != null)
+                        AfterRestart();
+
+                    if (res1.Exceptions.Count()==0 && res2.Exceptions.Count()==0)
+                        MessageBox.Show("Потоки сервера и поток задач перезапущены.");                    
+                }));
             };
             this.btClose.Click += (o, e) => {
-                App.Current.Shutdown();
+                this.btClose.IsEnabled = false;
+                this.btClose.Content = "Завершение задач...";
+                this.btRestart.IsEnabled = false;
+
+                if (WhenAllBeginsToEnd != null)
+                    WhenAllBeginsToEnd();
+
+                UniActionsCore.Actions.Stop(() => {
+                    App.Current.Dispatcher.BeginInvoke(new Action(() => { 
+                        App.Current.Shutdown();                    
+                    }));
+                });
             };
         }
+
+        public event Action WhenAllBeginsToEnd;
+        public event Action BeforeRestart;
+        public event Action AfterRestart;
     }
+
 }

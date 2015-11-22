@@ -3,6 +3,7 @@ using Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using UniActionsClientIntefaces;
@@ -25,17 +26,17 @@ namespace UniActionsCore
             {
                 Settings.Clear();
 
-                Settings.SetValue(VAC.AppSettingsNames.ServerPort, ServerThreading.Settings.ServerListenerPort.ToString());
-                Settings.SetValue(VAC.AppSettingsNames.ResolveAll, ServerThreading.Settings.ResolveAll.ToString());
-                Settings.SetValue(VAC.AppSettingsNames.ServerThreadCount, ServerThreading.Settings.ServerThreadCount.ToString());
+                Settings.SetValue(VAC.AppSettingsNames.DistributionPort, ServerThreading.Settings.DistributionPort.ToString());
+                Settings.SetValue(VAC.AppSettingsNames.ResolveAll, ServerThreading.Settings.ResolveAllIp.ToString());
                 Settings.SetValue(VAC.AppSettingsNames.SecondsBetweenActions, Pool.Settings.SecondsBetweenActions.ToString());
+                Settings.SetValue(VAC.AppSettingsNames.ActionsPorts, Helper.MassToString(ServerThreading.Settings.ActionsPorts.Cast<object>(), VAC.AppSettingsNames.Splitter));
 
                 for (int i = 0; i < ServerThreading.Settings.ResolvedIp.Count(); i++)
                 {
                     Settings.SetValue(VAC.AppSettingsNames.
                         ResolvedIp.Set(i),
                         ServerThreading.Settings.
-                        ResolvedIp[i]);
+                        ResolvedIp[i].ToString());
                 }
 
                 var customCheckers = ModulesControl.CustomCheckers.Where(x => !ModulesControl.IsStandart(x));
@@ -116,9 +117,9 @@ namespace UniActionsCore
         public static void SetDefaults()
         {
             Pool.Settings.SecondsBetweenActions = Pool.Settings.Default.SecondsBetweenActions;
-            ServerThreading.Settings.ResolveAll = ServerThreading.Settings.Defaults.ResolveAll;
-            ServerThreading.Settings.ServerListenerPort = ServerThreading.Settings.Defaults.ServerListenerPort;
-            ServerThreading.Settings.ServerThreadCount = ServerThreading.Settings.Defaults.ServerThreadCount;
+            ServerThreading.Settings.ResolveAllIp = ServerThreading.Settings.Defaults.ResolveAll;
+            ServerThreading.Settings.DistributionPort = ServerThreading.Settings.Defaults.DistributionPort;
+            ServerThreading.Settings.ActionsPorts = ServerThreading.Settings.Defaults.ActionPorts.ToList();
         }
 
         public static VoidResult Load() {
@@ -128,9 +129,13 @@ namespace UniActionsCore
                 if (Settings == null)
                     Settings = new ApplicationUserSettings.Settings(Defaults.FileName);
 
-                ServerThreading.Settings.ServerListenerPort = int.Parse(Settings.GetValue(VAC.AppSettingsNames.ServerPort));
-                ServerThreading.Settings.ResolveAll = Convert.ToBoolean(Settings.GetValue(VAC.AppSettingsNames.ResolveAll));
-                ServerThreading.Settings.ServerThreadCount = int.Parse(Settings.GetValue(VAC.AppSettingsNames.ServerThreadCount)); 
+                ServerThreading.Settings.DistributionPort = ushort.Parse(Settings.GetValue(VAC.AppSettingsNames.DistributionPort));
+                ServerThreading.Settings.ResolveAllIp = Convert.ToBoolean(Settings.GetValue(VAC.AppSettingsNames.ResolveAll));
+                ServerThreading.Settings.ActionsPorts = Settings.GetValue(VAC.AppSettingsNames.ActionsPorts)
+                    .Split(VAC.AppSettingsNames.Splitter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => ushort.Parse(x))
+                    .ToList();
+
                 Pool.Settings.SecondsBetweenActions = int.Parse(Settings.GetValue(VAC.AppSettingsNames.SecondsBetweenActions));
 
                 int i = 0;
@@ -138,7 +143,7 @@ namespace UniActionsCore
                 while (Settings.Contains(VAC.AppSettingsNames.ResolvedIp.Set(i)))
                 {
                     ServerThreading.Settings.ResolvedIp.Add(
-                        Settings.GetValue(VAC.AppSettingsNames.ResolvedIp.Set(i)));
+                        IPAddress.Parse(Settings.GetValue(VAC.AppSettingsNames.ResolvedIp.Set(i))));
                     i++;
                 }
 

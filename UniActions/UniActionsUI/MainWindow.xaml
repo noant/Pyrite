@@ -27,12 +27,15 @@
                         <TabItem Header="IP фильтр">
                             <local:CIpList></local:CIpList>
                         </TabItem>
+                        <TabItem Header="Порты">
+                            <local:CPorts></local:CPorts>
+                        </TabItem>
                         <TabItem Header="Настройки">
                             <local:CSettings></local:CSettings>
                         </TabItem>
                     </TabControl>
                     <Grid Grid.Row="1">
-                        <local:CSavior></local:CSavior>
+                        <local:CSavior x:Name="cSavior"></local:CSavior>
                     </Grid>
                 </Grid>
             </TabItem>

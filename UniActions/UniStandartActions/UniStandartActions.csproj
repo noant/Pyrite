@@ -88,6 +88,7 @@
     <Compile Include="Checkers\DateTimeCheckerView.Designer.cs">
       <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Checkers\EveryIterationChecker.cs" />
     <Compile Include="Checkers\MinuteTimerChecker.cs" />
     <Compile Include="Checkers\MinuteTimerCheckerView.cs">
       <SubType>Form</SubType>
