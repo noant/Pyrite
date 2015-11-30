@@ -9,4 +9,6 @@
     <string name="address_parse_ok">Данные успешно изменены</string>
     <string name="ok">Ввод</string>
     <string name="settings">Настройки</string>
+    <string name="error">error</string>
+    <string name="executing">Выполняется...</string>
 </resources>

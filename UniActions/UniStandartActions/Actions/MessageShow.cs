@@ -13,6 +13,7 @@ namespace UniStandartActions.Actions
 {
     public partial class MessageShow : Form
     {
+        private static int _height = 116;
         private static MessageShow _messageShow;
 
         public static void SetMessage(string message)
@@ -46,6 +47,12 @@ namespace UniStandartActions.Actions
             else
             {
                 this.Height += 33;
+                if (this.Height >= Screen.PrimaryScreen.Bounds.Height)
+                {
+                    this.Height = _height;
+                    this.lblContent.Text = string.Empty;
+                }
+
                 this.lblContent.Text += "\r\n\r\n" + str;
             }
         }

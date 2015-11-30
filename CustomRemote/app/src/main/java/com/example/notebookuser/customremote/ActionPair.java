@@ -14,6 +14,7 @@ public class ActionPair {
     public String getCommand(){
         return _command;
     }
+    public void setName(String name) { _name=name; }
 
     public Boolean getIsCategory(){
         return _isCategory;

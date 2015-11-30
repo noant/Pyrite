@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             String category = this.getIntent().getStringExtra(MainActivity.EXTRA_CATEGORY);
             LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
             for (final ActionPair actionPair : new TcpHelper().getAllCommands(category)) {
-                if (actionPair.getCommand()=="error")
+                if (actionPair.getCommand()==getString(R.string.error))
                     throw new Exception(actionPair.getName());
 
                 Button b = new Button(this);
@@ -68,11 +68,18 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         final Button b = (Button) v;
                         if (!actionPair.getIsCategory()) {
+                            b.setEnabled(false);
+                            b.setText(getString(R.string.executing));
                             new Thread(new Runnable() {
                                 public void run() {
-                                    final String result = new TcpHelper().Do(((ActionPair) b.getTag()).getCommand(), b.getText().toString());
+                                    final String result = new TcpHelper().Do(
+                                            ((ActionPair) b.getTag()).getCommand(),
+                                            ((ActionPair) b.getTag()).getName()
+                                    );
                                     b.post(new Runnable() {
                                         public void run() {
+                                            b.setEnabled(true);
+                                            ((ActionPair) b.getTag()).setName(result);
                                             b.setText(result);
                                         }
                                     });
@@ -82,9 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         else
                         {
                             Intent intent = new Intent(_this, MainActivity.class);
-
                             intent.putExtra(EXTRA_CATEGORY, b.getText());
-
                             startActivity(intent);
                         }
                     }
