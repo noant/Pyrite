@@ -29,9 +29,9 @@ namespace UniActionsUI
             this.btAdd.Click += (o, e) => {
                 var ip = tbIp.Ip;
                 tbIp.RemoveIp();
-                if (!UniActionsCore.ServerThreading.Settings.ResolvedIp.Contains(ip))
+                if (!App.Uni.ServerThreading.Settings.ResolvedIp.Contains(ip))
                 {
-                    UniActionsCore.ServerThreading.Settings.ResolvedIp.Add(ip);
+                    App.Uni.ServerThreading.Settings.ResolvedIp.Add(ip);
                     listIp.Items.Add(ip);
                 }
                 ProcessButtonsEnabled();
@@ -42,7 +42,7 @@ namespace UniActionsUI
                 if (ip != null)
                 {
                     listIp.Items.Remove(ip);
-                    UniActionsCore.ServerThreading.Settings.ResolvedIp.Remove((IPAddress)ip);
+                    App.Uni.ServerThreading.Settings.ResolvedIp.Remove((IPAddress)ip);
                 }
                 ProcessButtonsEnabled();
             };
@@ -61,14 +61,14 @@ namespace UniActionsUI
         void ProcessButtonsEnabled()
         { 
             var ip = tbIp.Ip;
-            this.btAdd.IsEnabled = !UniActionsCore.ServerThreading.Settings.ResolvedIp.Any(x => x.Equals(ip));
+            this.btAdd.IsEnabled = !App.Uni.ServerThreading.Settings.ResolvedIp.Any(x => x.Equals(ip));
             btDelete.IsEnabled = listIp.Items.Count > 1 && listIp.SelectedIndex != -1;
         }
 
         public void Refresh()
         {
             listIp.Items.Clear();
-            foreach (var ip in UniActionsCore.ServerThreading.Settings.ResolvedIp)
+            foreach (var ip in App.Uni.ServerThreading.Settings.ResolvedIp)
                 listIp.Items.Add(ip);
             ProcessButtonsEnabled();
         }

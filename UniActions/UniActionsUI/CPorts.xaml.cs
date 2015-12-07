@@ -27,13 +27,13 @@ namespace UniActionsUI
             ControlsHelper.AppendOnlyInteger(tbPort, ushort.MaxValue, 0);
 
             btAdd.Click += (o, e) => {
-                UniActionsCore.ServerThreading.Settings.ActionsPorts.Add(tbPort.GetUShort());
+                App.Uni.ServerThreading.Settings.ActionsPorts.Add(tbPort.GetUShort());
                 ProcessButtonsEnabled();
                 Refresh();
             };
 
             btDelete.Click += (o, e) => {
-                UniActionsCore.ServerThreading.Settings.ActionsPorts.RemoveAll(x => x == tbPort.GetUShort());
+                App.Uni.ServerThreading.Settings.ActionsPorts.RemoveAll(x => x == tbPort.GetUShort());
                 ProcessButtonsEnabled();
             };
 
@@ -53,13 +53,13 @@ namespace UniActionsUI
         {
             btDelete.IsEnabled = listPort.SelectedIndex != -1 && listPort.Items.Count > 1;
             var port = tbPort.GetUShort();
-            btAdd.IsEnabled = !UniActionsCore.ServerThreading.Settings.ActionsPorts.Any(x => x == port);
+            btAdd.IsEnabled = !App.Uni.ServerThreading.Settings.ActionsPorts.Any(x => x == port);
         }
 
         public void Refresh()
         {
             listPort.Items.Clear();
-            foreach (var port in UniActionsCore.ServerThreading.Settings.ActionsPorts)
+            foreach (var port in App.Uni.ServerThreading.Settings.ActionsPorts)
                 listPort.Items.Add(port);
             ProcessButtonsEnabled();
         }

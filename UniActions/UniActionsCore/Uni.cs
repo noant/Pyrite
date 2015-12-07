@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationUserSettings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,36 +7,74 @@ using System.Threading.Tasks;
 
 namespace UniActionsCore
 {
-    public static class Actions
+    public class Uni
     {
-        public static VoidResult Initialize()
+        public static Result<Uni> Create(SaveAndLoad sal)
         {
+            var result = new Result<Uni>();
+            var uni = new Uni();
+            result.AddExceptions(uni.Initialize(sal).Exceptions);
+            result.Value = uni;
+            return result;
+        }
+
+        public static Result<Uni> Create()
+        {
+            return Create(new SaveAndLoad());
+        }
+
+        public VoidResult CommitChanges()
+        {
+            return SaveAndLoad.Save();
+        }
+
+        public ServerThreading ServerThreading { get; private set; }
+
+        public TasksPool TasksPool { get; private set; }
+
+        public ModulesControl ModulesControl { get; private set; }
+
+        internal SaveAndLoad SaveAndLoad { get; private set; }
+
+        internal Settings Settings { get; private set; }
+        
+        public VoidResult Initialize(SaveAndLoad sal)
+        {
+            this.SaveAndLoad = sal;
+            this.SaveAndLoad.Uni = this;
+
             var result = new VoidResult();
 
-            Pool.Initialize();
+            TasksPool = new TasksPool();
+            TasksPool.Uni = this;
+            TasksPool.Initialize();
+            ModulesControl = new ModulesControl();
+            ModulesControl.Uni = this;
             result.AddExceptions(ModulesControl.Initialize().Exceptions);
+            ServerThreading = new UniActionsCore.ServerThreading();
+            ServerThreading.Uni = this;
             ServerThreading.Initialize();
 
-            result.AddExceptions(SAL.Load().Exceptions);
+            result.AddExceptions(SaveAndLoad.Load().Exceptions);
 
-            result.AddExceptions(Pool.BeginStart().Exceptions);
+            result.AddExceptions(TasksPool.BeginStart().Exceptions);
             result.AddExceptions(ServerThreading.BeginStart().Exceptions);
 
             return result;
         }
 
-        public static VoidResult ReIntialize(Action<VoidResult> callback)
+        public VoidResult ReIntialize(Action<VoidResult> callback)
         {
             var result = new VoidResult();
             ModulesControl.Clear();
-            Pool.Clear();
+            TasksPool.Clear();
             
-            result.AddExceptions(SAL.Load().Exceptions);
+            result.AddExceptions(SaveAndLoad.Load().Exceptions);
 
             object locker = new object();
             bool poolStopped = false;
             bool serverStopped = false;
-            Pool.BeginStop(() =>
+            TasksPool.BeginStop(() =>
             {
                 lock (locker)
                 {
@@ -45,7 +84,7 @@ namespace UniActionsCore
                         try
                         {
                             ServerThreading.BeginStart();
-                            Pool.BeginStart();
+                            TasksPool.BeginStart();
                         }
                         catch (Exception e)
                         {
@@ -65,7 +104,7 @@ namespace UniActionsCore
                         try
                         {
                             ServerThreading.BeginStart();
-                            Pool.BeginStart();
+                            TasksPool.BeginStart();
                         }
                         catch (Exception e)
                         {
@@ -79,12 +118,12 @@ namespace UniActionsCore
             return result;
         }
 
-        public static void Stop(Action callback)
+        public void Stop(Action callback)
         {
             object locker = new object();
             bool poolStopped = false;
             bool serverStopped = false;
-            Pool.BeginStop(() => {
+            TasksPool.BeginStop(() => {
                 lock (locker)
                 {
                     poolStopped = true;

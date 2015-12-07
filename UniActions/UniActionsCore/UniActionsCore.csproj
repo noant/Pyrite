@@ -45,9 +45,9 @@
     <Compile Include="Helper.cs" />
     <Compile Include="ModulesControl.cs" />
     <Compile Include="Other.cs" />
-    <Compile Include="Pool.cs" />
-    <Compile Include="SAL.cs" />
-    <Compile Include="Actions.cs" />
+    <Compile Include="TasksPool.cs" />
+    <Compile Include="SaveAndLoad.cs" />
+    <Compile Include="Uni.cs" />
     <Compile Include="ServerThreading.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VAC.cs" />

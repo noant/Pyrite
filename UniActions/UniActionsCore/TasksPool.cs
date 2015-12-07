@@ -9,46 +9,50 @@ using UniStandartActions;
 
 namespace UniActionsCore
 {
-    public static class Pool
+    public class TasksPool
     {
-        public static class Settings {
-            public static class Default
+        public class TasksPoolSettings {
+            public static class Defaults
             {
                 public static readonly int SecondsBetweenActions = 30;
                 public static readonly int MaxSecondsBetweenActions = 59;
             }
-            private static int _secondsBetweenActions;
-            public static int SecondsBetweenActions 
+            private int _secondsBetweenActions;
+            public int SecondsBetweenActions 
             {
                 get {
                     return _secondsBetweenActions;
                 }
                 set {
-                    if (value > Default.MaxSecondsBetweenActions)
-                        throw new Exception("Max value is " + Default.MaxSecondsBetweenActions + " seconds");
+                    if (value > Defaults.MaxSecondsBetweenActions)
+                        throw new Exception("Max value is " + Defaults.MaxSecondsBetweenActions + " seconds");
                     else _secondsBetweenActions = value;
                 }
             }
         }
 
-        private static List<ActionItem> _actionItems;
-        public static IEnumerable<ActionItem> ActionItems { 
+        public TasksPoolSettings Settings { get; private set; }
+
+        public Uni Uni { get; internal set; }
+
+        private List<ActionItem> _actionItems;
+        public IEnumerable<ActionItem> ActionItems { 
             get {
                 return _actionItems.ToArray();
             } 
         }
 
-        public static void RemoveItem(ActionItem item)
+        public void RemoveItem(ActionItem item)
         {
             _actionItems.Remove(item);
         }
 
-        public static void RemoveAll(Func<ActionItem, bool> func)
+        public void RemoveAll(Func<ActionItem, bool> func)
         {
             _actionItems.RemoveAll(x => func(x));
         }
 
-        public static Result<bool> CheckItem(ActionItem item)
+        public Result<bool> CheckItem(ActionItem item)
         {
             var result = new Result<bool>();
 
@@ -67,7 +71,7 @@ namespace UniActionsCore
             return result;
         }
 
-        public static Result<bool> AddItem(ActionItem item)
+        public Result<bool> AddItem(ActionItem item)
         {
             var result = CheckItem(item);
             if (result.Value && !_actionItems.Contains(item))
@@ -75,22 +79,23 @@ namespace UniActionsCore
             return result;
         }
 
-        public static IEnumerable<string> GetCategories()
+        public IEnumerable<string> GetCategories()
         {
             return ActionItems.Where(x => x.Category != "").Select(x => x.Category);
         }
 
-        internal static void Initialize()
+        internal void Initialize()
         {
+            Settings = new TasksPoolSettings();
             _actionItems = new List<ActionItem>();
         }
 
-        internal static void Clear() {
+        internal void Clear() {
             _actionItems.Clear();
         }
 
-        private static Thread _thread;
-        public static VoidResult BeginStart()
+        private Thread _thread;
+        public VoidResult BeginStart()
         {
             _prepareToStop = false;
             IsStopped = false;
@@ -121,8 +126,8 @@ namespace UniActionsCore
                                             {
                                                 lock (ActionItems)
                                                 {
-                                                    Pool.RemoveItem(action);
-                                                    SAL.Save();
+                                                    this.RemoveItem(action);
+                                                    Uni.SaveAndLoad.Save();
                                                 }
                                             }
                                         }
@@ -141,7 +146,7 @@ namespace UniActionsCore
                                 }
                             }
                         }
-                        Thread.Sleep(TimeSpan.FromSeconds(Settings.SecondsBetweenActions));
+                        Thread.Sleep(TimeSpan.FromSeconds(this.Settings.SecondsBetweenActions));
                     }
                     //end
                     IsStopped = true;
@@ -157,12 +162,12 @@ namespace UniActionsCore
             return result;
         }
         
-        public static event Action WhenStopped;
+        public event Action WhenStopped;
 
-        private static volatile bool _isInActionNow;
-        private static bool _prepareToStop;
-        private static Action _whenStoppedCallback;
-        public static void BeginStop(Action callback)
+        private volatile bool _isInActionNow;
+        private bool _prepareToStop;
+        private Action _whenStoppedCallback;
+        public void BeginStop(Action callback)
         {
             _prepareToStop = true;
             _whenStoppedCallback = callback;
@@ -172,8 +177,8 @@ namespace UniActionsCore
                 IsStopped = true;
             }
         }
-        private static bool _isStopped;
-        public static bool IsStopped
+        private bool _isStopped;
+        public bool IsStopped
         {
             get
             {

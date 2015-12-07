@@ -17,7 +17,7 @@ namespace test
         public Form1()
         {
             InitializeComponent();
-            Actions.Initialize();
+            //Uni.Initialize();
             //SAL.SetDefaults();
 
             //Pool.ActionItems.Add(

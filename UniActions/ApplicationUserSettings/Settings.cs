@@ -14,47 +14,64 @@ namespace ApplicationUserSettings
         {
             public static readonly string FileName ="settings.xml";
         }
-
+        
         public class ParameterNotExistException : Exception {
             public ParameterNotExistException(string message) : base(message)
             {}
         }
 
-        public Settings() {
-            FileName = Defaults.FileName;
-        }
-        public Settings(string fileName)
-        {
-            FileName = fileName;
+        public Settings(string fileName) {
+            this.NeedSettingsSourceToWrite += (settings) => new FileStream(fileName, FileMode.Truncate);
+            this.NeedSettingsSourceToRead += (settings) =>
+                {
+                    if (!File.Exists(fileName))
+                        SaveStruct(new FileStream(fileName, FileMode.OpenOrCreate));
+                    return new FileStream(fileName, FileMode.OpenOrCreate);
+                };
         }
 
-        public string FileName {get; private set;}
+        public Settings() : this(Defaults.FileName) { }
+
+        public Settings(Func<Settings, Stream> needSourceToRead, Func<Settings, Stream> needSourceToWrite, Action<Settings, Stream> afterCommit)
+        {
+            NeedSettingsSourceToWrite += needSourceToWrite;
+            NeedSettingsSourceToRead += needSourceToRead;
+            WhenChangesCommit += afterCommit;
+        }
+
+        private event Func<Settings, Stream> NeedSettingsSourceToWrite;
+        private event Func<Settings, Stream> NeedSettingsSourceToRead;
+        private event Action<Settings, Stream> WhenChangesCommit;
 
         private XmlParameters Parameters;
-
-        private void ValidateFile()
-        {
-            if (!File.Exists(FileName))
-            {
-                File.AppendAllText(FileName, "<xml></xml>");
-            }
-        }
         
         private void LoadParameters()
         {
-            ValidateFile();
+            var stream = NeedSettingsSourceToRead(this);
             var serializer = new XmlSerializer(typeof(XmlParameters));
-            FileStream fs = new FileStream(FileName, FileMode.Open);
-            Parameters = (XmlParameters)serializer.Deserialize(fs);
-            fs.Close();
+            Parameters = (XmlParameters)serializer.Deserialize(stream);
+            stream.Close();
         }
-
+        
         private void SaveParameters()
         {
-            FileStream fs = new FileStream(FileName, FileMode.Truncate );
+            var stream = NeedSettingsSourceToWrite(this);
             var serializer = new XmlSerializer(typeof(XmlParameters));
-            serializer.Serialize(fs, Parameters);
-            fs.Close();
+            serializer.Serialize(stream, Parameters);
+            stream.Close();
+            if (WhenChangesCommit != null)
+                WhenChangesCommit(this, stream);
+        }
+
+        public void SaveStruct(Stream stream)
+        {
+            var serializer = new XmlSerializer(typeof(XmlParameters));
+            serializer.Serialize(stream, new XmlParameters() { 
+                Items = new List<XmlItem>()
+            });
+            stream.Close();
+            if (WhenChangesCommit != null)
+                WhenChangesCommit(this, stream);
         }
 
         public bool Contains(string parName)

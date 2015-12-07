@@ -37,11 +37,11 @@ namespace UniActionsUI
 
         public void Refresh()
         {
-            this.listModules.ItemsSource = UniActionsCore.ModulesControl.CustomActions.Where(x=>
-                !UniActionsCore.ModulesControl.IsStandart(x)
+            this.listModules.ItemsSource = App.Uni.ModulesControl.CustomActions.Where(x =>
+                !App.Uni.ModulesControl.IsStandart(x)
                 ).Select(x=> 
                     {
-                        return V.Process(UniActionsCore.ModulesControl.GetViewName(x)).Value;
+                        return V.Process(App.Uni.ModulesControl.GetViewName(x)).Value;
                     }
                 );
         }
@@ -53,9 +53,9 @@ namespace UniActionsUI
 
             var name = this.listModules.SelectedItem.ToString();
 
-            V.Process(UniActionsCore.ModulesControl.RemoveAction(
-                UniActionsCore.ModulesControl.CustomActions
-                .Single(x=> V.Process(UniActionsCore.ModulesControl.GetViewName(x)).Value==name)
+            V.Process(App.Uni.ModulesControl.RemoveAction(
+                App.Uni.ModulesControl.CustomActions
+                .Single(x => V.Process(App.Uni.ModulesControl.GetViewName(x)).Value == name)
                 ));
             Refresh();
         }
@@ -68,7 +68,7 @@ namespace UniActionsUI
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                var types = V.Process(UniActionsCore.ModulesControl.RegisterAction(ofd.FileName)).Value.ToList();
+                var types = V.Process(App.Uni.ModulesControl.RegisterAction(ofd.FileName)).Value.ToList();
                 if (types.Count() == 0)
                 {
                     System.Windows.MessageBox.Show("Ни одного типа не зарегистрировано");

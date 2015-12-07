@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using UniActionsCore;
 
 namespace UniActionsUI
 {
@@ -15,9 +16,10 @@ namespace UniActionsUI
     /// </summary>
     public partial class App : Application
     {
+        public static Uni Uni { get; private set; }
         public App() {
             this.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
-            V.Process(UniActionsCore.Actions.Initialize());
+            Uni = V.Process(Uni.Create()).Value;
             Starter.Initialize();
         }
 

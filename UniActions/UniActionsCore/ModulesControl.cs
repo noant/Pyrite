@@ -13,26 +13,28 @@ namespace UniActionsCore
     public class ModulesControl
     {
         private static readonly string _uniActionsStandart = "UniStandartActions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+        
+        public Uni Uni { get; internal set; }
 
-        private static List<Type> _customActions;
-        public static IEnumerable<Type> CustomActions
+        private List<Type> _customActions;
+        public IEnumerable<Type> CustomActions
         {
             get
             {
-                return _customActions;
+                return _customActions.ToArray();
             }
         }
 
-        private static List<Type> _customCheckers;
-        public static IEnumerable<Type> CustomCheckers
+        private List<Type> _customCheckers;
+        public IEnumerable<Type> CustomCheckers
         {
             get
             {
-                return _customCheckers;
+                return _customCheckers.ToArray();
             }
         }
 
-        public static Result<string> GetViewName(Type type)
+        public Result<string> GetViewName(Type type)
         {
             var result = new Result<string>();
             try
@@ -47,7 +49,7 @@ namespace UniActionsCore
             return result;
         }
 
-        public static Result<ICustomAction> CreateActionInstance(Type type)
+        public Result<ICustomAction> CreateActionInstance(Type type)
         {
             var result = new Result<ICustomAction>();
             try
@@ -63,7 +65,7 @@ namespace UniActionsCore
 
             return result;
         }
-        public static Result<ICustomChecker> CreateCheckerInstance(Type type)
+        public Result<ICustomChecker> CreateCheckerInstance(Type type)
         {
             var result = new Result<ICustomChecker>();
             try
@@ -80,7 +82,7 @@ namespace UniActionsCore
             return result;
         }
 
-        internal static VoidResult Initialize()
+        internal VoidResult Initialize()
         {
             var result = new VoidResult();
 
@@ -105,17 +107,17 @@ namespace UniActionsCore
             return result;
         }
 
-        internal static void Clear()
+        internal void Clear()
         {
             Initialize();
         }
 
-        public static bool IsStandart(Type type)
+        public bool IsStandart(Type type)
         {
             return type.Assembly.FullName == _uniActionsStandart;
         }
 
-        public static Result<IEnumerable<Type>> RegisterAction(string filename)
+        public Result<IEnumerable<Type>> RegisterAction(string filename)
         {
             var result = new Result<IEnumerable<Type>>();
             IEnumerable<Type> types=null;
@@ -139,7 +141,7 @@ namespace UniActionsCore
             return result;
         }
 
-        public static bool CanRegisterAction(Type actionType)
+        public bool CanRegisterAction(Type actionType)
         {
             Exception exception = null;
 
@@ -155,7 +157,7 @@ namespace UniActionsCore
             return exception == null;
         }
 
-        public static Result<IEnumerable<Type>> RegisterChecker(string filename)
+        public Result<IEnumerable<Type>> RegisterChecker(string filename)
         {
             var result = new Result<IEnumerable<Type>>();
             IEnumerable<Type> types = null;
@@ -179,7 +181,7 @@ namespace UniActionsCore
             return result;
         }
 
-        public static bool CanRegisterChecker(Type checkerType)
+        public bool CanRegisterChecker(Type checkerType)
         {
             Exception exception = null;
 
@@ -195,16 +197,16 @@ namespace UniActionsCore
             return exception == null;
         }
 
-        public static VoidResult RemoveChecker(Type checkerType)
+        public VoidResult RemoveChecker(Type checkerType)
         {
             var result = new VoidResult();
             try
             {
-                lock (Pool.ActionItems)
+                lock (Uni.TasksPool.ActionItems)
                 {
                     var assemblyName = checkerType.Assembly.FullName;
                     _customCheckers.RemoveAll(x => x.Assembly.FullName == assemblyName);
-                    Pool.RemoveAll(x => x.Checker.GetType().Assembly.FullName == assemblyName);
+                    Uni.TasksPool.RemoveAll(x => x.Checker.GetType().Assembly.FullName == assemblyName);
                 }
             }
             catch (Exception e)
@@ -215,16 +217,16 @@ namespace UniActionsCore
             return result;
         }
 
-        public static VoidResult RemoveAction(Type actionType)
+        public VoidResult RemoveAction(Type actionType)
         {
             var result = new VoidResult();
             try
             {
-                lock (Pool.ActionItems)
+                lock (Uni.TasksPool.ActionItems)
                 {
                     var assemblyName = actionType.Assembly.FullName;
                     _customActions.RemoveAll(x => x.Assembly.FullName == assemblyName);
-                    Pool.RemoveAll(x => x.Action.GetType().Assembly.FullName == assemblyName);
+                    Uni.TasksPool.RemoveAll(x => x.Action.GetType().Assembly.FullName == assemblyName);
                 }
             }
             catch (Exception e)

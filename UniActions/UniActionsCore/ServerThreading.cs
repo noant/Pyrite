@@ -14,7 +14,7 @@ namespace UniActionsCore
 {
     public class ServerThreading
     {
-        public static class Settings
+        public class ServerThreadingSettings
         {
             public static class Defaults
             {
@@ -28,14 +28,14 @@ namespace UniActionsCore
                 };
             }
 
-            public static ushort DistributionPort { get; set; }
-            public static bool ResolveAllIp { get; set; }
+            public ushort DistributionPort { get; set; }
+            public bool ResolveAllIp { get; set; }
 
-            public static List<IPAddress> ResolvedIp { get; internal set; }
-            public static List<ushort> ActionsPorts { get; internal set; } 
+            public List<IPAddress> ResolvedIp { get; internal set; }
+            public List<ushort> ActionsPorts { get; internal set; } 
         }
-
-        private class ThreadPortOccupation {
+                
+        private class ThreadPortOccupation{
             public ThreadPortOccupation(Thread t, TcpListener listener, ushort port)
             {
                 Thread = t;
@@ -49,13 +49,17 @@ namespace UniActionsCore
             public bool IsOccupiedByClient { get; set; }
         }
 
-        private static volatile List<ThreadPortOccupation> _threadPortOccupations;
+        public Uni Uni { get; internal set; }
 
-        public static event Action WhenStopped;
+        public ServerThreadingSettings Settings {get; private set;}
 
-        private static volatile bool _prepareToStop;
-        private static Action _whenStoppedCallback;
-        public static VoidResult BeginStop(Action callback)
+        private volatile List<ThreadPortOccupation> _threadPortOccupations;
+
+        public event Action WhenStopped;
+
+        private volatile bool _prepareToStop;
+        private Action _whenStoppedCallback;
+        public VoidResult BeginStop(Action callback)
         {
             _whenStoppedCallback = callback;
 
@@ -70,7 +74,6 @@ namespace UniActionsCore
                 {
                     if (!x.IsOccupiedByClient)
                     {
-                        //x.Thread.Abort();
                         x.Listener.Stop();
                     }
                 });
@@ -84,8 +87,8 @@ namespace UniActionsCore
 
             return result;
         }
-        private static bool _isStopped;
-        public static bool IsStopped
+        private bool _isStopped;
+        public bool IsStopped
         {
             get
             {
@@ -103,14 +106,14 @@ namespace UniActionsCore
             }
         }
 
-        private static void SendString(NetworkStream stream, string str)
+        private void SendString(NetworkStream stream, string str)
         {
             var bytesToSend = Encoding.UTF8.GetBytes(str);
             stream.WriteByte((byte)bytesToSend.Length);
             stream.Write(bytesToSend, 0, bytesToSend.Length);
         }
 
-        private static string GetNextString(NetworkStream stream)
+        private string GetNextString(NetworkStream stream)
         {
             var len = stream.ReadByte();
             var buff = new byte[len];
@@ -118,17 +121,18 @@ namespace UniActionsCore
             return Encoding.UTF8.GetString(buff);
         }
         
-        public static void Initialize()
+        public void Initialize()
         {
-            Settings.ResolvedIp = new List<IPAddress>();
-            Settings.ActionsPorts = Settings.Defaults.ActionPorts.ToList();
+            this.Settings = new ServerThreadingSettings();
+            this.Settings.ResolvedIp = new List<IPAddress>();
+            this.Settings.ActionsPorts = ServerThreadingSettings.Defaults.ActionPorts.ToList();
             IsStopped = true;
         }
 
-        private static TcpListener _listenerPortDistribution;
-        private static Thread _threadPortDistribution;
+        private TcpListener _listenerPortDistribution;
+        private Thread _threadPortDistribution;
 
-        public static VoidResult BeginStart()
+        public VoidResult BeginStart()
         {
             VoidResult result = new VoidResult();
 
@@ -174,8 +178,8 @@ namespace UniActionsCore
                     var port = Settings.ActionsPorts[i];
 
                     var listener = new TcpListener(port);
-                    listener.Server.SendTimeout = Settings.Defaults.SendTimout;
-                    listener.Server.ReceiveTimeout = Settings.Defaults.ReceiveTimout;
+                    listener.Server.SendTimeout = ServerThreadingSettings.Defaults.SendTimout;
+                    listener.Server.ReceiveTimeout = ServerThreadingSettings.Defaults.ReceiveTimout;
                     listener.Start();
                     Thread t = new Thread(() => {
                         while (!_prepareToStop)
@@ -191,7 +195,7 @@ namespace UniActionsCore
                                     lock (Settings.ResolvedIp)
                                     {
                                         var ip = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
-                                        if (!Settings.ResolvedIp.Where(x=>x.Equals(ip)).Any())
+                                        if (!Settings.ResolvedIp.Where(x => x.Equals(ip)).Any())
                                         {
                                             client.Close();
                                             throw new Exception("Not resolved ip: " + ip);
@@ -202,11 +206,8 @@ namespace UniActionsCore
                                 var stream = client.GetStream();
                                 var command = GetNextString(stream);
 
-                                lock (Pool.ActionItems)
-                                {
-                                    CommandHandling(stream, command);
-                                }
-
+                                CommandHandling(stream, command);
+                                
                                 client.Close();
                             }
                             catch (Exception e)
@@ -242,12 +243,12 @@ namespace UniActionsCore
             return result;
         }
 
-        private static void CommandHandling(NetworkStream stream, string command)
+        private void CommandHandling(NetworkStream stream, string command)
         {
             if (command == VAC.ServerCommands.Command_GetStartCommands)
             {
-                var fastActions = Pool.ActionItems.Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
-                var categories = Pool.ActionItems.Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category).Distinct().OrderBy(x => x);
+                var fastActions = Uni.TasksPool.ActionItems.Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var categories = Uni.TasksPool.ActionItems.Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category).Distinct().OrderBy(x => x);
                 stream.WriteByte((byte)(fastActions.Count() + categories.Count()));
                 foreach (var action in fastActions)
                 {
@@ -264,7 +265,7 @@ namespace UniActionsCore
             {
                 var category = GetNextString(stream);
 
-                var actions = Pool.ActionItems.Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var actions = Uni.TasksPool.ActionItems.Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
 
                 stream.WriteByte((byte)actions.Count());
 
@@ -276,11 +277,10 @@ namespace UniActionsCore
             }
             else
             {
-                var remoteAction = Pool.ActionItems.Where(x => x.ServerCommand == command).FirstOrDefault();
+                var remoteAction = Uni.TasksPool.ActionItems.Where(x => x.ServerCommand == command).FirstOrDefault();
                 if (remoteAction != null)
                 {
                     var state = GetNextString(stream);
-
                     SendString(stream, remoteAction.Execute(state));
                 }
             }

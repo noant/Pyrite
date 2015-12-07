@@ -67,7 +67,7 @@ namespace UniActionsUI
 
             int num = 1;
 
-            foreach (var category in Pool.ActionItems.Where(x=> 
+            foreach (var category in App.Uni.TasksPool.ActionItems.Where(x => 
                 (x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)) || !this.ShowOnlyServerActions)
                 .Select(x=>x.Category).Distinct().OrderBy(x=>x))
             {
@@ -79,7 +79,7 @@ namespace UniActionsUI
                     this.spItems.Children.Add(lbl);
                 }
 
-                foreach (var item in Pool.ActionItems.Where(x=> 
+                foreach (var item in App.Uni.TasksPool.ActionItems.Where(x => 
                     (x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)) || !this.ShowOnlyServerActions)
                     .Where(x => x.Category == category))
                 {

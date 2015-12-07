@@ -31,8 +31,9 @@ namespace UniActionsUI
                 if (BeforeRestart != null)
                     BeforeRestart();
 
-                var res1 = V.Process(UniActionsCore.SAL.Save());
-                UniActionsCore.Actions.ReIntialize(new Action<VoidResult>((res2) => {
+                var res1 = V.Process(App.Uni.CommitChanges());
+                App.Uni.ReIntialize(new Action<VoidResult>((res2) =>
+                {
                     V.Process(res2);
 
                     this.Dispatcher.BeginInvoke(new Action(() => { 
@@ -54,7 +55,8 @@ namespace UniActionsUI
                 if (WhenAllBeginsToEnd != null)
                     WhenAllBeginsToEnd();
 
-                UniActionsCore.Actions.Stop(() => {
+                App.Uni.Stop(() =>
+                {
                     App.Current.Dispatcher.BeginInvoke(new Action(() => { 
                         App.Current.Shutdown();                    
                     }));

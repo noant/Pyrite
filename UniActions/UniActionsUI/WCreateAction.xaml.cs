@@ -36,10 +36,10 @@ namespace UniActionsUI
                 if (_blockSelectActions) return;
                 if (this.cbAction.SelectedIndex != 0)
                 {
-                    var type = UniActionsCore.ModulesControl.CustomActions.Where(x =>
-                        V.Process(UniActionsCore.ModulesControl.GetViewName(x)).Value == this.cbAction.SelectedItem.ToString()).Single();
+                    var type = App.Uni.ModulesControl.CustomActions.Where(x =>
+                        V.Process(App.Uni.ModulesControl.GetViewName(x)).Value == this.cbAction.SelectedItem.ToString()).Single();
 
-                    _item.Action = V.Process(UniActionsCore.ModulesControl.CreateActionInstance(type)).Value;
+                    _item.Action = V.Process(App.Uni.ModulesControl.CreateActionInstance(type)).Value;
                     if (_item.Action == null)
                         this.cbAction.SelectedIndex = 0;
                 }
@@ -55,10 +55,10 @@ namespace UniActionsUI
                 if (_blockSelectActions) return;
                 if (this.cbChecker.SelectedIndex != 0)
                 {
-                    var type = UniActionsCore.ModulesControl.CustomCheckers.Where(x =>
-                        V.Process(UniActionsCore.ModulesControl.GetViewName(x)).Value == this.cbChecker.SelectedItem.ToString()).Single();
+                    var type = App.Uni.ModulesControl.CustomCheckers.Where(x =>
+                        V.Process(App.Uni.ModulesControl.GetViewName(x)).Value == this.cbChecker.SelectedItem.ToString()).Single();
 
-                    _item.Checker = V.Process(UniActionsCore.ModulesControl.CreateCheckerInstance(type)).Value;
+                    _item.Checker = V.Process(App.Uni.ModulesControl.CreateCheckerInstance(type)).Value;
                     if (_item.Checker == null)
                         this.cbChecker.SelectedIndex = 0;
                 }
@@ -106,16 +106,16 @@ namespace UniActionsUI
             this.btCreate.Click += (o, e) => {
                 if (!this.IsEdit)
                 {
-                    var res = V.Process(Pool.AddItem(_item));
+                    var res = V.Process(App.Uni.TasksPool.AddItem(_item));
                     if (res.Value)
                     {
-                        V.Process(SAL.Save());
+                        V.Process(App.Uni.CommitChanges());
                         this.DialogResult = true;
                     }
                 }
                 else
                 {
-                    var res = V.Process(Pool.CheckItem(_item));
+                    var res = V.Process(App.Uni.TasksPool.CheckItem(_item));
 
                     if (res.Value)
                     {
@@ -127,23 +127,23 @@ namespace UniActionsUI
                         _tempItem.ServerCommand = _item.ServerCommand;
                         _tempItem.UseServerThreading = _item.UseServerThreading;
                         _tempItem.IsOnlyOnce = _item.IsOnlyOnce;
-                        V.Process(SAL.Save());
+                        V.Process(App.Uni.CommitChanges());
                         this.DialogResult = true;
                     }
                 }
             };
 
-            this.cbCategory.ItemsSource = UniActionsCore.Pool.ActionItems.
+            this.cbCategory.ItemsSource = App.Uni.TasksPool.ActionItems.
                 Where(x => !string.IsNullOrEmpty(x.Category)).
                 Select(x => x.Category).
                 Distinct().
                 OrderBy(x => x);
 
-            this.cbAction.ItemsSource = new string[] {"-"}.Union(UniActionsCore.ModulesControl.CustomActions
-                .Select(x => V.Process(UniActionsCore.ModulesControl.GetViewName(x)).Value));
+            this.cbAction.ItemsSource = new string[] { "-" }.Union(App.Uni.ModulesControl.CustomActions
+                .Select(x => V.Process(App.Uni.ModulesControl.GetViewName(x)).Value));
 
-            this.cbChecker.ItemsSource = new string[] {"-"}.Union(UniActionsCore.ModulesControl.CustomCheckers
-                .Select(x => V.Process(UniActionsCore.ModulesControl.GetViewName(x)).Value));
+            this.cbChecker.ItemsSource = new string[] { "-" }.Union(App.Uni.ModulesControl.CustomCheckers
+                .Select(x => V.Process(App.Uni.ModulesControl.GetViewName(x)).Value));
 
             this.bOnlyOnce.BoolChanged += (o) => {
                 _item.IsOnlyOnce = o.Value;
@@ -199,7 +199,7 @@ namespace UniActionsUI
 
         private void ProcessOkEnable()
         {
-            var result = Pool.CheckItem(_item);
+            var result = App.Uni.TasksPool.CheckItem(_item);
             if (result.Value)
             {
                 lblStatus.Content = "";

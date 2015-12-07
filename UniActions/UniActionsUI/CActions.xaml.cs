@@ -62,8 +62,8 @@ namespace UniActionsUI
                 {
                     if (MessageBox.Show("Удалить выбранный сценарий?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        Pool.RemoveItem((ActionItem)this.lvItems.SelectedItem);
-                        SAL.Save();
+                        App.Uni.TasksPool.RemoveItem((ActionItem)this.lvItems.SelectedItem);
+                        V.Process(App.Uni.CommitChanges());
                         Refresh();
                     }
                 }
@@ -77,7 +77,7 @@ namespace UniActionsUI
 
         public void Refresh()
         {
-            this.lvItems.ItemsSource = UniActionsCore.Pool.ActionItems;
+            this.lvItems.ItemsSource = App.Uni.TasksPool.ActionItems;
             ProcessButtonsEnable();
         }
 
