@@ -78,7 +78,8 @@ namespace UniActionsCore
                     }
                 });
 
-                _threadPortOccupations.RemoveAll(x => !x.IsOccupiedByClient);
+                lock (_threadPortOccupations)
+                    _threadPortOccupations.RemoveAll(x => !x.IsOccupiedByClient);
             }
             catch (Exception e)
             {
@@ -215,21 +216,24 @@ namespace UniActionsCore
                                 Log.Write(e);
                             }
                             finally {
-                                if (_threadPortOccupations.Any(x => x.Port == port))
-                                    _threadPortOccupations.Single(x => x.Port == port).IsOccupiedByClient = false;                              
+                                lock (_threadPortOccupations)
+                                    if (_threadPortOccupations.Any(x => x.Port == port))
+                                        _threadPortOccupations.Single(x => x.Port == port).IsOccupiedByClient = false;                              
                             }
 
                             if (_prepareToStop)
                             {
                                 listener.Stop();
-                                _threadPortOccupations.RemoveAll(x => x.Port == port);
+                                lock (_threadPortOccupations)
+                                    _threadPortOccupations.RemoveAll(x => x.Port == port);
 
                                 if (!_threadPortOccupations.Any())
                                     IsStopped = true;
                             }
                         }
                     });
-                    _threadPortOccupations.Add(new ThreadPortOccupation(t, listener, port));
+                    lock (_threadPortOccupations)
+                        _threadPortOccupations.Add(new ThreadPortOccupation(t, listener, port));
                     t.IsBackground = false;
                     t.Start();
                 }

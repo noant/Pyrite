@@ -31,32 +31,40 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FtdAdapter">
-      <HintPath>D:\Программирование\Libs\NModbus_net-3.5_1.11.0.0\bin\net\FtdAdapter.dll</HintPath>
+      <HintPath>..\LibrariesToAdd\FtdAdapter.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>D:\Программирование\Libs\NModbus_net-3.5_1.11.0.0\bin\net\log4net.dll</HintPath>
+      <HintPath>..\LibrariesToAdd\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Modbus">
-      <HintPath>D:\Программирование\Libs\NModbus_net-3.5_1.11.0.0\bin\net\Modbus.dll</HintPath>
+      <HintPath>..\LibrariesToAdd\Modbus.dll</HintPath>
     </Reference>
     <Reference Include="Modbus.Extensions">
-      <HintPath>D:\Программирование\Libs\NModbus_net-3.5_1.11.0.0\bin\net\Modbus.Extensions.dll</HintPath>
+      <HintPath>..\LibrariesToAdd\Modbus.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UniActionsClientIntefaces">
-      <HintPath>..\..\UniActions\UniActionsClientIntefaces\bin\Release\UniActionsClientIntefaces.dll</HintPath>
+      <HintPath>..\..\UniActions\UniActionsClientIntefaces\bin\Debug\UniActionsClientIntefaces.dll</HintPath>
     </Reference>
     <Reference Include="Unme.Common">
-      <HintPath>D:\Программирование\Libs\NModbus_net-3.5_1.11.0.0\bin\net\Unme.Common.dll</HintPath>
+      <HintPath>..\LibrariesToAdd\Unme.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateForm.Designer.cs">
+      <DependentUpon>CreateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NModbusAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,6 +72,11 @@
     <Content Include="FTD2XX.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CreateForm.resx">
+      <DependentUpon>CreateForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

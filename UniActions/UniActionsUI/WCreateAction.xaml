@@ -4,7 +4,7 @@
             xmlns:local="clr-namespace:UniActionsUI"
             Title="Создать сценарий"
             WindowStartupLocation="CenterScreen"
-            Height="363.265">
+            Height="479.031">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="220"></RowDefinition>
