@@ -11,6 +11,8 @@ namespace ModbusAction
 {
     public class NModbusAction : ICustomAction
     {
+        private static object _comPortsLocker = new object();
+        
         private string _stateOn = "off";
         private string _stateOff = "on";
         private string _stateError = "Ошибка связи с устройством Modbus";
@@ -27,7 +29,8 @@ namespace ModbusAction
         private int _modbusWriteTimeout = 2000;
 
         private SerialPort ConfigurePort() {
-            SerialPort port = new SerialPort(_portName);            
+            
+            SerialPort port = new SerialPort(_portName);
             port.BaudRate = _portBaudRate;
             port.DataBits = _portDataBits;
             port.Parity = _portParity;
@@ -46,30 +49,37 @@ namespace ModbusAction
 
         public string CheckState()
         {
-            try
+            lock (_comPortsLocker)
             {
-                using (var master = ConfigureMaster())
+                try
                 {
-                    return master.ReadCoils(_modbusSlaveId, _modbusCoilAddress, 1).First() ?
-                       _stateOn : _stateOff;
+                    using (var master = ConfigureMaster())
+                    {
+                        return master.ReadCoils(_modbusSlaveId, _modbusCoilAddress, 1).First() ?
+                           _stateOn : _stateOff;
+                    }
                 }
-            }
-            catch {
-                return _stateError;
+                catch
+                {
+                    return _stateError;
+                }
             }
         }
 
         public string Do(string inputState)
         {
-            //try
-            //{
-            using (var master = ConfigureMaster())
+            lock (_comPortsLocker)
             {
-                var state = inputState != _stateOn;
-                master.WriteSingleCoil(_modbusSlaveId, _modbusCoilAddress, state);
+                try
+                {
+                    using (var master = ConfigureMaster())
+                    {
+                        var state = inputState != _stateOn;
+                        master.WriteSingleCoil(_modbusSlaveId, _modbusCoilAddress, state);
+                    }
+                }
+                catch { }
             }
-            //}
-            //catch { }
             return CheckState();
         }
 
