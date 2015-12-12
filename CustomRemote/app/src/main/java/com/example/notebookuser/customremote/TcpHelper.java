@@ -62,8 +62,8 @@ public class TcpHelper {
 
             //get action port
             InetAddress address = InetAddress.getByName(pars.getAddress());
-            Socket socketGetActionPort = new Socket(address, Integer.parseInt(pars.getPort()));
-            socketGetActionPort.setSoTimeout(5000);
+            Socket socketGetActionPort = new Socket();
+            socketGetActionPort.connect(new InetSocketAddress(address, Integer.parseInt(pars.getPort())), 5000);
             InputStream inGetActionPort = socketGetActionPort.getInputStream();
             int port = Integer.parseInt(getNextString(inGetActionPort));
             //
@@ -76,7 +76,7 @@ public class TcpHelper {
         catch (IOException e1){
             e1.printStackTrace();
         }
-        return -1;
+        return 1;
     }
 
     public String getNextString(InputStream in)
@@ -118,7 +118,6 @@ public class TcpHelper {
 
             Statics pars = new Statics();
             Socket socket = new Socket();
-            socket.setSoTimeout(5000);
             socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 5000);
 
             OutputStream out = socket.getOutputStream();
