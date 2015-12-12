@@ -7,14 +7,16 @@
         android:padding="0dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout android:layout_width="fill_parent" android:padding="0dp">
+        <RelativeLayout android:layout_width="fill_parent" android:padding="0dp"
+            android:layout_height="32dp">
             <Button android:layout_alignParentRight="true"
                 android:layout_height="fill_parent"
                 android:layout_width="wrap_content"
                 android:text="@string/settings"
                 android:padding="0dp"
                 android:onClick="btClick"
-                />
+                android:background="#2c2c2c"
+                android:textColor="#6d6d6d" />
         </RelativeLayout>
         <LinearLayout
             android:gravity="top"

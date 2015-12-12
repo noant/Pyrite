@@ -8,9 +8,11 @@
     tools:context="com.example.notebookuser.customremote.ChangeAddressActivity">
 
     <EditText android:id="@+id/edit_address" android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff" />
     <EditText android:id="@+id/edit_port" android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:inputType="number" />
+        android:layout_height="wrap_content" android:inputType="number"
+        android:textColor="#ffffff" />
     <Button android:id="@+id/bt_ok"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

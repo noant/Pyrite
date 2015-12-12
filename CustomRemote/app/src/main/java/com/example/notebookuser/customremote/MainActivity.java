@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (actionPair.getIsCategory())
                     b.getBackground().setColorFilter(new LightingColorFilter(Color.WHITE, Color.DKGRAY));
-                else
-                    b.getBackground().setColorFilter(new LightingColorFilter(Color.WHITE, Color.BLUE));
 
                 final MainActivity _this = this;
 
