@@ -11,24 +11,26 @@ namespace ModbusAction
 {
     public class NModbusAction : ICustomAction
     {
-        private static object _comPortsLocker = new object();
-        
-        private string _stateOn = "off";
-        private string _stateOff = "on";
-        private string _stateError = "Ошибка связи с устройством Modbus";
+        internal static object _comPortsLocker = new object();
 
-        private string _portName = "COM1";
-        private int _portBaudRate = 9600;
-        private int _portDataBits = 8;
-        private Parity _portParity = Parity.None;
-        private StopBits _portStopBits = StopBits.One;
+        protected string _stateOn = "off";
+        protected string _stateOff = "on";
+        protected string _stateError = "Ошибка связи с устройством Modbus";
 
-        private byte _modbusSlaveId = 1;
-        private ushort _modbusCoilAddress = 0;
-        private int _modbusReadTimeout = 2000;
-        private int _modbusWriteTimeout = 2000;
+        protected ChangeableState _changeableState = ChangeableState.Both;
 
-        private SerialPort ConfigurePort() {
+        protected string _portName = "COM1";
+        protected int _portBaudRate = 9600;
+        protected int _portDataBits = 8;
+        protected Parity _portParity = Parity.None;
+        protected StopBits _portStopBits = StopBits.One;
+
+        protected byte _modbusSlaveId = 1;
+        protected ushort _modbusCoilAddress = 0;
+        protected int _modbusReadTimeout = 2000;
+        protected int _modbusWriteTimeout = 2000;
+
+        protected SerialPort ConfigurePort() {
             
             SerialPort port = new SerialPort(_portName);
             port.BaudRate = _portBaudRate;
@@ -39,7 +41,7 @@ namespace ModbusAction
             return port;
         }
 
-        private IModbusSerialMaster ConfigureMaster()
+        protected IModbusSerialMaster ConfigureMaster()
         {
             var master = ModbusSerialMaster.CreateRtu(ConfigurePort());
             master.Transport.ReadTimeout = _modbusReadTimeout;
@@ -49,6 +51,10 @@ namespace ModbusAction
 
         public string CheckState()
         {
+            if (_changeableState == ChangeableState.Off)
+                return _stateOn;
+            if (_changeableState == ChangeableState.On)
+                return _stateOff;
             lock (_comPortsLocker)
             {
                 try
@@ -74,7 +80,13 @@ namespace ModbusAction
                 {
                     using (var master = ConfigureMaster())
                     {
-                        var state = inputState != _stateOn;
+                        var state = inputState == _stateOff;
+
+                        if (_changeableState == ChangeableState.Off)
+                            state = false;
+                        else if (_changeableState == ChangeableState.On)
+                            state = true;
+
                         master.WriteSingleCoil(_modbusSlaveId, _modbusCoilAddress, state);
                     }
                 }
@@ -83,7 +95,7 @@ namespace ModbusAction
             return CheckState();
         }
 
-        public bool InitializeNew()
+        public virtual bool InitializeNew()
         {
             var form = new CreateForm();
             form.tbPortName.Text = this._portName;
@@ -98,6 +110,10 @@ namespace ModbusAction
             form.cbDataBits.SelectedItem = this._portDataBits;
             form.cbParity.SelectedItem = this._portParity;
             form.cbStopBits.SelectedItem = this._portStopBits;
+
+            form.rbOff.Checked = this._changeableState == ChangeableState.Off;
+            form.rbOn.Checked = this._changeableState == ChangeableState.On;
+            form.rbOnOff.Checked = this._changeableState == ChangeableState.Both;
 
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -114,18 +130,20 @@ namespace ModbusAction
                 this._portParity = (Parity)form.cbParity.SelectedItem;
                 this._portStopBits = (StopBits)form.cbStopBits.SelectedItem;
 
+                this._changeableState = form.rbOff.Checked ? ChangeableState.Off : form.rbOn.Checked ? ChangeableState.On : ChangeableState.Both;
+
                 return true;
             }
 
             return false;
         }
 
-        public string Name
+        public virtual string Name
         {
             get { return "Действие Modbus RTU (запись в одну ячейку)"; }
         }
 
-        string _splitter = "#";
+        protected string _splitter = "#";
 
         public void SetFromString(string settings)
         {
@@ -141,6 +159,7 @@ namespace ModbusAction
             _modbusCoilAddress = byte.Parse(strs[8]);
             _modbusReadTimeout = int.Parse(strs[9]);
             _modbusWriteTimeout = int.Parse(strs[10]);
+            _changeableState = (ChangeableState)int.Parse(strs[11]);
         }
 
         public string SetToString()
@@ -156,7 +175,15 @@ namespace ModbusAction
                 _modbusSlaveId + _splitter +
                 _modbusCoilAddress + _splitter +
                 _modbusReadTimeout + _splitter +
-                _modbusWriteTimeout;
+                _modbusWriteTimeout + _splitter +
+                (int)_changeableState;
+        }
+
+        public enum ChangeableState
+        {
+            Off,
+            On,
+            Both
         }
     }
 }

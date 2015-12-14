@@ -65,6 +65,7 @@
     <Compile Include="CreateForm.Designer.cs">
       <DependentUpon>CreateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FastActions.cs" />
     <Compile Include="NModbusAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

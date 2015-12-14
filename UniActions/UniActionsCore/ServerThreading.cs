@@ -208,17 +208,17 @@ namespace UniActionsCore
                                 var command = GetNextString(stream);
 
                                 CommandHandling(stream, command);
-                                
                                 client.Close();
                             }
                             catch (Exception e)
                             {
                                 Log.Write(e);
                             }
-                            finally {
+                            finally
+                            {
                                 lock (_threadPortOccupations)
                                     if (_threadPortOccupations.Any(x => x.Port == port))
-                                        _threadPortOccupations.Single(x => x.Port == port).IsOccupiedByClient = false;                              
+                                        _threadPortOccupations.Single(x => x.Port == port).IsOccupiedByClient = false;
                             }
 
                             if (_prepareToStop)
@@ -263,7 +263,8 @@ namespace UniActionsCore
 
                 foreach (var category in categories)
                 {
-                    SendString(stream, category);}
+                    SendString(stream, category);
+                }
             }
             else if (command == VAC.ServerCommands.Command_GetCategoryCommands)
             {
