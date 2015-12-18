@@ -11,25 +11,26 @@ using UniActionsClientIntefaces;
 
 namespace UniActionsCore
 {
-    public class ActionItem
+    public class ActionItem : IDisposable
     {
         private static class Defaults
         {
             public static readonly DispatcherPriority DispatcherPriority = System.Windows.Threading.DispatcherPriority.Background;
         }
 
+        private Thread _thread;
         public ActionItem()
         {
             this.IsActive = true;
             Guid = Guid.NewGuid();
-            var thread = new Thread(() =>
+            _thread = new Thread(() =>
             {
                 this.Dispatcher = Dispatcher.CurrentDispatcher;
                 Dispatcher.Run();
             });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.IsBackground = true;
-            thread.Start();
+            _thread.SetApartmentState(ApartmentState.STA);
+            _thread.IsBackground = true;
+            _thread.Start();
         }
 
         public ICustomAction Action { get; set; }
@@ -131,6 +132,11 @@ namespace UniActionsCore
             };
 
             return item;
+        }
+
+        public void Dispose()
+        {
+            this._thread.Abort();
         }
 
         private Dispatcher Dispatcher;

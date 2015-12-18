@@ -36,7 +36,7 @@ namespace UniActionsCore
         }
                 
         private class ThreadPortOccupation{
-            public ThreadPortOccupation(Thread t, TcpListener listener, ushort port)
+            public ThreadPortOccupation(Thread t, TcpListenerEx listener, ushort port)
             {
                 Thread = t;
                 Port = port;
@@ -44,7 +44,7 @@ namespace UniActionsCore
             }
 
             public Thread Thread { get; private set; }
-            public TcpListener Listener { get; private set; }
+            public TcpListenerEx Listener { get; private set; }
             public ushort Port { get; private set; }
             public bool IsOccupiedByClient { get; set; }
         }
@@ -130,7 +130,7 @@ namespace UniActionsCore
             IsStopped = true;
         }
 
-        private TcpListener _listenerPortDistribution;
+        private TcpListenerEx _listenerPortDistribution;
         private Thread _threadPortDistribution;
 
         public VoidResult BeginStart()
@@ -150,24 +150,34 @@ namespace UniActionsCore
             _prepareToStop = false;
 
             _threadPortDistribution = Helper.AlterThread(() => { 
-                _listenerPortDistribution = new TcpListener(Settings.DistributionPort);
+                _listenerPortDistribution = new TcpListenerEx(Settings.DistributionPort);
                 _listenerPortDistribution.Start();
                 while (!_prepareToStop)
                 {
                     try
                     {
-                        var client = _listenerPortDistribution.AcceptTcpClient();
-                        ThreadPortOccupation occupation = null;
+                        using (var client = _listenerPortDistribution.AcceptTcpClient())
+                        {
+                            ThreadPortOccupation occupation = null;
 
-                        while (occupation == null)
-                            occupation = _threadPortOccupations.FirstOrDefault(x => !x.IsOccupiedByClient);
+                            while (occupation == null)
+                            {
+                                occupation = _threadPortOccupations.FirstOrDefault(x => !x.IsOccupiedByClient);
+                                if (occupation == null)
+                                    Thread.Sleep(10);
+                            }
 
-                        SendString(client.GetStream(), occupation.Port.ToString());
-                        client.Close();
+                            SendString(client.GetStream(), occupation.Port.ToString());
+                        }
                     }
                     catch (Exception e)
                     {
-                        Log.Write(e);
+                        if (e is SocketException && e.Message.Contains("WSACancelBlockingCall"))
+                        {
+                            //do nothing
+                        }
+                        else
+                            Log.Write(e);
                     }
                 }
             });
@@ -178,63 +188,68 @@ namespace UniActionsCore
                 {
                     var port = Settings.ActionsPorts[i];
 
-                    var listener = new TcpListener(port);
+                    var listener = new TcpListenerEx(port);
+
                     listener.Server.SendTimeout = ServerThreadingSettings.Defaults.SendTimout;
                     listener.Server.ReceiveTimeout = ServerThreadingSettings.Defaults.ReceiveTimout;
-                    listener.Start();
+                    ThreadPortOccupation portOccupation = null;
                     Thread t = new Thread(() => {
-                        while (!_prepareToStop)
+                        while (true)
                         {
                             try
                             {
-                                TcpClient client = listener.AcceptTcpClient();
-
-                                _threadPortOccupations.Single(x => x.Port == port).IsOccupiedByClient = true;
-
-                                if (Settings.ResolvedIp != null && Settings.ResolvedIp.Any() && !Settings.ResolveAllIp)
+                                using (TcpClient client = listener.AcceptTcpClient())
                                 {
-                                    lock (Settings.ResolvedIp)
+                                    portOccupation.IsOccupiedByClient = true;
+
+                                    if (Settings.ResolvedIp != null && Settings.ResolvedIp.Any() && !Settings.ResolveAllIp)
                                     {
-                                        var ip = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
-                                        if (!Settings.ResolvedIp.Where(x => x.Equals(ip)).Any())
+                                        lock (Settings.ResolvedIp)
                                         {
-                                            client.Close();
-                                            throw new Exception("Not resolved ip: " + ip);
+                                            var ip = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
+                                            if (!Settings.ResolvedIp.Where(x => x.Equals(ip)).Any())
+                                            {
+                                                client.Close();
+                                                throw new Exception("Not resolved ip: " + ip);
+                                            }
                                         }
                                     }
+
+                                    var stream = client.GetStream();
+                                    var command = GetNextString(stream);
+
+                                    CommandHandling(stream, command);
                                 }
-
-                                var stream = client.GetStream();
-                                var command = GetNextString(stream);
-
-                                CommandHandling(stream, command);
-                                client.Close();
                             }
                             catch (Exception e)
                             {
-                                Log.Write(e);
-                            }
-                            finally
-                            {
-                                lock (_threadPortOccupations)
-                                    if (_threadPortOccupations.Any(x => x.Port == port))
-                                        _threadPortOccupations.Single(x => x.Port == port).IsOccupiedByClient = false;
+                                if (e is SocketException && e.Message.Contains("WSACancelBlockingCall"))
+                                {
+                                    //do nothing
+                                }
+                                else
+                                    Log.Write(e);
                             }
 
-                            if (_prepareToStop)
+                            portOccupation.IsOccupiedByClient = false;
+
+                            if (!listener.IsActive)
                             {
-                                listener.Stop();
                                 lock (_threadPortOccupations)
+                                {
                                     _threadPortOccupations.RemoveAll(x => x.Port == port);
 
-                                if (!_threadPortOccupations.Any())
-                                    IsStopped = true;
+                                    if (!_threadPortOccupations.Any())
+                                        IsStopped = true;
+                                }
+                                break;
                             }
                         }
                     });
-                    lock (_threadPortOccupations)
-                        _threadPortOccupations.Add(new ThreadPortOccupation(t, listener, port));
+
+                    _threadPortOccupations.Add(portOccupation = new ThreadPortOccupation(t, listener, port));
                     t.IsBackground = false;
+                    listener.Start();
                     t.Start();
                 }
                 catch (Exception e)

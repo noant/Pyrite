@@ -91,6 +91,7 @@ namespace UniActionsCore
         }
 
         internal void Clear() {
+            _actionItems.ForEach(x => x.Dispose());
             _actionItems.Clear();
         }
 
