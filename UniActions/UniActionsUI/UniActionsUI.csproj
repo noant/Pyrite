@@ -152,7 +152,6 @@
       <DependentUpon>CSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="FSHelper.cs" />
-    <Compile Include="V.cs" />
     <Compile Include="IpBox.xaml.cs">
       <DependentUpon>IpBox.xaml</DependentUpon>
     </Compile>

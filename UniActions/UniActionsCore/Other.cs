@@ -6,8 +6,33 @@ using System.Threading.Tasks;
 
 namespace UniActionsCore
 {
+    public static class Resulting{
+        static Resulting()
+        {
+            NotCriticalExceptions = new List<Type>();
+            CriticalHandler += (exceptions) =>
+            {
+                if (exceptions.Count(x => NotCriticalExceptions.Any(z => z.Equals(x.GetType()))) != exceptions.Count())
+                    if (NeedShutdown != null)
+                        NeedShutdown();
+            };
+        }
+
+        public static List<Type> NotCriticalExceptions { get; private set; }
+
+        public static event CriticalHandler CriticalHandler;
+
+        internal static void RaiseCriticalHandler(IEnumerable<Exception> exceptions)
+        {
+            if (CriticalHandler != null)
+                CriticalHandler(exceptions);
+        }
+
+        public static event Action NeedShutdown;
+    }
+
     public class Result<T>
-    {
+    {        
         private List<Exception> _exceptions;
         public IEnumerable<Exception> Exceptions { 
             get {
@@ -22,8 +47,13 @@ namespace UniActionsCore
         {
             if (_exceptions == null)
                 _exceptions = new List<Exception>();
-
+            
             _exceptions.Add(e);
+
+            if (!Resulting.NotCriticalExceptions.Any(x => x.Equals(e.GetType())))
+            {
+                Resulting.RaiseCriticalHandler(this.Exceptions);
+            }
         }
 
         internal void AddExceptions(IEnumerable<Exception> es)
@@ -37,4 +67,6 @@ namespace UniActionsCore
     { 
         
     }
+
+    public delegate void CriticalHandler(IEnumerable<Exception> exceptions);
 }

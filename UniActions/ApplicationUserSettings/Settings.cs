@@ -83,7 +83,8 @@ namespace ApplicationUserSettings
         public string GetValue(string parName)
         {
             if (Parameters == null) LoadParameters();
-            if (Parameters.Items.Where(x => x.ParameterName == parName).Count() == 0) throw new ParameterNotExistException("Parameter not exist: "+parName);
+            if (Parameters.Items.Where(x => x.ParameterName == parName).Count() == 0) 
+                throw new ParameterNotExistException("Parameter not exist: "+parName);
             return Parameters.Items.Where(x => x.ParameterName == parName).First().Value;
         }
 

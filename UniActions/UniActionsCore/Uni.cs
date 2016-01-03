@@ -37,7 +37,7 @@ namespace UniActionsCore
         internal SaveAndLoad SaveAndLoad { get; private set; }
 
         internal Settings Settings { get; private set; }
-        
+
         public VoidResult Initialize(SaveAndLoad sal)
         {
             this.SaveAndLoad = sal;

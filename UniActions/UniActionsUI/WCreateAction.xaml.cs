@@ -37,9 +37,9 @@ namespace UniActionsUI
                 if (this.cbAction.SelectedIndex != 0)
                 {
                     var type = App.Uni.ModulesControl.CustomActions.Where(x =>
-                        V.Process(App.Uni.ModulesControl.GetViewName(x)).Value == this.cbAction.SelectedItem.ToString()).Single();
+                        App.Uni.ModulesControl.GetViewName(x).Value == this.cbAction.SelectedItem.ToString()).Single();
 
-                    _item.Action = V.Process(App.Uni.ModulesControl.CreateActionInstance(type)).Value;
+                    _item.Action = App.Uni.ModulesControl.CreateActionInstance(type).Value;
                     if (_item.Action == null)
                         this.cbAction.SelectedIndex = 0;
                 }
@@ -56,9 +56,9 @@ namespace UniActionsUI
                 if (this.cbChecker.SelectedIndex != 0)
                 {
                     var type = App.Uni.ModulesControl.CustomCheckers.Where(x =>
-                        V.Process(App.Uni.ModulesControl.GetViewName(x)).Value == this.cbChecker.SelectedItem.ToString()).Single();
+                        App.Uni.ModulesControl.GetViewName(x).Value == this.cbChecker.SelectedItem.ToString()).Single();
 
-                    _item.Checker = V.Process(App.Uni.ModulesControl.CreateCheckerInstance(type)).Value;
+                    _item.Checker = App.Uni.ModulesControl.CreateCheckerInstance(type).Value;
                     if (_item.Checker == null)
                         this.cbChecker.SelectedIndex = 0;
                 }
@@ -106,16 +106,16 @@ namespace UniActionsUI
             this.btCreate.Click += (o, e) => {
                 if (!this.IsEdit)
                 {
-                    var res = V.Process(App.Uni.TasksPool.AddItem(_item));
+                    var res = App.Uni.TasksPool.AddItem(_item);
                     if (res.Value)
                     {
-                        V.Process(App.Uni.CommitChanges());
+                        App.Uni.CommitChanges();
                         this.DialogResult = true;
                     }
                 }
                 else
                 {
-                    var res = V.Process(App.Uni.TasksPool.CheckItem(_item));
+                    var res = App.Uni.TasksPool.CheckItem(_item);
 
                     if (res.Value)
                     {
@@ -127,7 +127,7 @@ namespace UniActionsUI
                         _tempItem.ServerCommand = _item.ServerCommand;
                         _tempItem.UseServerThreading = _item.UseServerThreading;
                         _tempItem.IsOnlyOnce = _item.IsOnlyOnce;
-                        V.Process(App.Uni.CommitChanges());
+                        App.Uni.CommitChanges();
                         this.DialogResult = true;
                     }
                 }
@@ -140,10 +140,10 @@ namespace UniActionsUI
                 OrderBy(x => x);
 
             this.cbAction.ItemsSource = new string[] { "-" }.Union(App.Uni.ModulesControl.CustomActions
-                .Select(x => V.Process(App.Uni.ModulesControl.GetViewName(x)).Value));
+                .Select(x => App.Uni.ModulesControl.GetViewName(x).Value));
 
             this.cbChecker.ItemsSource = new string[] { "-" }.Union(App.Uni.ModulesControl.CustomCheckers
-                .Select(x => V.Process(App.Uni.ModulesControl.GetViewName(x)).Value));
+                .Select(x => App.Uni.ModulesControl.GetViewName(x).Value));
 
             this.bOnlyOnce.BoolChanged += (o) => {
                 _item.IsOnlyOnce = o.Value;

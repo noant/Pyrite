@@ -63,7 +63,7 @@ namespace UniActionsUI
                     if (MessageBox.Show("Удалить выбранный сценарий?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
                         App.Uni.TasksPool.RemoveItem((ActionItem)this.lvItems.SelectedItem);
-                        V.Process(App.Uni.CommitChanges());
+                        App.Uni.CommitChanges();
                         Refresh();
                     }
                 }

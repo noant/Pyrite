@@ -31,11 +31,9 @@ namespace UniActionsUI
                 if (BeforeRestart != null)
                     BeforeRestart();
 
-                var res1 = V.Process(App.Uni.CommitChanges());
+                var res1 = App.Uni.CommitChanges();
                 App.Uni.ReIntialize(new Action<VoidResult>((res2) =>
                 {
-                    V.Process(res2);
-
                     this.Dispatcher.BeginInvoke(new Action(() => { 
                         this.btRestart.Content = btText;                        
                     }));

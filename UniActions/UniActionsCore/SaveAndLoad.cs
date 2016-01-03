@@ -214,7 +214,7 @@ namespace UniActionsCore
                         Log.Write(e);
                         result.AddException(e);
                     }
-
+                    
                     i++;
                 }
             }
@@ -222,9 +222,11 @@ namespace UniActionsCore
             {
                 if (e is ApplicationUserSettings.Settings.ParameterNotExistException)
                     SetDefaults();
-                else result.AddException(e);
-                
-                Log.Write(e);
+                else
+                {
+                    Log.Write(e);
+                    result.AddException(e);
+                }
             }
 
             return result;
