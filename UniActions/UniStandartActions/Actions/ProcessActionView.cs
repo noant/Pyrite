@@ -32,12 +32,55 @@ namespace UniStandartActions.Actions
             this.tbStateOff.TextChanged += (o, e) => ProcessOkEnable();
         }
 
-        public string Path { get { return tbPath.Text; } }
-        public string Args { get { return tbArgs.Text; } }
-        public string StateOn { get { return tbStateOn.Text; } }
-        public string StateOff { get { return tbStateOff.Text; } }
-        public bool Tracking { get { return cbTracking.Checked; } }
-        public bool CloseMainWindow { get { return cbCloseMainWindow.Checked; } }
+        public string Path { 
+            get { 
+                return tbPath.Text; 
+            }
+            set
+            {
+                tbPath.Text = value;
+            }
+        }
+        public string Args
+        {
+            get { return tbArgs.Text; }
+            set
+            {
+                tbArgs.Text = value;
+            }
+        }
+        public string StateOn
+        {
+            get { return tbStateOn.Text; }
+            set
+            {
+                tbStateOn.Text = value;
+            }
+        }
+        public string StateOff
+        {
+            get { return tbStateOff.Text; }
+            set
+            {
+                tbStateOff.Text = value;
+            }
+        }
+        public bool Tracking
+        {
+            get { return cbTracking.Checked; }
+            set
+            {
+                cbTracking.Checked = value;
+            }
+        }
+        public bool CloseMainWindow
+        {
+            get { return cbCloseMainWindow.Checked; }
+            set
+            {
+                cbCloseMainWindow.Checked = value;
+            }
+        }
 
         private void ProcessOkEnable()
         {

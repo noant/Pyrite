@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionItem.cs" />
-    <Compile Include="ClassesExtensions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ModulesControl.cs" />
     <Compile Include="Other.cs" />
@@ -54,9 +53,9 @@
     <Compile Include="VAC.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationUserSettings\ApplicationUserSettings.csproj">
-      <Project>{34e6e951-4119-444b-bf32-066122e3a080}</Project>
-      <Name>ApplicationUserSettings</Name>
+    <ProjectReference Include="..\HierarchicalData\HierarchicalData.csproj">
+      <Project>{ca8b1b75-6b8a-4216-af3d-27b5d1cdf3e4}</Project>
+      <Name>HierarchicalData</Name>
     </ProjectReference>
     <ProjectReference Include="..\Log\Log.csproj">
       <Project>{a73a1166-fc36-4800-bd02-465fa7e9b833}</Project>

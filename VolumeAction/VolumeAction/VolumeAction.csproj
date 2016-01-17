@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HierarchicalData">
+      <HintPath>..\..\UniActions\HierarchicalData\bin\Release\HierarchicalData.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -41,9 +44,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="UniActionsClientIntefaces">
       <HintPath>..\..\UniActions\UniActionsClientIntefaces\bin\Release\UniActionsClientIntefaces.dll</HintPath>
-    </Reference>
-    <Reference Include="UniStandartActions">
-      <HintPath>..\..\UniActions\UniStandartActions\bin\Release\UniStandartActions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

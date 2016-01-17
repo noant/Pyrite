@@ -52,7 +52,7 @@ namespace UniActionsCore
             var result = this.Dispatcher.Invoke(new Func<string>(() =>
             {
                 lock (_locker)
-                    return this.Action.CheckState();
+                    return this.Action.State;
             }), Defaults.DispatcherPriority, null);
             return result.ToString();
         }
@@ -62,7 +62,7 @@ namespace UniActionsCore
             var result = this.Dispatcher.BeginInvoke(new Action(() =>
             {
                 lock (_locker)
-                    callback(this.Action.CheckState());
+                    callback(this.Action.State);
             }), Defaults.DispatcherPriority, null);
         }
 
@@ -93,7 +93,7 @@ namespace UniActionsCore
             {
                 var state = "";
                 lock (_locker)
-                    state = this.Action.Do(this.Action.CheckState());
+                    state = this.Action.Do(this.Action.State);
                 callback(state);
             }), Defaults.DispatcherPriority, null);
         }
@@ -103,7 +103,7 @@ namespace UniActionsCore
             var result = this.Dispatcher.Invoke(new Func<string>(() =>
             {
                 lock (_locker)
-                    return this.Action.Do(this.Action.CheckState());
+                    return this.Action.Do(this.Action.State);
             }), Defaults.DispatcherPriority, null);
             return result.ToString();
         }
@@ -112,7 +112,7 @@ namespace UniActionsCore
         {
             this.Dispatcher.BeginInvoke(new Action(() =>
             {
-                this.Action.Do(this.Action.CheckState());
+                this.Action.Do(this.Action.State);
             }), Defaults.DispatcherPriority, null);
         }
 
@@ -120,9 +120,9 @@ namespace UniActionsCore
         {
             var item = new ActionItem()
             {
-                Action = this.Action,
+                Action = ModulesControl.Clone(this.Action),
+                Checker = ModulesControl.Clone(this.Checker),
                 Category = this.Category,
-                Checker = this.Checker,
                 Guid = this.Guid,
                 IsActive = this.IsActive,
                 Name = this.Name,

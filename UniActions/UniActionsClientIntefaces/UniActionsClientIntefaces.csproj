@@ -43,6 +43,12 @@
     <Compile Include="ICustomChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HierarchicalData\HierarchicalData.csproj">
+      <Project>{ca8b1b75-6b8a-4216-af3d-27b5d1cdf3e4}</Project>
+      <Name>HierarchicalData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

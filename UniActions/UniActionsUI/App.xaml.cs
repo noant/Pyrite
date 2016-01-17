@@ -21,22 +21,30 @@ namespace UniActionsUI
         public App() {
             this.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
 
-            Resulting.NeedShutdown += () => App.Current.Shutdown();
+            Resulting.NeedShutdown += () =>
+                {
+                    try
+                    {
+                        lock (App.Current)
+                            App.Current.Shutdown();
+                    }
+                    catch { }
+                };
             Resulting.CriticalHandler += (exceptions) =>
             {
                 if (exceptions.Count() != 0)
                 {
-                    Thread t = new Thread(() =>
-                    {
+                    //Thread t = new Thread(() =>
+                    //{
                         var message = "Выброшены следующие ошибки:\r\n";
                         foreach (var e in exceptions)
                             message += e.Message + "\r\n";
 
                         MessageBox.Show(message, "Сообщение", MessageBoxButton.OK, MessageBoxImage.Error);
-                    });
-                    t.IsBackground = true;
-                    t.SetApartmentState(ApartmentState.STA);
-                    t.Start();
+                    //});
+                    //t.IsBackground = true;
+                    //t.SetApartmentState(ApartmentState.STA);
+                    //t.Start();
                 }
             };
 

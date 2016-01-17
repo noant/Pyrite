@@ -55,7 +55,7 @@ namespace UniActionsCore
             try
             {
                 var action = (ICustomAction)type.GetConstructor(new Type[0]).Invoke(new object[0]);
-                if (action.InitializeNew())
+                if (action.BeginUserSettings())
                     result.Value = action;
             }
             catch (Exception e)
@@ -71,7 +71,7 @@ namespace UniActionsCore
             try
             {
                 var checker = (ICustomChecker)type.GetConstructor(new Type[0]).Invoke(new object[0]);
-                if (checker.InitializeNew())
+                if (checker.BeginUserSettings())
                     result.Value = checker;
             }
             catch (Exception e)
@@ -235,6 +235,16 @@ namespace UniActionsCore
                 result.AddException(e);
             }
             return result;
+        }
+
+        public static ICustomAction Clone(ICustomAction action)
+        {
+            return (ICustomAction)HierarchicalData.Helper.CloneHierarchicalObject(action);
+        }
+
+        public static ICustomChecker Clone(ICustomChecker action)
+        {
+            return (ICustomChecker)HierarchicalData.Helper.CloneHierarchicalObject(action);
         }
     }
 }

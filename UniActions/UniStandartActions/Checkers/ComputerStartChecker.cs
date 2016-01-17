@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,34 +11,30 @@ namespace UniStandartActions.Checkers
     public class ComputerStartChecker : ICustomChecker
     {
         private bool _started;
-        public bool IsCanDoNow()
+        public bool IsCanDoNow
         {
-            if (!_started)
+            get
             {
-                _started = true;
-                return true;
+                if (!_started)
+                {
+                    _started = true;
+                    return true;
+                }
+                else return false;
             }
-            else return false;
         }
+        public bool AllowUserSettings { get { return false; } }
 
         public string Name
         {
             get { return "При включении компьютера";  }
         }
 
-        public bool InitializeNew()
+        public bool BeginUserSettings()
         {
             return true;
         }
 
-        public void SetFromString(string settings)
-        {
-            return;
-        }
-
-        public string SetToString()
-        {
-            return "";
-        }
+        public void Refresh() { }
     }
 }

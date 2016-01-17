@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,11 +12,19 @@ namespace UniStandartActions.Actions
 {
     public class ProcessAction : ICustomAction
     {
+        public bool AllowUserSettings { get { return true; } }
+
+        [Settings]
         private string _stateOn;
+        [Settings]
         private string _stateOff;
+        [Settings]
         private string _path;
+        [Settings]
         private string _args;
+        [Settings]
         private bool _closeMainWindow;
+        [Settings]
         private bool _processTracking;
         public string Do(string inputState)
         {
@@ -85,11 +94,14 @@ namespace UniStandartActions.Actions
             return true;
         }
 
-        public string CheckState()
+        public string State
         {
-            if (_currentProcess == null || !_processTracking) return _stateOff;
-            if (_currentProcess.HasExited) return _stateOff;
-            else return _stateOn;
+            get
+            {
+                if (_currentProcess == null || !_processTracking) return _stateOff;
+                if (_currentProcess.HasExited) return _stateOff;
+                else return _stateOn;
+            }
         }
 
         public string Name
@@ -97,15 +109,21 @@ namespace UniStandartActions.Actions
             get { return "Запуск процесса"; }
         }
 
-        public bool InitializeNew()
+        public bool BeginUserSettings()
         {
             var form = new ProcessActionView();
+            form.Path = this._path;
+            form.Args = this._args;
+            form.StateOn = this._stateOn;
+            form.StateOff = this._stateOff;
+            form.Tracking = this._processTracking;
+            form.CloseMainWindow = this._closeMainWindow;
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this._path = Validate(form.Path);
-                this._args = Validate(form.Args);
-                this._stateOn = Validate(form.StateOn);
-                this._stateOff = Validate(form.StateOff);
+                this._path = form.Path;
+                this._args = form.Args;
+                this._stateOn = form.StateOn;
+                this._stateOff = form.StateOff;
                 this._processTracking = form.Tracking;
                 this._closeMainWindow = form.CloseMainWindow;
                 return true;
@@ -113,27 +131,6 @@ namespace UniStandartActions.Actions
             else return false;
         }
 
-        private string Validate(string str)
-        {
-            return str.Replace(_splitter, "???");
-        }
-
-        private string _splitter = "###";
-
-        public void SetFromString(string settings)
-        {
-            var strs = settings.Split(new string[] { _splitter }, StringSplitOptions.RemoveEmptyEntries);
-            this._stateOff = strs[0];
-            this._stateOn = strs[1];
-            this._path = strs[2];
-            this._args = strs[3];
-            this._processTracking = strs[4] == "1";
-            this._closeMainWindow = strs[5] == "1";
-        }
-
-        public string SetToString()
-        {
-            return _stateOff + _splitter + _stateOn + _splitter + _path + _splitter + (string.IsNullOrEmpty(_args) ? " " : _args) + _splitter + (this._processTracking ? "1" : "0") + _splitter + (this._closeMainWindow ? "1" : "0");
-        }
+        public void Refresh() { }
     }
 }

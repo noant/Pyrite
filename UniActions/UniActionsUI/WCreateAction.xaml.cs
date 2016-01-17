@@ -30,6 +30,7 @@ namespace UniActionsUI
 
             _item = new ActionItem();
 
+            UniActionsCore.Resulting.EnableExceptionHandling = false;
             ProcessOkEnable();
 
             this.cbAction.SelectionChanged += (o, e) => {
@@ -120,8 +121,8 @@ namespace UniActionsUI
                     if (res.Value)
                     {
                         _tempItem.Action = _item.Action;
-                        _tempItem.Category = _item.Category;
                         _tempItem.Checker = _item.Checker;
+                        _tempItem.Category = _item.Category;
                         _tempItem.IsActive = _item.IsActive;
                         _tempItem.Name = _item.Name;
                         _tempItem.ServerCommand = _item.ServerCommand;
@@ -149,6 +150,11 @@ namespace UniActionsUI
                 _item.IsOnlyOnce = o.Value;
                 ProcessOkEnable();
             };
+
+            this.btEditAction.Click += (o, e) => _item.Action.BeginUserSettings();
+            this.btEditChecker.Click += (o, e) => _item.Checker.BeginUserSettings();
+
+            UniActionsCore.Resulting.EnableExceptionHandling = true; 
         }
 
         private bool _isEdit;
@@ -199,6 +205,10 @@ namespace UniActionsUI
 
         private void ProcessOkEnable()
         {
+            btEditAction.IsEnabled = _item.Action != null && _item.Action.AllowUserSettings;
+            btEditChecker.IsEnabled = _item.Checker != null && _item.Checker.AllowUserSettings;
+
+            UniActionsCore.Resulting.EnableExceptionHandling = false;
             var result = App.Uni.TasksPool.CheckItem(_item);
             if (result.Value)
             {
@@ -215,6 +225,7 @@ namespace UniActionsUI
 
                 DisableOk();
             }
+            UniActionsCore.Resulting.EnableExceptionHandling = true;
         }
 
         private void EnableOk()

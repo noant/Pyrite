@@ -9,12 +9,14 @@ namespace UniActionsCore
     public static class Resulting{
         static Resulting()
         {
+            EnableExceptionHandling = true;
             NotCriticalExceptions = new List<Type>();
             CriticalHandler += (exceptions) =>
             {
-                if (exceptions.Count(x => NotCriticalExceptions.Any(z => z.Equals(x.GetType()))) != exceptions.Count())
-                    if (NeedShutdown != null)
-                        NeedShutdown();
+                if (EnableExceptionHandling)
+                    if (exceptions.Count(x => NotCriticalExceptions.Any(z => z.Equals(x.GetType()))) != exceptions.Count())
+                        if (NeedShutdown != null)
+                            NeedShutdown();
             };
         }
 
@@ -24,9 +26,12 @@ namespace UniActionsCore
 
         internal static void RaiseCriticalHandler(IEnumerable<Exception> exceptions)
         {
-            if (CriticalHandler != null)
-                CriticalHandler(exceptions);
+            if (EnableExceptionHandling)
+                if (CriticalHandler != null)
+                    CriticalHandler(exceptions);
         }
+
+        public static bool EnableExceptionHandling { get; set; }
 
         public static event Action NeedShutdown;
     }

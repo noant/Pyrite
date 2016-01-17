@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,15 @@ namespace UniActionsClientIntefaces
     public interface ICustomAction
     {
         string Do(string inputState);
-        string CheckState();
+        string State { get; }
         string Name { get; }
 
-        bool InitializeNew();
+        bool AllowUserSettings { get; }
 
-        void SetFromString(string settings);
+        bool BeginUserSettings();
 
-        string SetToString();
+        //HierarchicalObject Settings { get; set; }
+
+        void Refresh();
     }
 }

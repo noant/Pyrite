@@ -9,29 +9,26 @@ namespace UniStandartActions.Checkers
 {
     public class NeverChecker : ICustomChecker
     {
-        public bool IsCanDoNow()
+        public bool IsCanDoNow
         {
-            return false;
+            get
+            {
+                return false;
+            }
         }
+
+        public bool AllowUserSettings { get { return false; } }
 
         public string Name
         {
             get { return "Никогда"; }
         }
 
-        public bool InitializeNew()
+        public bool BeginUserSettings()
         {
             return true;
         }
 
-        public void SetFromString(string settings)
-        {
-            return;
-        }
-
-        public string SetToString()
-        {
-            return "";
-        }
+        public void Refresh() { }
     }
 }

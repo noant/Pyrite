@@ -23,6 +23,10 @@ namespace UniStandartActions.Actions
             {
                 return (int)nudTimer.Value;
             }
+            set
+            {
+                nudTimer.Value = value;
+            }
         }
 
         public bool CanCancel
@@ -31,6 +35,10 @@ namespace UniStandartActions.Actions
             {
                 return cbCanCancel.Checked;
             }
+            set
+            {
+                cbCanCancel.Checked = value;
+            }
         }
 
         public bool Restart
@@ -38,6 +46,10 @@ namespace UniStandartActions.Actions
             get
             {
                 return cbRestart.Checked;
+            }
+            set
+            {
+                cbRestart.Checked = value;
             }
         }
     }

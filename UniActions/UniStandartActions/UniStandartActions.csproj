@@ -101,6 +101,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HierarchicalData\HierarchicalData.csproj">
+      <Project>{ca8b1b75-6b8a-4216-af3d-27b5d1cdf3e4}</Project>
+      <Name>HierarchicalData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UniActionsClientIntefaces\UniActionsClientIntefaces.csproj">
       <Project>{683527b0-3d6e-4fd3-b549-588bfdd43119}</Project>
       <Name>UniActionsClientIntefaces</Name>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +33,16 @@ namespace test
             //);
 
             //SAL.Save();
+
+
+            HierarchicalData.HierarchicalObject a = new HierarchicalData.HierarchicalObject();
+            a[1] = 2;
+            a[3] = DateTime.Now;
+
+            var b = a.ToString();
+            var c = HierarchicalObject.FromXml(b);
+            var cc = HierarchicalObject.FromXml(b);
+
         }
     }
 }

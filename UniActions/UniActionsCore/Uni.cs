@@ -1,4 +1,4 @@
-﻿using ApplicationUserSettings;
+﻿using HierarchicalData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace UniActionsCore
 
         internal SaveAndLoad SaveAndLoad { get; private set; }
 
-        internal Settings Settings { get; private set; }
+        internal HierarchicalObject Settings { get; private set; }
 
         public VoidResult Initialize(SaveAndLoad sal)
         {

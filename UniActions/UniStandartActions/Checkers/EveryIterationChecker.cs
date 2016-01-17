@@ -9,9 +9,11 @@ namespace UniStandartActions.Checkers
 {
     public class EveryIterationChecker : ICustomChecker
     {
-        public bool IsCanDoNow()
+        public bool IsCanDoNow
         {
-            return true;
+            get{
+                return true;
+            }
         }
 
         public string Name
@@ -19,19 +21,13 @@ namespace UniStandartActions.Checkers
             get { return "Всегда"; }
         }
 
-        public bool InitializeNew()
+        public bool BeginUserSettings()
         {
             return true;
         }
 
-        public void SetFromString(string settings)
-        {
-            return;
-        }
+        public bool AllowUserSettings { get { return false; } }
 
-        public string SetToString()
-        {
-            return string.Empty;
-        }
+        public void Refresh() { }
     }
 }

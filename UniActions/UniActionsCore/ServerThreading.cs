@@ -77,9 +77,6 @@ namespace UniActionsCore
                         x.Listener.Stop();
                     }
                 });
-
-                lock (_threadPortOccupations)
-                    _threadPortOccupations.RemoveAll(x => !x.IsOccupiedByClient);
             }
             catch (Exception e)
             {

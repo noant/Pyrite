@@ -73,7 +73,9 @@ namespace UniActionsCore
 
         public Result<bool> AddItem(ActionItem item)
         {
+            UniActionsCore.Resulting.EnableExceptionHandling = false;
             var result = CheckItem(item);
+            UniActionsCore.Resulting.EnableExceptionHandling = true;
             if (result.Value && !_actionItems.Contains(item))
                 _actionItems.Add(item);
             return result;
@@ -114,7 +116,7 @@ namespace UniActionsCore
                             {
                                 if (_prepareToStop)
                                     break;
-                                if (action.Checker.IsCanDoNow())
+                                if (action.Checker.IsCanDoNow)
                                 {
                                     Helper.AlterHardThread(() =>
                                     {

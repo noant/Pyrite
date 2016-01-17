@@ -34,9 +34,23 @@
             <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Наименование</Label>
             <TextBox Name="tbName" Grid.Row="0" Grid.Column="1"></TextBox>
             <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Тип действия</Label>
-            <ComboBox Name="cbAction" Grid.Row="1" Grid.Column="1" IsEditable="False" SelectedIndex="0"></ComboBox>
+            <Grid Grid.Row="1" Grid.Column="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ComboBox Name="cbAction" IsEditable="False" SelectedIndex="0"></ComboBox>
+                <Button Grid.Column="1" Name="btEditAction">Редактировать</Button>
+            </Grid>
             <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" >Тип проверки</Label>
-            <ComboBox Name="cbChecker" Grid.Row="2" Grid.Column="1" IsEditable="False" SelectedIndex="0"></ComboBox>
+            <Grid Grid.Row="2" Grid.Column="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ComboBox Name="cbChecker" IsEditable="False" SelectedIndex="0"></ComboBox>
+                <Button Grid.Column="1" Name="btEditChecker">Редактировать</Button>
+            </Grid>
             <Label Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">Использовать в потоке сервера</Label>
             <local:CBoolSelect x:Name="bUseInServer" Grid.Row="3" Grid.Column="1"></local:CBoolSelect>
             <Label Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">Команда сервера</Label>

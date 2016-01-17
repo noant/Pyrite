@@ -12,23 +12,22 @@ namespace UniActionsCore
         {
             public static readonly string ActionsPorts = "action_ports";
             public static readonly string DistributionPort = "serverPort";
-            public static readonly string UsedActionCustomSettings = "use_actioncustomsettings_#1";
-            public static readonly string UsedActionCheckerCustomSettings = "use_actioncheckercustomsettings_#1";
-            public static readonly string UsedActionServerCommand = "use_actionservercommand_#1";
-            public static readonly string UsedCustomAction = "use_action_#1";
-            public static readonly string UsedCustomChecker = "use_checker_#1";
-            public static readonly string UsedUseServerCommand = "use_servercommand_#1";
-            public static readonly string UsedActionName = "use_actionname_#1";
-            public static readonly string UsedCategory = "use_category_#1";
-            public static readonly string UsedIsActive = "use_isactive_#1";
-            public static readonly string UsedIsOnlyOnce = "use_isonlyonce_#1";
-            public static readonly string ActionModule = "actionmodule_#1";
-            public static readonly string CheckerModule = "checkermodule_#1";
-            public static readonly string ResolvedIp = "resolvedip_#1";
+            public static readonly string UsedActionCustomSettings = "use_actioncustomsettings";
+            public static readonly string UsedActionCheckerCustomSettings = "use_actioncheckercustomsettings";
+            public static readonly string UsedActionServerCommand = "use_actionservercommand";
+            public static readonly string UsedCustomAction = "use_action";
+            public static readonly string UsedCustomChecker = "use_checker";
+            public static readonly string UsedUseServerCommand = "use_servercommand";
+            public static readonly string UsedActionName = "use_actionname";
+            public static readonly string UsedCategory = "use_category";
+            public static readonly string UsedIsActive = "use_isactive";
+            public static readonly string UsedIsOnlyOnce = "use_isonlyonce";
+            public static readonly string ActionModule = "actionmodule";
+            public static readonly string CheckerModule = "checkermodule";
+            public static readonly string ResolvedIp = "resolvedip";
             public static readonly string ResolveAll = "resolveall";
             public static readonly string SecondsBetweenActions = "secondsbetweenactions";
-
-            public static readonly string Splitter = "#";
+            public static readonly string Action = "action";
         }
 
         public static class ServerCommands

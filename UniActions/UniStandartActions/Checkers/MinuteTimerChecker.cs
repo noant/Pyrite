@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,20 @@ namespace UniStandartActions.Checkers
 {
     public class MinuteTimerChecker : ICustomChecker
     {
+        [Settings]
         private DateTime _dtFinish = DateTime.Now.AddMinutes(-5);
         private bool _shown;
-        public bool IsCanDoNow()
+        public bool IsCanDoNow
         {
-            if (_shown) return false;
-            return _shown = (DateTime.Now.Minute == _dtFinish.Minute && 
-                DateTime.Now.Hour == _dtFinish.Hour &&
-                DateTime.Now.Day == _dtFinish.Day &&
-                DateTime.Now.Month == _dtFinish.Month &&
-                DateTime.Now.Year == _dtFinish.Year);
+            get
+            {
+                if (_shown) return false;
+                return _shown = (DateTime.Now.Minute == _dtFinish.Minute &&
+                    DateTime.Now.Hour == _dtFinish.Hour &&
+                    DateTime.Now.Day == _dtFinish.Day &&
+                    DateTime.Now.Month == _dtFinish.Month &&
+                    DateTime.Now.Year == _dtFinish.Year);
+            }
         }
 
         public string Name
@@ -26,7 +31,7 @@ namespace UniStandartActions.Checkers
             get { return "Таймер"; }
         }
 
-        public bool InitializeNew()
+        public bool BeginUserSettings()
         {
             var form = new MinuteTimerCheckerView();
             form.Minutes = (decimal)(DateTime.Now - _dtFinish).TotalMinutes;
@@ -38,14 +43,8 @@ namespace UniStandartActions.Checkers
             return false;
         }
 
-        public void SetFromString(string settings)
-        {
-            _dtFinish = DateTime.Parse(settings);
-        }
+        public void Refresh() { }
 
-        public string SetToString()
-        {
-            return _dtFinish.ToString();
-        }
+        public bool AllowUserSettings { get { return true; } }
     }
 }

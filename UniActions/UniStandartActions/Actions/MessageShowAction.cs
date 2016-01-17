@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,10 @@ namespace UniStandartActions.Actions
 {
     public class MessageShowAction : ICustomAction
     {
+        [Settings]
         private string _message = "";
+
+        public bool AllowUserSettings { get { return true; } }
 
         public string Do(string inputState)
         {
@@ -19,9 +23,12 @@ namespace UniStandartActions.Actions
             return _message;
         }
 
-        public string CheckState()
+        public string State
         {
-            return _message;
+            get
+            {
+                return _message;
+            }
         }
 
         public string Name
@@ -29,7 +36,7 @@ namespace UniStandartActions.Actions
             get { return "Показать сообщение"; }
         }
 
-        public bool InitializeNew()
+        public bool BeginUserSettings()
         {
             var form = new MessageShowActionView();
             form.Message = _message;
@@ -41,14 +48,6 @@ namespace UniStandartActions.Actions
             else return false;
         }
 
-        public void SetFromString(string settings)
-        {
-            _message = settings;
-        }
-
-        public string SetToString()
-        {
-            return _message;
-        }
+        public void Refresh() { }
     }
 }
