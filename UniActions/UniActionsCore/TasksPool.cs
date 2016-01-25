@@ -78,6 +78,11 @@ namespace UniActionsCore
             UniActionsCore.Resulting.EnableExceptionHandling = true;
             if (result.Value && !_actionItems.Contains(item))
                 _actionItems.Add(item);
+
+            item.AfterActionSlow += (x) => 
+                this.Uni.ServerThreading.ShareState(x, false);
+            item.BeforeActionSlow += (x) => 
+                this.Uni.ServerThreading.ShareState(x, true);
             return result;
         }
 

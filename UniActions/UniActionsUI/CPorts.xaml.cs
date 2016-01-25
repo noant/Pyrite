@@ -24,7 +24,7 @@ namespace UniActionsUI
         {
             InitializeComponent();
 
-            ControlsHelper.AppendOnlyInteger(tbPort, ushort.MaxValue, 0);
+            ControlsHelper.AppendOnlyInteger(tbPort, 0, ushort.MaxValue);
 
             btAdd.Click += (o, e) => {
                 App.Uni.ServerThreading.Settings.ActionsPorts.Add(tbPort.GetUShort());
@@ -33,7 +33,11 @@ namespace UniActionsUI
             };
 
             btDelete.Click += (o, e) => {
-                App.Uni.ServerThreading.Settings.ActionsPorts.RemoveAll(x => x == tbPort.GetUShort());
+                var portToDelete = ushort.Parse(listPort.SelectedItem.ToString());
+                App.Uni.ServerThreading.Settings.ActionsPorts.RemoveAll(x => 
+                    x == portToDelete
+                    );
+                Refresh();
                 ProcessButtonsEnabled();
             };
 

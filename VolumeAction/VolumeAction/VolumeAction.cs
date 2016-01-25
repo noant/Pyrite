@@ -34,12 +34,14 @@ namespace VolumeAction
 
         public string Do(string inputState)
         {
+            IsBusyNow = true;
             if (_mode == VolumeChangeMode.Set)
                 Nircmd.SetSoundVolume(_value);
             else if (_mode == VolumeChangeMode.Plus)
                 Nircmd.ChangeSoundVolume(_value);
             else if (_mode == VolumeChangeMode.Minus)
                 Nircmd.ChangeSoundVolume(-_value);
+            IsBusyNow = false;
 
             return State;
         }
@@ -72,6 +74,8 @@ namespace VolumeAction
         {
             get { return "Уровень звука"; }
         }
+
+        public bool IsBusyNow { get; private set; }
     }
 
     public enum VolumeChangeMode

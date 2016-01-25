@@ -7,10 +7,22 @@
     android:orientation="vertical"
     tools:context="com.example.notebookuser.customremote.ChangeAddressActivity">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="@string/IPAddress" />
     <EditText android:id="@+id/edit_address" android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="#ffffff" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="@string/tcpPort" />
     <EditText android:id="@+id/edit_port" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:inputType="number"
+        android:textColor="#ffffff" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="@string/udpPort" />
+    <EditText android:id="@+id/edit_udp_port" android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:inputType="number"
         android:textColor="#ffffff" />
     <Button android:id="@+id/bt_ok"

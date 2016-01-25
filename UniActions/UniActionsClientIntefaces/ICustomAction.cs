@@ -17,7 +17,7 @@ namespace UniActionsClientIntefaces
 
         bool BeginUserSettings();
 
-        //HierarchicalObject Settings { get; set; }
+        bool IsBusyNow { get; }
 
         void Refresh();
     }

@@ -43,6 +43,57 @@ namespace UniActionsCore
         public bool IsActive { get; set; }
         public bool IsOnlyOnce { get; set; }
 
+        public event Action<ActionItem> AfterActionSlow;
+        public event Action<ActionItem> BeforeActionSlow;
+
+        private object _lockerAfterBefore = new object();
+
+        private void RaiseAfterActionSlowAsync()
+        {
+            if (AfterActionSlow != null)
+                Helper.AlterThread(() =>
+                {
+                    lock (_lockerAfterBefore)
+                        AfterActionSlow(this);
+                });
+        }
+
+        private void RaiseBeforeActionSlowAsync()
+        {
+            if (BeforeActionSlow != null)
+                Helper.AlterThread(() => {
+                    lock (_lockerAfterBefore)
+                        BeforeActionSlow(this);
+                });                
+        }
+
+        public event Action<ActionItem> AfterActionFast;
+        public event Action<ActionItem> BeforeActionFast;
+
+        private void RaiseAfterActionFast()
+        {
+            if (AfterActionFast != null)
+                AfterActionFast(this);
+        }
+
+        private void RaiseBeforeActionFast()
+        {
+            if (BeforeActionFast != null)
+                BeforeActionFast(this);
+        }
+
+        private void RaiseAfterEvent()
+        {
+            RaiseAfterActionSlowAsync();
+            RaiseAfterActionFast();
+        }
+
+        private void RaiseBeforeEvent()
+        {
+            RaiseBeforeActionSlowAsync();
+            RaiseBeforeActionFast();
+        }
+
         internal Guid Guid { get; set; }
 
         private object _locker = new object();
@@ -68,54 +119,84 @@ namespace UniActionsCore
 
         public string Execute(string inputState)
         {
-            var result = this.Dispatcher.Invoke(new Func<string>(() =>
+            try
             {
-                lock (_locker)
-                    return this.Action.Do(inputState);
-            }), Defaults.DispatcherPriority, null);
-            return result.ToString();
-        }
-
-        public void ExecuteAsync(string inputState, Action<string> callback)
-        {
-            this.Dispatcher.BeginInvoke(new Action(() =>
+                RaiseBeforeEvent();
+                var result = this.Dispatcher.Invoke(new Func<string>(() =>
+                {
+                    lock (_locker)
+                        return this.Action.Do(inputState);
+                }), Defaults.DispatcherPriority, null);
+                return result.ToString();
+            }
+            catch (Exception e)
             {
-                var state = "";
-                lock (_locker)
-                    state = this.Action.Do(inputState);
-                callback(state);
-            }), Defaults.DispatcherPriority ,null);
+                throw e;
+            }
+            finally
+            {
+                RaiseAfterEvent();
+            }
         }
-
+        
         public void ExecuteAsync(Action<string> callback)
         {
+            RaiseBeforeEvent();
             this.Dispatcher.BeginInvoke(new Action(() =>
             {
                 var state = "";
                 lock (_locker)
                     state = this.Action.Do(this.Action.State);
                 callback(state);
+                RaiseAfterEvent();
             }), Defaults.DispatcherPriority, null);
+        }
+
+        public void ExecuteAsync(string state, Action<string> callback)
+        {
+            RaiseBeforeEvent();
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                lock (_locker)
+                    state = this.Action.Do(state);
+
+                if (callback != null)
+                    callback(state);
+
+                RaiseAfterEvent();
+            }), Defaults.DispatcherPriority, null);
+        }
+
+        public string BusyState
+        {
+            get
+            {
+                return "Выполняется: " + Action.Name;
+            }
         }
 
         public string Execute()
         {
-            var result = this.Dispatcher.Invoke(new Func<string>(() =>
+            try
             {
-                lock (_locker)
-                    return this.Action.Do(this.Action.State);
-            }), Defaults.DispatcherPriority, null);
-            return result.ToString();
-        }
-
-        public void ExecuteWithoutRetval()
-        {
-            this.Dispatcher.BeginInvoke(new Action(() =>
+                RaiseBeforeEvent();
+                var result = this.Dispatcher.Invoke(new Func<string>(() =>
+                {
+                    lock (_locker)
+                        return this.Action.Do(this.Action.State);
+                }), Defaults.DispatcherPriority, null);
+                return result.ToString();
+            }
+            catch (Exception e)
             {
-                this.Action.Do(this.Action.State);
-            }), Defaults.DispatcherPriority, null);
+                throw e;
+            }
+            finally
+            {
+                RaiseAfterEvent();
+            }
         }
-
+        
         public ActionItem Clone()
         {
             var item = new ActionItem()

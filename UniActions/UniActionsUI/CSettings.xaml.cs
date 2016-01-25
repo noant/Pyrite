@@ -46,7 +46,7 @@ namespace UniActionsUI
             cbResolveAllIp.SelectedIndex = App.Uni.ServerThreading.Settings.ResolveAllIp ? 0 : 1;
 
             ControlsHelper.AppendOnlyInteger(tbPort, 0 , 255*255 -1);
-            ControlsHelper.AppendOnlyInteger(tbSecondsBetweenActions, TasksPool.TasksPoolSettings.Defaults.MaxSecondsBetweenActions, 0);
+            ControlsHelper.AppendOnlyInteger(tbSecondsBetweenActions, 0, TasksPool.TasksPoolSettings.Defaults.MaxSecondsBetweenActions);
         }
     }
 }

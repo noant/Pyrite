@@ -94,6 +94,7 @@ namespace ModbusAction
 
         public string Do(string inputState)
         {
+            IsBusyNow = true;
             lock (_comPortsLocker)
             {
                 try
@@ -112,6 +113,7 @@ namespace ModbusAction
                 }
                 catch { }
             }
+            IsBusyNow = false;
             return State;
         }
 
@@ -162,6 +164,8 @@ namespace ModbusAction
         {
             get { return "Действие Modbus RTU (запись в одну ячейку)"; }
         }
+
+        public bool IsBusyNow { get; private set; }
         
         public enum ChangeableState
         {

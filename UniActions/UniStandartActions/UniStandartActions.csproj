@@ -80,6 +80,13 @@
     <Compile Include="Actions\ProcessActionView.Designer.cs">
       <DependentUpon>ProcessActionView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\WaitAction.cs" />
+    <Compile Include="Actions\WaitActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\WaitActionView.Designer.cs">
+      <DependentUpon>WaitActionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Checkers\ComputerStartChecker.cs" />
     <Compile Include="Checkers\DateTimeChecker.cs" />
     <Compile Include="Checkers\DateTimeCheckerView.cs">
@@ -125,6 +132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\ProcessActionView.resx">
       <DependentUpon>ProcessActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\WaitActionView.resx">
+      <DependentUpon>WaitActionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Checkers\DateTimeCheckerView.resx">
       <DependentUpon>DateTimeCheckerView.cs</DependentUpon>

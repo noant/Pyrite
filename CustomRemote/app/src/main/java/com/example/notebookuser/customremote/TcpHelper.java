@@ -27,7 +27,7 @@ public class TcpHelper {
         public static final String command_getCategoryCommands="getcategorycommands";
         public static final String command_endFastActions="endfastactions";
     }
-    public String Do(String command, String state)
+    public void Do(String command, String state)
     {
         try {
             Statics pars = new Statics();
@@ -41,10 +41,6 @@ public class TcpHelper {
 
             sendString(out, command);
             sendString(out, state);
-
-            String nextState = getNextString(in);
-
-            return new String(nextState);
         }
         catch (UnknownHostException e1){
             e1.printStackTrace();
@@ -52,7 +48,6 @@ public class TcpHelper {
         catch (IOException e1){
             e1.printStackTrace();
         }
-        return command;
     }
 
     public int getNextActionPort()
@@ -82,7 +77,7 @@ public class TcpHelper {
     public String getNextString(InputStream in)
     {
         try {
-            byte[] buff = new byte[in.read()];
+             byte[] buff = new byte[in.read()];
             in.read(buff);
             return new String(buff);
         }
@@ -154,8 +149,9 @@ public class TcpHelper {
                     actionPairs[i]=new ActionPair(name);
                 }
                 else{
+                    Boolean enabled = getNextString(in).equals("1");
                     String command = getNextString(in);
-                    ActionPair ap = new ActionPair(name, command);
+                    ActionPair ap = new ActionPair(name, command, enabled);
                     actionPairs[i]=ap;
                 }
             }
@@ -164,11 +160,11 @@ public class TcpHelper {
         }
         catch (UnknownHostException e1){
             e1.printStackTrace();
-            actionPairs[0] = new ActionPair(e1.getMessage(), "error");
+            actionPairs[0] = new ActionPair(e1.getMessage(), "error", false);
         }
         catch (IOException e1){
             e1.printStackTrace();
-            actionPairs[0] = new ActionPair(e1.getMessage(), "error");
+            actionPairs[0] = new ActionPair(e1.getMessage(), "error", false);
         }
 
         return actionPairs;

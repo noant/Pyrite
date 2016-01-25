@@ -28,6 +28,7 @@ namespace UniStandartActions.Actions
         private bool _processTracking;
         public string Do(string inputState)
         {
+            IsBusyNow = true;
             if (inputState == _stateOff)
             {
                 if (StartProcess(_path, _args) && _processTracking)
@@ -40,6 +41,7 @@ namespace UniStandartActions.Actions
                     return _stateOff;
                 else return _stateOn;
             }
+            IsBusyNow = false;
             return _stateOff;
         }
 
@@ -131,6 +133,11 @@ namespace UniStandartActions.Actions
             else return false;
         }
 
+        public bool IsBusyNow
+        {
+            get;
+            private set;
+        }
         public void Refresh() { }
     }
 }

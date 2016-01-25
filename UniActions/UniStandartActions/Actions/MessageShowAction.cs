@@ -19,7 +19,9 @@ namespace UniStandartActions.Actions
 
         public string Do(string inputState)
         {
+            IsBusyNow = true;
             MessageShow.SetMessage(inputState);
+            IsBusyNow = false;
             return _message;
         }
 
@@ -34,6 +36,12 @@ namespace UniStandartActions.Actions
         public string Name
         {
             get { return "Показать сообщение"; }
+        }
+
+        public bool IsBusyNow
+        {
+            get;
+            private set;
         }
 
         public bool BeginUserSettings()

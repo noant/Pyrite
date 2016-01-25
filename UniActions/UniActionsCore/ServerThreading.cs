@@ -18,21 +18,31 @@ namespace UniActionsCore
         {
             public static class Defaults
             {
-                public static readonly ushort DistributionPort = 600;
+                public static readonly ushort DistributionPort = 6001;
                 public static readonly bool ResolveAll = true;
                 public static readonly int ReceiveTimout = 10000;
                 public static readonly int SendTimout = 10000;
 
+                public static readonly int UdpSendRepeatDelay = 1;
+                public static readonly int UdpSendRepeatCount = 25;
+
                 public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() { 
-                    601,602,603,604,605,606,607,608,609,610
+                    6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
+
+                public static IPAddress UdpMulticastAddress = new IPAddress(new byte[] { 239, 192, 100, 1 });
+                public static readonly short UdpPort = 6000;
+                public static readonly Encoding ServerEncoding = Encoding.UTF8;
             }
 
             public ushort DistributionPort { get; set; }
             public bool ResolveAllIp { get; set; }
 
             public List<IPAddress> ResolvedIp { get; internal set; }
-            public List<ushort> ActionsPorts { get; internal set; } 
+            public List<ushort> ActionsPorts { get; internal set; }
+
+            public int UdpPort { get; set; }
+            public IPAddress UdpMulticastAddress { get; set; }
         }
                 
         private class ThreadPortOccupation{
@@ -106,7 +116,7 @@ namespace UniActionsCore
 
         private void SendString(NetworkStream stream, string str)
         {
-            var bytesToSend = Encoding.UTF8.GetBytes(str);
+            var bytesToSend = ServerThreadingSettings.Defaults.ServerEncoding.GetBytes(str);
             stream.WriteByte((byte)bytesToSend.Length);
             stream.Write(bytesToSend, 0, bytesToSend.Length);
         }
@@ -116,7 +126,7 @@ namespace UniActionsCore
             var len = stream.ReadByte();
             var buff = new byte[len];
             stream.Read(buff, 0, buff.Length);
-            return Encoding.UTF8.GetString(buff);
+            return ServerThreadingSettings.Defaults.ServerEncoding.GetString(buff);
         }
         
         public void Initialize()
@@ -124,6 +134,8 @@ namespace UniActionsCore
             this.Settings = new ServerThreadingSettings();
             this.Settings.ResolvedIp = new List<IPAddress>();
             this.Settings.ActionsPorts = ServerThreadingSettings.Defaults.ActionPorts.ToList();
+            this.Settings.UdpPort = ServerThreadingSettings.Defaults.UdpPort;
+            this.Settings.UdpMulticastAddress = ServerThreadingSettings.Defaults.UdpMulticastAddress;
             IsStopped = true;
         }
 
@@ -268,8 +280,10 @@ namespace UniActionsCore
                 stream.WriteByte((byte)(fastActions.Count() + categories.Count()));
                 foreach (var action in fastActions)
                 {
-                    SendString(stream, action.CheckState());
-                    SendString(stream, action.ServerCommand);}
+                    SendString(stream, GetState(action, action.Action.IsBusyNow));
+                    SendString(stream, action.Action.IsBusyNow ? "0" : "1");
+                    SendString(stream, action.ServerCommand);
+                }
 
                 SendString(stream, VAC.ServerCommands.Command_EndFastActions);
 
@@ -288,7 +302,8 @@ namespace UniActionsCore
 
                 foreach (var action in actions)
                 {
-                    SendString(stream, action.CheckState());
+                    SendString(stream, GetState(action, action.Action.IsBusyNow));
+                    SendString(stream, action.Action.IsBusyNow ? "0" : "1");
                     SendString(stream, action.ServerCommand);
                 }
             }
@@ -298,8 +313,31 @@ namespace UniActionsCore
                 if (remoteAction != null)
                 {
                     var state = GetNextString(stream);
-                    SendString(stream, remoteAction.Execute(state));
+                    remoteAction.ExecuteAsync(state, null);
                 }
+            }
+        }
+
+        private string GetState(ActionItem action, bool isBusy)
+        {
+            if (isBusy)
+                return action.BusyState;
+            else return action.CheckState();
+        }
+
+        public void ShareState(ActionItem action, bool busy)
+        {
+            var udpClient = new UdpClient();
+            var state = GetState(action, busy);
+            udpClient.Connect(Settings.UdpMulticastAddress, Settings.UdpPort);
+            for (int i = 0; i < ServerThreadingSettings.Defaults.UdpSendRepeatCount; i++)
+            {
+                udpClient.SendStringArrayAsync(new string[]{ 
+                    busy ? "0" : "1",
+                    state,
+                    action.ServerCommand
+                });
+                Thread.Sleep(ServerThreadingSettings.Defaults.UdpSendRepeatDelay);
             }
         }
     }

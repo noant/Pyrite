@@ -24,6 +24,7 @@ namespace UniStandartActions.Actions
         private string _stateRestart = "Перезагрузить компьютер";
         public string Do(string inputState)
         {
+            IsBusyNow = true;
             var form = new PowerOffForm() { 
                 Timer = _timeout, 
                 CanCancel = _canCancel, 
@@ -32,6 +33,7 @@ namespace UniStandartActions.Actions
 
             form.Show();
             form.Start();
+            IsBusyNow = false;
 
             return State;
         }
@@ -65,6 +67,11 @@ namespace UniStandartActions.Actions
             return false;
         }
 
+        public bool IsBusyNow
+        {
+            get;
+            private set;
+        }
         public void Refresh() { }
     }
 }

@@ -19,7 +19,7 @@ namespace UniActionsUI
             void Refresh();
         }
 
-        public static void AppendOnlyInteger(TextBox tb, int max, int min)
+        public static void AppendOnlyInteger(TextBox tb, int min, int max)
         {
             tb.PreviewTextInput += (o, e) => {
                 var futureText = tb.Text.Insert(tb.CaretIndex, e.Text);

@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 Button b = new Button(this);
                 b.setTag(actionPair);
                 b.setText(actionPair.getName());
+                b.setEnabled(actionPair.getIsEnabled());
+                actionPair.setButton(b);
 
                 if (actionPair.getIsCategory())
                     b.getBackground().setColorFilter(new LightingColorFilter(Color.WHITE, Color.DKGRAY));
@@ -65,27 +67,18 @@ public class MainActivity extends AppCompatActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         final Button b = (Button) v;
+                        b.setText(R.string.executing);
+                        b.setEnabled(false);
                         if (!actionPair.getIsCategory()) {
-                            b.setEnabled(false);
-                            b.setText(getString(R.string.executing));
                             new Thread(new Runnable() {
                                 public void run() {
-                                    final String result = new TcpHelper().Do(
+                                    new TcpHelper().Do(
                                             ((ActionPair) b.getTag()).getCommand(),
                                             ((ActionPair) b.getTag()).getName()
                                     );
-                                    b.post(new Runnable() {
-                                        public void run() {
-                                            b.setEnabled(true);
-                                            ((ActionPair) b.getTag()).setName(result);
-                                            b.setText(result);
-                                        }
-                                    });
                                 }
                             }).start();
-                        }
-                        else
-                        {
+                        } else {
                             Intent intent = new Intent(_this, MainActivity.class);
                             intent.putExtra(EXTRA_CATEGORY, b.getText());
                             startActivity(intent);

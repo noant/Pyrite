@@ -24,10 +24,10 @@ namespace UniActionsUI
         public IpBox()
         {
             InitializeComponent();
-            ControlsHelper.AppendOnlyInteger(tbNum1, 255, 0);
-            ControlsHelper.AppendOnlyInteger(tbNum2, 255, 0);
-            ControlsHelper.AppendOnlyInteger(tbNum3, 255, 0);
-            ControlsHelper.AppendOnlyInteger(tbNum4, 255, 0);
+            ControlsHelper.AppendOnlyInteger(tbNum1, 0, 255);
+            ControlsHelper.AppendOnlyInteger(tbNum2, 0, 255);
+            ControlsHelper.AppendOnlyInteger(tbNum3, 0, 255);
+            ControlsHelper.AppendOnlyInteger(tbNum4, 0, 255);
 
             this.tbNum1.TextChanged += (o, e) => {
                 if (IpChanged != null)

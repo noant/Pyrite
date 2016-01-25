@@ -21,10 +21,12 @@ public class ChangeAddressActivity extends AppCompatActivity {
 
         EditText edit_address = (EditText)findViewById(R.id.edit_address);
         EditText edit_port = (EditText)findViewById(R.id.edit_port);
+        EditText edit_udp_port = (EditText)findViewById(R.id.edit_udp_port);
 
         try {
             edit_address.setText(new Statics().getAddress());
             edit_port.setText(new Statics().getPort());
+            edit_udp_port.setText(new Statics().getUdpPort());
         }
         catch (Exception e)
         {
@@ -60,11 +62,13 @@ public class ChangeAddressActivity extends AppCompatActivity {
     {
         EditText editAddress = (EditText) findViewById(R.id.edit_address);
         EditText editPort = (EditText) findViewById(R.id.edit_port);
+        EditText editUdpPort = (EditText) findViewById(R.id.edit_udp_port);
         try {
             InetAddress address = InetAddress.getByName(editAddress.getText().toString());
             Statics statics = new Statics();
             statics.setAddress(editAddress.getText().toString());
             statics.setPort(Integer.parseInt(editPort.getText().toString()));
+            statics.setUdpPort(Integer.parseInt(editUdpPort.getText().toString()));
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }

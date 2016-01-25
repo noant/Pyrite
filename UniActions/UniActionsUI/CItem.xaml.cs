@@ -54,20 +54,28 @@ namespace UniActionsUI
         public void Refresh()
         {
             this.Background = this._bg = GetFromString(_actionItem.Category);
-            this.lblContent.Content = "Получение статуса...";
-            this.IsEnabled = false;
-            _actionItem.CheckStateAsync(new Action<string>((state) => {
-                this.Dispatcher.BeginInvoke(new Action(() => {
-                    try
-                    {
-                        this.IsEnabled = true; //can throws exception when control is not exist already
-                        this.lblContent.Content = state;
-                    }
-                    catch { }
-                }));
-            }));
-        }
 
+            var actionLock = new Action<ActionItem>(x => ChangeView("", false));
+
+            var actionUnlock = new Action<ActionItem>(x => {
+                _actionItem.CheckStateAsync(new Action<string>((state) =>
+                {
+                    ChangeView(state, true);
+                }));    
+            });
+
+            _actionItem.BeforeActionFast += actionLock;
+            _actionItem.AfterActionFast += actionUnlock;
+
+            this.Unloaded += (o, e) => {
+                _actionItem.BeforeActionFast -= actionLock;
+                _actionItem.AfterActionFast -= actionUnlock;                
+            };
+
+            actionLock(_actionItem);
+            actionUnlock(_actionItem);
+        }
+        
         #region color helper
         private Brush SelectBrush = Brushes.Tomato;
 
@@ -127,28 +135,39 @@ namespace UniActionsUI
 
         public void Run()
         {
-            this.lblContent.Content = "Получение статуса...";
-            this.IsEnabled = false;
+            ChangeView("", false);
             _actionItem.ExecuteAsync(new Action<string>((state) => {
-                this.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    try
-                    {
-                        this.IsEnabled = true; //can throws exception when control is not exist already
-                        this.lblContent.Content = state;
-                    }
-                    catch { }
-                }));
+                ChangeView(state, true);
             }));
 
             if (Clicked != null)
                 Clicked();
         }
 
+        private void ChangeView(string state, bool enable)
+        {
+            try
+            {
+                this.Dispatcher.BeginInvoke(new Action(() => { 
+                    if (!enable) 
+                    {
+                        this.IsEnabled = false; //throws exception when control is not exist already
+                        this.lblContent.Content = _actionItem.BusyState;
+                    }
+                    else
+                    {
+                        this.IsEnabled = true;
+                        this.lblContent.Content = state;
+                    }                    
+                }));
+            }
+            catch { }
+        }
+
         public CItem()
         {
             InitializeComponent();
-            
+
             var actionUp = new Action(() => { 
                 this.Background = this._bg;
             });            

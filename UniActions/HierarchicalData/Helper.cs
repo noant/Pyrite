@@ -19,7 +19,9 @@ namespace HierarchicalData
             var props = type.GetProperties().Where(x=>x.CustomAttributes.Any(z=>z.AttributeType==settingAttrType));
             var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance).Where(x => x.CustomAttributes.Any(z => z.AttributeType == settingAttrType));
             foreach (var property in props)
+            {
                 hobject[property.Name] = property.GetValue(obj);
+            }
             foreach (var field in fields)
                 hobject[field.Name] = field.GetValue(obj);
             return hobject;
