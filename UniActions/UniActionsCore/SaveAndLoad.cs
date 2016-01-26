@@ -34,8 +34,8 @@ namespace UniActionsCore
         public VoidResult Save()
         {
             var result = new VoidResult();
-            //try
-            //{
+            try
+            {
                 Savior.Clear();
 
                 Savior[VAC.AppSettingsNames.DistributionPort] = Uni.ServerThreading.Settings.DistributionPort;
@@ -46,7 +46,7 @@ namespace UniActionsCore
 
                 Savior[VAC.AppSettingsNames.CheckerModule] = Uni.ModulesControl.CustomCheckers.Where(x => !Uni.ModulesControl.IsStandart(x)).Select(x => x.Assembly.Location).ToHierarchicalObject();
                 Savior[VAC.AppSettingsNames.ActionModule] = Uni.ModulesControl.CustomActions.Where(x => !Uni.ModulesControl.IsStandart(x)).Select(x => x.Assembly.Location).ToHierarchicalObject();
-                
+
                 for (int i = 0; i < Uni.TasksPool.ActionItems.Count(); i++)
                 {
                     try
@@ -70,17 +70,15 @@ namespace UniActionsCore
                     }
                     catch (Exception e)
                     {
-                        Log.Write(e);
                         result.AddException(e);
                     }
                 }
                 Savior.SaveToFile();
-            //}
-            //catch (Exception e)
-            //{
-            //    Log.Write(e);
-            //    result.AddException(e);
-            //}
+            }
+            catch (Exception e)
+            {
+                result.AddException(e);
+            }
             return result;
         }
 
@@ -165,7 +163,6 @@ namespace UniActionsCore
                         }
                         catch (Exception e)
                         {
-                            Log.Write(e);
                             result.AddException(e);
                         }
                     }
@@ -176,7 +173,6 @@ namespace UniActionsCore
                     SetDefaults();
                 else
                 {
-                    Log.Write(e);
                     result.AddException(e);
                 }
             }

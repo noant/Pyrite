@@ -44,7 +44,6 @@ namespace UniActionsCore
             catch (Exception e)
             {
                 result.AddException(e);
-                Log.Write(e);
             }
             return result;
         }
@@ -60,7 +59,7 @@ namespace UniActionsCore
             }
             catch (Exception e)
             {
-                Log.Write(e);
+                result.AddException(e);
             }
 
             return result;
@@ -76,7 +75,6 @@ namespace UniActionsCore
             }
             catch (Exception e)
             {
-                Log.Write(e);
                 result.AddException(e);
             }
             return result;
@@ -102,7 +100,6 @@ namespace UniActionsCore
             catch (Exception e)
             {
                 result.AddException(e);
-                Log.Write(e);
             }
             return result;
         }
@@ -131,7 +128,6 @@ namespace UniActionsCore
             }
             catch (Exception e)
             {
-                Log.Write(e);
                 result.AddException(e);
             }
 
@@ -171,7 +167,6 @@ namespace UniActionsCore
             }
             catch (Exception e)
             {
-                Log.Write(e);
                 result.AddException(e);
             }
 
@@ -211,7 +206,6 @@ namespace UniActionsCore
             }
             catch (Exception e)
             {
-                Log.Write(e);
                 result.AddException(e);
             }
             return result;
@@ -231,7 +225,6 @@ namespace UniActionsCore
             }
             catch (Exception e)
             {
-                Log.Write(e);
                 result.AddException(e);
             }
             return result;

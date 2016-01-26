@@ -171,7 +171,7 @@ namespace UniActionsCore
         {
             get
             {
-                return "Выполняется: " + Action.Name;
+                return "Выполняется: " + Name;
             }
         }
 

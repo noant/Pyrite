@@ -80,7 +80,7 @@ namespace UniActionsCore
 
                 _listenerPortDistribution.Stop();
 
-                _threadPortOccupations.ForEach(x =>
+                _threadPortOccupations.ToList().ForEach(x =>
                 {
                     if (!x.IsOccupiedByClient)
                     {
@@ -263,7 +263,6 @@ namespace UniActionsCore
                 }
                 catch (Exception e)
                 {
-                    Log.Write(e);
                     result.AddException(e);
                 }
             }

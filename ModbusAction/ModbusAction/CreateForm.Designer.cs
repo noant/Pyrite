@@ -74,7 +74,7 @@
             this.btCancel.Location = new System.Drawing.Point(228, 504);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 12;
+            this.btCancel.TabIndex = 4;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
@@ -93,7 +93,7 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(290, 157);
-            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройки COM порта";
             // 
@@ -160,7 +160,7 @@
             0,
             0});
             this.nudBaudRate.Name = "nudBaudRate";
-            this.nudBaudRate.Size = new System.Drawing.Size(219, 20);
+            this.nudBaudRate.Size = new System.Drawing.Size(217, 20);
             this.nudBaudRate.TabIndex = 1;
             // 
             // label2
@@ -201,7 +201,7 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 175);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(290, 134);
-            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Настройки устройства Modbus";
             // 
@@ -214,8 +214,8 @@
             0,
             0});
             this.nudWriteTimeout.Name = "nudWriteTimeout";
-            this.nudWriteTimeout.Size = new System.Drawing.Size(200, 20);
-            this.nudWriteTimeout.TabIndex = 8;
+            this.nudWriteTimeout.Size = new System.Drawing.Size(201, 20);
+            this.nudWriteTimeout.TabIndex = 3;
             this.nudWriteTimeout.Value = new decimal(new int[] {
             1,
             0,
@@ -240,8 +240,8 @@
             0,
             0});
             this.nudReadTimeout.Name = "nudReadTimeout";
-            this.nudReadTimeout.Size = new System.Drawing.Size(200, 20);
-            this.nudReadTimeout.TabIndex = 7;
+            this.nudReadTimeout.Size = new System.Drawing.Size(201, 20);
+            this.nudReadTimeout.TabIndex = 2;
             this.nudReadTimeout.Value = new decimal(new int[] {
             1,
             0,
@@ -267,7 +267,7 @@
             0});
             this.nudSingleCoil.Name = "nudSingleCoil";
             this.nudSingleCoil.Size = new System.Drawing.Size(219, 20);
-            this.nudSingleCoil.TabIndex = 6;
+            this.nudSingleCoil.TabIndex = 1;
             this.nudSingleCoil.Value = new decimal(new int[] {
             1,
             0,
@@ -298,7 +298,7 @@
             0});
             this.nudSlaveId.Name = "nudSlaveId";
             this.nudSlaveId.Size = new System.Drawing.Size(219, 20);
-            this.nudSlaveId.TabIndex = 5;
+            this.nudSlaveId.TabIndex = 0;
             this.nudSlaveId.Value = new decimal(new int[] {
             1,
             0,
@@ -326,7 +326,7 @@
             this.groupBox3.Location = new System.Drawing.Point(12, 315);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(290, 182);
-            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Статусы";
             // 
@@ -334,10 +334,10 @@
             // 
             this.rbOff.AutoSize = true;
             this.rbOff.Location = new System.Drawing.Point(9, 47);
-            this.rbOff.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbOff.Margin = new System.Windows.Forms.Padding(2);
             this.rbOff.Name = "rbOff";
             this.rbOff.Size = new System.Drawing.Size(121, 17);
-            this.rbOff.TabIndex = 13;
+            this.rbOff.TabIndex = 1;
             this.rbOff.Text = "Только выключать";
             this.rbOff.UseVisualStyleBackColor = true;
             // 
@@ -346,10 +346,10 @@
             this.rbOnOff.AutoSize = true;
             this.rbOnOff.Checked = true;
             this.rbOnOff.Location = new System.Drawing.Point(9, 66);
-            this.rbOnOff.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbOnOff.Margin = new System.Windows.Forms.Padding(2);
             this.rbOnOff.Name = "rbOnOff";
             this.rbOnOff.Size = new System.Drawing.Size(142, 17);
-            this.rbOnOff.TabIndex = 12;
+            this.rbOnOff.TabIndex = 2;
             this.rbOnOff.TabStop = true;
             this.rbOnOff.Text = "Включать и выключать";
             this.rbOnOff.UseVisualStyleBackColor = true;
@@ -358,10 +358,10 @@
             // 
             this.rbOn.AutoSize = true;
             this.rbOn.Location = new System.Drawing.Point(9, 27);
-            this.rbOn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbOn.Margin = new System.Windows.Forms.Padding(2);
             this.rbOn.Name = "rbOn";
             this.rbOn.Size = new System.Drawing.Size(113, 17);
-            this.rbOn.TabIndex = 11;
+            this.rbOn.TabIndex = 0;
             this.rbOn.Text = "Только включать";
             this.rbOn.UseVisualStyleBackColor = true;
             // 
@@ -370,7 +370,7 @@
             this.tbStateOn.Location = new System.Drawing.Point(6, 153);
             this.tbStateOn.Name = "tbStateOn";
             this.tbStateOn.Size = new System.Drawing.Size(278, 20);
-            this.tbStateOn.TabIndex = 10;
+            this.tbStateOn.TabIndex = 4;
             // 
             // label11
             // 
@@ -386,7 +386,7 @@
             this.tbStateOff.Location = new System.Drawing.Point(6, 114);
             this.tbStateOff.Name = "tbStateOff";
             this.tbStateOff.Size = new System.Drawing.Size(278, 20);
-            this.tbStateOff.TabIndex = 9;
+            this.tbStateOff.TabIndex = 3;
             // 
             // label10
             // 
@@ -403,7 +403,7 @@
             this.btOk.Location = new System.Drawing.Point(147, 504);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 11;
+            this.btOk.TabIndex = 3;
             this.btOk.Text = "Ok";
             this.btOk.UseVisualStyleBackColor = true;
             // 

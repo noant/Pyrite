@@ -43,7 +43,7 @@
             this.btCancel.Location = new System.Drawing.Point(147, 114);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 0;
+            this.btCancel.TabIndex = 4;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
@@ -53,7 +53,7 @@
             this.btOk.Location = new System.Drawing.Point(66, 114);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 1;
+            this.btOk.TabIndex = 3;
             this.btOk.Text = "Ok";
             this.btOk.UseVisualStyleBackColor = true;
             // 
@@ -62,7 +62,7 @@
             this.nudTimer.Location = new System.Drawing.Point(105, 12);
             this.nudTimer.Name = "nudTimer";
             this.nudTimer.Size = new System.Drawing.Size(120, 20);
-            this.nudTimer.TabIndex = 2;
+            this.nudTimer.TabIndex = 0;
             // 
             // label1
             // 
@@ -79,7 +79,7 @@
             this.cbCanCancel.Location = new System.Drawing.Point(15, 46);
             this.cbCanCancel.Name = "cbCanCancel";
             this.cbCanCancel.Size = new System.Drawing.Size(147, 17);
-            this.cbCanCancel.TabIndex = 4;
+            this.cbCanCancel.TabIndex = 1;
             this.cbCanCancel.Text = "Возможность отменить";
             this.cbCanCancel.UseVisualStyleBackColor = true;
             // 
@@ -89,7 +89,7 @@
             this.cbRestart.Location = new System.Drawing.Point(15, 69);
             this.cbRestart.Name = "cbRestart";
             this.cbRestart.Size = new System.Drawing.Size(98, 17);
-            this.cbRestart.TabIndex = 5;
+            this.cbRestart.TabIndex = 2;
             this.cbRestart.Text = "Перезагрузка";
             this.cbRestart.UseVisualStyleBackColor = true;
             // 

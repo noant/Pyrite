@@ -57,17 +57,17 @@ namespace UniActionsCore
             var result = new Result<bool>();
 
             if (item.Action == null)
-                result.AddException(new Exception("Необходимо выбрать вид действия"));
+                result.AddWarning(new Warning("Необходимо выбрать вид действия"));
             if (item.Checker == null)
-                result.AddException(new Exception("Необходимо выбрать вид проверки"));
+                result.AddWarning(new Warning("Необходимо выбрать вид проверки"));
             if (string.IsNullOrEmpty(item.Name))
-                result.AddException(new Exception("Необходимо ввести имя сценария"));
+                result.AddWarning(new Warning("Необходимо ввести имя сценария"));
             if (_actionItems.Count(x => x.Name == item.Name && item.Guid != x.Guid) > 0)
-                result.AddException(new Exception("Действие с таким именем уже существует"));
+                result.AddWarning(new Warning("Действие с таким именем уже существует"));
             if (_actionItems.Count(x => x.ServerCommand == item.ServerCommand && !string.IsNullOrEmpty(x.ServerCommand) && item.Guid != x.Guid) > 0)
-                result.AddException(new Exception("Действие с такой командой сервера уже существует"));
+                result.AddWarning(new Warning("Действие с такой командой сервера уже существует"));
 
-            result.Value = result.Exceptions.Count() == 0;
+            result.Value = result.Warnings.Count() == 0;
             return result;
         }
 
@@ -79,10 +79,16 @@ namespace UniActionsCore
             if (result.Value && !_actionItems.Contains(item))
                 _actionItems.Add(item);
 
-            item.AfterActionSlow += (x) => 
-                this.Uni.ServerThreading.ShareState(x, false);
-            item.BeforeActionSlow += (x) => 
-                this.Uni.ServerThreading.ShareState(x, true);
+            item.AfterActionSlow += (x) =>
+            {
+                if (item.UseServerThreading && !string.IsNullOrEmpty(item.ServerCommand))
+                    Uni.ServerThreading.ShareState(x, false);
+            };
+            item.BeforeActionSlow += (x) =>
+            {
+                if (item.UseServerThreading && !string.IsNullOrEmpty(item.ServerCommand))
+                    Uni.ServerThreading.ShareState(x, true);
+            };
             return result;
         }
 
@@ -165,7 +171,6 @@ namespace UniActionsCore
             catch (Exception e)
             {
                 result.AddException(e);
-                Log.Write(e);
             }
             return result;
         }

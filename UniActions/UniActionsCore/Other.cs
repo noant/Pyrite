@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,7 @@ namespace UniActionsCore
     }
 
     public class Result<T>
-    {        
+    {
         private List<Exception> _exceptions;
         public IEnumerable<Exception> Exceptions { 
             get {
@@ -46,10 +47,22 @@ namespace UniActionsCore
                 return _exceptions;
             }
         }
+        private List<Warning> _warnings;
+        public IEnumerable<Warning> Warnings
+        {
+            get
+            {
+                if (_warnings == null)
+                    _warnings = new List<Warning>();
+                return _warnings;
+            }
+        }
         public T Value { get; internal set; }
 
         internal void AddException(Exception e)
         {
+            Log.Write(e);
+
             if (_exceptions == null)
                 _exceptions = new List<Exception>();
             
@@ -60,12 +73,28 @@ namespace UniActionsCore
                 Resulting.RaiseCriticalHandler(this.Exceptions);
             }
         }
-
         internal void AddExceptions(IEnumerable<Exception> es)
         {
             foreach (var e in es)
                 AddException(e);
         }
+
+        internal void AddWarning(Warning e)
+        {
+            if (_warnings == null)
+                _warnings = new List<Warning>();
+
+            _warnings.Add(e);
+        }
+        internal void AddWarnings(IEnumerable<Warning> ws)
+        {
+            foreach (var e in ws)
+                AddWarning(e);
+        }
+    }
+
+    public class Warning : Exception {
+        public Warning(string message) : base(message) { }
     }
 
     public class VoidResult : Result<object>

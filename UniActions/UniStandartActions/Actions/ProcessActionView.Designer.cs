@@ -93,7 +93,7 @@
             this.btCancel.Location = new System.Drawing.Point(639, 129);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 7;
+            this.btCancel.TabIndex = 8;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
@@ -103,7 +103,7 @@
             this.btOk.Location = new System.Drawing.Point(558, 129);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 6;
+            this.btOk.TabIndex = 7;
             this.btOk.Text = "Ok";
             this.btOk.UseVisualStyleBackColor = true;
             // 
@@ -157,7 +157,7 @@
             this.cbCloseMainWindow.Location = new System.Drawing.Point(175, 129);
             this.cbCloseMainWindow.Name = "cbCloseMainWindow";
             this.cbCloseMainWindow.Size = new System.Drawing.Size(269, 17);
-            this.cbCloseMainWindow.TabIndex = 10;
+            this.cbCloseMainWindow.TabIndex = 6;
             this.cbCloseMainWindow.Text = "Не убивать процесс, а закрывать главное окно";
             this.cbCloseMainWindow.UseVisualStyleBackColor = true;
             // 

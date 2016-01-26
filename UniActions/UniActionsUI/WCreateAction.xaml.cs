@@ -207,8 +207,7 @@ namespace UniActionsUI
         {
             btEditAction.IsEnabled = _item.Action != null && _item.Action.AllowUserSettings;
             btEditChecker.IsEnabled = _item.Checker != null && _item.Checker.AllowUserSettings;
-
-            UniActionsCore.Resulting.EnableExceptionHandling = false;
+            
             var result = App.Uni.TasksPool.CheckItem(_item);
             if (result.Value)
             {
@@ -218,14 +217,13 @@ namespace UniActionsUI
             else
             {
                 var str = "";
-                foreach (var exception in result.Exceptions)
-                    str += exception.Message + "\r\n";
+                foreach (var warning in result.Warnings)
+                    str += warning.Message + "\r\n";
 
                 lblStatus.Content = str;
 
                 DisableOk();
             }
-            UniActionsCore.Resulting.EnableExceptionHandling = true;
         }
 
         private void EnableOk()

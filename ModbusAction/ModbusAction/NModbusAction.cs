@@ -21,6 +21,7 @@ namespace ModbusAction
         [Settings]
         protected string _stateError = "Ошибка связи с устройством Modbus";
 
+        [Settings]
         protected ChangeableState _changeableState = ChangeableState.Both;
 
         [Settings]

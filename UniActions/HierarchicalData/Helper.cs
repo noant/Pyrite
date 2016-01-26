@@ -35,9 +35,15 @@ namespace HierarchicalData
             var props = type.GetProperties().Where(x => x.CustomAttributes.Any(z => z.AttributeType == settingAttrType));
             var fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance).Where(x => x.CustomAttributes.Any(z => z.AttributeType == settingAttrType));
             foreach (var property in props)
-                property.SetValue(obj, hobject[property.Name]);
+            {
+                if (hobject.ContainsKey(property.Name))
+                    property.SetValue(obj, hobject[property.Name]);
+            }
             foreach (var field in fields)
-                field.SetValue(obj, hobject[field.Name]);
+            {
+                if (hobject.ContainsKey(field.Name))
+                    field.SetValue(obj, hobject[field.Name]);
+            }
         }
 
         public static object CloneHierarchicalObject(object obj)

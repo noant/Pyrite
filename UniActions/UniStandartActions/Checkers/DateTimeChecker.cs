@@ -53,19 +53,19 @@ namespace UniStandartActions.Checkers
         private bool _d_sunday;
 
         [Settings]
-        private int _year;
+        private int _year = DateTime.Now.Year;
 
         [Settings]
-        private int _month;
+        private int _month = DateTime.Now.Month;
 
         [Settings]
-        private int _day;
+        private int _day = DateTime.Now.Day;
 
         [Settings]
-        private int _hour;
+        private int _hour = DateTime.Now.Hour;
 
         [Settings]
-        private int _minute;
+        private int _minute = DateTime.Now.Minute;
 
         public bool IsCanDoNow
         {
@@ -132,6 +132,9 @@ namespace UniStandartActions.Checkers
             form.cbEveryYear.Checked = this._everyYear;
 
             form.dtPicker.Value = new DateTime(this._year, this._month, this._day, this._hour, this._minute, 0);
+
+            form.nudHour.Value = this._hour;
+            form.nudMinute.Value = this._minute;
 
             form.cbOnlyWhenCompStart.Checked = this._onlyOnComputerStart;
 

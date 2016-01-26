@@ -82,7 +82,7 @@
             this.btOk.Location = new System.Drawing.Point(136, 99);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 3;
+            this.btOk.TabIndex = 1;
             this.btOk.Text = "Ok";
             this.btOk.UseVisualStyleBackColor = true;
             // 
@@ -92,7 +92,7 @@
             this.btCancel.Location = new System.Drawing.Point(217, 99);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 4;
+            this.btCancel.TabIndex = 2;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
