@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UniStandartActions.Actions
 {
     public partial class MessageShow : Form
     {
-        private static int _height = 116;
+        private static int _startupHeight = 116;
         private static MessageShow _messageShow;
 
         public static void SetMessage(string message)
@@ -38,7 +30,9 @@ namespace UniStandartActions.Actions
 
         public void AddMessage(string str)
         {
-            this.Visible = true;
+            if (!this.Visible)
+                this.Visible = true;
+
             if (string.IsNullOrEmpty(this.lblContent.Text))
             {
                 this.lblContent.Text = str;
@@ -49,11 +43,12 @@ namespace UniStandartActions.Actions
                 this.Height += 33;
                 if (this.Height >= Screen.PrimaryScreen.Bounds.Height)
                 {
-                    this.Height = _height;
+                    this.Height = _startupHeight;
                     this.lblContent.Text = string.Empty;
+                    AddMessage(str);
                 }
-
-                this.lblContent.Text += "\r\n\r\n" + str;
+                else
+                    this.lblContent.Text += "\r\n\r\n" + str;
             }
         }
 

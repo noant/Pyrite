@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using UniActionsCore;
 
 namespace UniActionsUI
@@ -57,20 +47,13 @@ namespace UniActionsUI
 
             var actionLock = new Action<ActionItem>(x => ChangeView("", false));
 
-            var actionUnlock = new Action<ActionItem>(x => {
-                _actionItem.CheckStateAsync(new Action<string>((state) =>
-                {
-                    ChangeView(state, true);
-                }));    
-            });
+            var actionUnlock = new Action<ActionItem>(x => 
+                _actionItem.CheckStateAsync((state) => ChangeView(state, true))
+            );
 
-            _actionItem.BeforeActionFast += actionLock;
-            _actionItem.AfterActionFast += actionUnlock;
+            _actionItem.AfterAction += actionUnlock;
 
-            this.Unloaded += (o, e) => {
-                _actionItem.BeforeActionFast -= actionLock;
-                _actionItem.AfterActionFast -= actionUnlock;                
-            };
+            this.Unloaded += (o, e) => _actionItem.AfterAction -= actionUnlock;
 
             actionLock(_actionItem);
             actionUnlock(_actionItem);
@@ -146,22 +129,22 @@ namespace UniActionsUI
 
         private void ChangeView(string state, bool enable)
         {
-            try
-            {
-                this.Dispatcher.BeginInvoke(new Action(() => { 
-                    if (!enable) 
+            this.Dispatcher.BeginInvoke(new Action(() => {
+                try
+                {
+                    if (!enable)
                     {
                         this.IsEnabled = false; //throws exception when control is not exist already
-                        this.lblContent.Content = _actionItem.BusyState;
+                        this.lblContent.Content = "Выполняется...";
                     }
                     else
                     {
                         this.IsEnabled = true;
                         this.lblContent.Content = state;
-                    }                    
-                }));
-            }
-            catch { }
+                    }
+                }
+                catch { }
+            }));
         }
 
         public CItem()
@@ -180,7 +163,7 @@ namespace UniActionsUI
                 {
                     Run();
                     var t = new Thread(() => {
-                        Thread.Sleep(180);
+                        Thread.Sleep(180); //delay before background changed
                         this.Dispatcher.BeginInvoke(new Action(() => {
                             actionUp();
                         }));

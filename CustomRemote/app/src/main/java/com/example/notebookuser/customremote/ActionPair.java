@@ -21,6 +21,11 @@ public class ActionPair {
         }
     }
 
+    public Boolean isEnabled()
+    {
+        return  _isEnabled;
+    }
+
     public Button getButton()
     {
         return _button;
@@ -33,16 +38,9 @@ public class ActionPair {
         return _command;
     }
 
-    public Boolean getIsEnabled(){
-        return _isEnabled;
-    }
-
-    public void setIsEnabled(Boolean value){
-        _isEnabled = value;
-    }
     public void setName(String name) { _name=name; }
 
-    public Boolean getIsCategory(){
+    public Boolean isCategory(){
         return _isCategory;
     }
 

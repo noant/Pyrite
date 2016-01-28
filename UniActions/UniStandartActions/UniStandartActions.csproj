@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ChangeTestStatus.cs" />
     <Compile Include="Actions\MessageShow.cs">
       <SubType>Form</SubType>
     </Compile>

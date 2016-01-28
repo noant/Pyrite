@@ -1,6 +1,5 @@
 package com.example.notebookuser.customremote;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,9 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_CATEGORY = "com.example.notebookuser.customremote.Ca";
@@ -55,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
                 Button b = new Button(this);
                 b.setTag(actionPair);
-                b.setText(actionPair.getName());
-                b.setEnabled(actionPair.getIsEnabled());
+                b.setText(!actionPair.isEnabled() ? getString(R.string.executing) : actionPair.getName());
+                b.setEnabled(actionPair.isEnabled());
                 actionPair.setButton(b);
 
-                if (actionPair.getIsCategory())
+                if (actionPair.isCategory())
                     b.getBackground().setColorFilter(new LightingColorFilter(Color.WHITE, Color.DKGRAY));
 
                 final MainActivity _this = this;
@@ -67,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         final Button b = (Button) v;
-                        b.setText(R.string.executing);
-                        b.setEnabled(false);
-                        if (!actionPair.getIsCategory()) {
+                        if (!actionPair.isCategory()) {
+                            b.setText(R.string.executing);
+                            b.setEnabled(false);
                             new Thread(new Runnable() {
                                 public void run() {
                                     new TcpHelper().Do(

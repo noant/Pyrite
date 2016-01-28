@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using UniStandartActions;
 
 namespace UniActionsCore
 {
@@ -79,15 +76,10 @@ namespace UniActionsCore
             if (result.Value && !_actionItems.Contains(item))
                 _actionItems.Add(item);
 
-            item.AfterActionSlow += (x) =>
+            item.AfterActionAsyncEvent += (x) =>
             {
                 if (item.UseServerThreading && !string.IsNullOrEmpty(item.ServerCommand))
-                    Uni.ServerThreading.ShareState(x, false);
-            };
-            item.BeforeActionSlow += (x) =>
-            {
-                if (item.UseServerThreading && !string.IsNullOrEmpty(item.ServerCommand))
-                    Uni.ServerThreading.ShareState(x, true);
+                    Uni.ServerThreading.ShareState(x);
             };
             return result;
         }
@@ -113,7 +105,7 @@ namespace UniActionsCore
         {
             _prepareToStop = false;
             IsStopped = false;
-            var executiongNowCount = 0;
+            var executingNowCount = 0;
             var result = new VoidResult();
             try
             {
@@ -132,7 +124,7 @@ namespace UniActionsCore
                                     Helper.AlterHardThread(() =>
                                     {
                                         _isInActionNow = true;
-                                        executiongNowCount++;
+                                        executingNowCount++;
                                         try
                                         {
                                             action.Execute();
@@ -149,8 +141,8 @@ namespace UniActionsCore
                                         {
                                             Log.Write(e);
                                         }
-                                        executiongNowCount--;
-                                        if (executiongNowCount==0 )
+                                        executingNowCount--;
+                                        if (executingNowCount==0 )
                                         {
                                             _isInActionNow = false;
                                             if (_prepareToStop)

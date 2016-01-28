@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 using UniActionsClientIntefaces;
 
@@ -43,55 +37,32 @@ namespace UniActionsCore
         public bool IsActive { get; set; }
         public bool IsOnlyOnce { get; set; }
 
-        public event Action<ActionItem> AfterActionSlow;
-        public event Action<ActionItem> BeforeActionSlow;
+        public event Action<ActionItem> AfterActionAsyncEvent;
 
         private object _lockerAfterBefore = new object();
 
-        private void RaiseAfterActionSlowAsync()
+        private void RaiseAfterActionAsync()
         {
-            if (AfterActionSlow != null)
+            if (AfterActionAsyncEvent != null)
                 Helper.AlterThread(() =>
                 {
                     lock (_lockerAfterBefore)
-                        AfterActionSlow(this);
+                        AfterActionAsyncEvent(this);
                 });
         }
 
-        private void RaiseBeforeActionSlowAsync()
-        {
-            if (BeforeActionSlow != null)
-                Helper.AlterThread(() => {
-                    lock (_lockerAfterBefore)
-                        BeforeActionSlow(this);
-                });                
-        }
+        public event Action<ActionItem> AfterAction;
 
-        public event Action<ActionItem> AfterActionFast;
-        public event Action<ActionItem> BeforeActionFast;
-
-        private void RaiseAfterActionFast()
+        private void RaiseAfterAction()
         {
-            if (AfterActionFast != null)
-                AfterActionFast(this);
-        }
-
-        private void RaiseBeforeActionFast()
-        {
-            if (BeforeActionFast != null)
-                BeforeActionFast(this);
+            if (AfterAction != null)
+                AfterAction(this);
         }
 
         private void RaiseAfterEvent()
         {
-            RaiseAfterActionSlowAsync();
-            RaiseAfterActionFast();
-        }
-
-        private void RaiseBeforeEvent()
-        {
-            RaiseBeforeActionSlowAsync();
-            RaiseBeforeActionFast();
+            RaiseAfterActionAsync();
+            RaiseAfterAction();
         }
 
         internal Guid Guid { get; set; }
@@ -121,7 +92,6 @@ namespace UniActionsCore
         {
             try
             {
-                RaiseBeforeEvent();
                 var result = this.Dispatcher.Invoke(new Func<string>(() =>
                 {
                     lock (_locker)
@@ -141,7 +111,6 @@ namespace UniActionsCore
         
         public void ExecuteAsync(Action<string> callback)
         {
-            RaiseBeforeEvent();
             this.Dispatcher.BeginInvoke(new Action(() =>
             {
                 var state = "";
@@ -154,7 +123,6 @@ namespace UniActionsCore
 
         public void ExecuteAsync(string state, Action<string> callback)
         {
-            RaiseBeforeEvent();
             this.Dispatcher.BeginInvoke(new Action(() =>
             {
                 lock (_locker)
@@ -166,20 +134,11 @@ namespace UniActionsCore
                 RaiseAfterEvent();
             }), Defaults.DispatcherPriority, null);
         }
-
-        public string BusyState
-        {
-            get
-            {
-                return "Выполняется: " + Name;
-            }
-        }
-
+        
         public string Execute()
         {
             try
             {
-                RaiseBeforeEvent();
                 var result = this.Dispatcher.Invoke(new Func<string>(() =>
                 {
                     lock (_locker)

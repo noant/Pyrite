@@ -1,5 +1,7 @@
 package com.example.notebookuser.customremote;
 
+import android.provider.ContactsContract;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -32,6 +34,9 @@ public class UdpSharingHandler {
             return _started;
         }
 
+        private static Integer _hashesCleanCnt = 1000;
+        private static ArrayList<String> _datagramStrings = new ArrayList<String>();
+
         private static void beginListen(){
             _udpListenThread = new Thread(new Runnable() {
                 @Override
@@ -42,31 +47,56 @@ public class UdpSharingHandler {
                         socket.joinGroup(group);
                         _started = true;
                         while (true) {
-                            byte[] buff = new byte[2048];
-                            DatagramPacket packet = new DatagramPacket(buff, buff.length);
-                            socket.receive(packet);
-                            final String[] data = getStrArray(new String(packet.getData()));
-                            final Boolean isEnabled = data[0].equals("1");
-                            final String name = data[1];
+                            byte[] buff = new byte[512];
+                            DatagramPacket sourcePacket = new DatagramPacket(buff, buff.length);
+                            socket.receive(sourcePacket);
 
-                            for (int i=0;i<_actionPairs.size();i++) {
-                                final ActionPair actionPair = _actionPairs.get(i);
-                                if (actionPair.getCommand().equals(data[2])) {
-                                    if (actionPair.getButton().getParent() == null)
-                                        _actionPairs.remove(actionPair);
-                                    else {
-                                        actionPair.getButton().post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (actionPair.getButton().isEnabled() != isEnabled)
-                                                    actionPair.getButton().setEnabled(isEnabled);
-                                                if (!actionPair.getButton().getText().equals(name))
-                                                    actionPair.getButton().setText(name);
+                            final String datagramString = new String(sourcePacket.getData());
+
+                            if (_datagramStrings.contains(datagramString)) {
+                                if (_datagramStrings.size() >= _hashesCleanCnt)
+                                    _datagramStrings.clear();
+                                continue;
+                            }
+                            else
+                                _datagramStrings.add(datagramString);
+
+                            new Thread(new Runnable() { //async datagram handling
+                                @Override
+                                public void run() {
+                                    try {
+                                        final String[] data = getStrArray(datagramString);
+
+                                        final String name = data[0];
+                                        final String command = data[1];
+
+                                        for (int i = 0; i < _actionPairs.size(); i++) {
+                                            final ActionPair actionPair = _actionPairs.get(i);
+                                            if (actionPair.getCommand().equals(command)) {
+                                                if (actionPair.getButton().getParent() == null) {
+                                                    _actionPairs.remove(actionPair);
+                                                } else {
+                                                    actionPair.getButton().post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (!actionPair.getButton().getText().equals(name)) {
+                                                                actionPair.getButton().setText(name);
+                                                                actionPair.setName(name);
+                                                                actionPair.getButton().setEnabled(true);
+                                                            }
+                                                        }
+                                                    });
+                                                }
                                             }
-                                        });
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Integer i=0;
+                                        i++; // to delete
                                     }
                                 }
-                            }
+                            }).start();
 
                             if (_actionPairs.size()==0) {
                                 _started = false;
@@ -76,6 +106,7 @@ public class UdpSharingHandler {
                     }
                     catch (IOException e)
                     {
+                        Exception ee = e;// to delete
                     }
                 }
             });

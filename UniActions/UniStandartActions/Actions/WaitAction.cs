@@ -1,14 +1,10 @@
 ﻿using HierarchicalData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Actions
 {
+#if DEBUG
     public class WaitAction : ICustomAction
     {
         [Settings]
@@ -58,4 +54,5 @@ namespace UniStandartActions.Actions
         public void Refresh()
         {}
     }
+#endif
 }

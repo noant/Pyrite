@@ -1,14 +1,11 @@
 ﻿using Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace UniActionsCore
 {
@@ -320,21 +317,24 @@ namespace UniActionsCore
         private string GetState(ActionItem action, bool isBusy)
         {
             if (isBusy)
-                return action.BusyState;
+                return "-";
             else return action.CheckState();
         }
 
-        public void ShareState(ActionItem action, bool busy)
+        public void ShareState(ActionItem action)
         {
             var udpClient = new UdpClient();
-            var state = GetState(action, busy);
+            var state = GetState(action, false);
             udpClient.Connect(Settings.UdpMulticastAddress, Settings.UdpPort);
+
+            var datagramGuid = Guid.NewGuid();
+
             for (int i = 0; i < ServerThreadingSettings.Defaults.UdpSendRepeatCount; i++)
             {
-                udpClient.SendStringArrayAsync(new string[]{ 
-                    busy ? "0" : "1",
+                udpClient.SendStringArrayAsync(new string[]{
                     state,
-                    action.ServerCommand
+                    action.ServerCommand,
+                    datagramGuid.ToString()
                 });
                 Thread.Sleep(ServerThreadingSettings.Defaults.UdpSendRepeatDelay);
             }
