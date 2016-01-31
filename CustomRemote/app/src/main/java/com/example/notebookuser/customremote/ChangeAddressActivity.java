@@ -26,7 +26,7 @@ public class ChangeAddressActivity extends AppCompatActivity {
         try {
             edit_address.setText(new Statics().getAddress());
             edit_port.setText(new Statics().getPort());
-            edit_udp_port.setText(new Statics().getUdpPort());
+            edit_udp_port.setText(new Statics().getSharingPort());
         }
         catch (Exception e)
         {
@@ -68,7 +68,7 @@ public class ChangeAddressActivity extends AppCompatActivity {
             Statics statics = new Statics();
             statics.setAddress(editAddress.getText().toString());
             statics.setPort(Integer.parseInt(editPort.getText().toString()));
-            statics.setUdpPort(Integer.parseInt(editUdpPort.getText().toString()));
+            statics.setSharingPort(Integer.parseInt(editUdpPort.getText().toString()));
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }

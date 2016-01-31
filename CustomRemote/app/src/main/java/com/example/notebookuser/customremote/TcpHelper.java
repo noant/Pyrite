@@ -74,7 +74,7 @@ public class TcpHelper {
         return 1;
     }
 
-    public String getNextString(InputStream in)
+    public static String getNextString(InputStream in)
     {
         try {
              byte[] buff = new byte[in.read()];
@@ -87,7 +87,7 @@ public class TcpHelper {
         }
     }
 
-    public void sendString(OutputStream out, String value)
+    public static void sendString(OutputStream out, String value)
     {
         try {
             byte[] bytesToSend = value.getBytes();

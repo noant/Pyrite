@@ -20,15 +20,11 @@ namespace UniActionsCore
                 public static readonly int ReceiveTimout = 10000;
                 public static readonly int SendTimout = 10000;
 
-                public static readonly int UdpSendRepeatDelay = 1;
-                public static readonly int UdpSendRepeatCount = 25;
-
                 public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() { 
                     6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
 
-                public static IPAddress UdpMulticastAddress = new IPAddress(new byte[] { 239, 192, 100, 1 });
-                public static readonly short UdpPort = 6000;
+                public static readonly short SharingPort = 6000;
                 public static readonly Encoding ServerEncoding = Encoding.UTF8;
             }
 
@@ -38,8 +34,7 @@ namespace UniActionsCore
             public List<IPAddress> ResolvedIp { get; internal set; }
             public List<ushort> ActionsPorts { get; internal set; }
 
-            public int UdpPort { get; set; }
-            public IPAddress UdpMulticastAddress { get; set; }
+            public int SharingPort { get; set; }
         }
                 
         private class ThreadPortOccupation{
@@ -131,13 +126,13 @@ namespace UniActionsCore
             this.Settings = new ServerThreadingSettings();
             this.Settings.ResolvedIp = new List<IPAddress>();
             this.Settings.ActionsPorts = ServerThreadingSettings.Defaults.ActionPorts.ToList();
-            this.Settings.UdpPort = ServerThreadingSettings.Defaults.UdpPort;
-            this.Settings.UdpMulticastAddress = ServerThreadingSettings.Defaults.UdpMulticastAddress;
+            this.Settings.SharingPort = ServerThreadingSettings.Defaults.SharingPort;
             IsStopped = true;
         }
 
         private TcpListenerEx _listenerPortDistribution;
         private Thread _threadPortDistribution;
+        private List<IPAddress> _activeClients;
 
         public VoidResult BeginStart()
         {
@@ -152,6 +147,9 @@ namespace UniActionsCore
             if (_threadPortOccupations == null)
                 _threadPortOccupations = new List<ThreadPortOccupation>();
 
+            if (_activeClients == null)
+                _activeClients = new List<IPAddress>();
+
             IsStopped = false;
             _prepareToStop = false;
 
@@ -164,6 +162,10 @@ namespace UniActionsCore
                     {
                         using (var client = _listenerPortDistribution.AcceptTcpClient())
                         {
+                            var address = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
+                            if (!_activeClients.Any(x => x.Equals(address)))
+                                _activeClients.Add(address);
+
                             ThreadPortOccupation occupation = null;
 
                             while (occupation == null)
@@ -325,18 +327,28 @@ namespace UniActionsCore
         {
             var udpClient = new UdpClient();
             var state = GetState(action, false);
-            udpClient.Connect(Settings.UdpMulticastAddress, Settings.UdpPort);
 
-            var datagramGuid = Guid.NewGuid();
-
-            for (int i = 0; i < ServerThreadingSettings.Defaults.UdpSendRepeatCount; i++)
+            foreach(var address in _activeClients.ToArray())
             {
-                udpClient.SendStringArrayAsync(new string[]{
-                    state,
-                    action.ServerCommand,
-                    datagramGuid.ToString()
-                });
-                Thread.Sleep(ServerThreadingSettings.Defaults.UdpSendRepeatDelay);
+                new Thread(() =>
+                {
+                    try
+                    {
+                        var tcpClient = new TcpClient(address.ToString(), this.Settings.SharingPort);
+                        tcpClient.ReceiveTimeout = UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.ReceiveTimout;
+                        tcpClient.SendTimeout = UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.SendTimout;
+
+                        SendString(tcpClient.GetStream(), action.ServerCommand);
+                        SendString(tcpClient.GetStream(), state);
+                    }
+                    catch
+                    {
+                        _activeClients.Remove(address);
+                    }
+                })
+                {
+                    IsBackground = true
+                }.Start();
             }
         }
     }

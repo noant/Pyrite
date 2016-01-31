@@ -17,7 +17,7 @@ public class ActionPair {
         _button = b;
         if (!_isCategory)
         {
-            new UdpSharingHandler(this).beginUdpHandling();
+            new TcpSharingHandler(this).beginHandling();
         }
     }
 

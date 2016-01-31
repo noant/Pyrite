@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 
 /**
  * Created by NotebookUser on 25.10.2015.
@@ -16,11 +15,11 @@ public class Statics {
     {
         static String val_addr;
         static Integer val_port;
-        static Integer val_udpPort;
+        static Integer val_sharingPort;
         static String val_udpaddr;
         static String fn_addr =  MyApp.getAppContext().getFilesDir().getPath().toString() + "/address";
         static String fn_port = MyApp.getAppContext().getFilesDir().getPath().toString() + "/port";
-        static String fn_udpport = MyApp.getAppContext().getFilesDir().getPath().toString() + "/udpport";
+        static String fn_sharingPort = MyApp.getAppContext().getFilesDir().getPath().toString() + "/udpport";
         static String fn_udpaddr = MyApp.getAppContext().getFilesDir().getPath().toString() + "/udpaddress";
     }
 
@@ -68,18 +67,18 @@ public class Statics {
         Temp.val_port=port;
     }
 
-    public String getUdpPort(){
-        if (Temp.val_udpPort==null)
+    public String getSharingPort(){
+        if (Temp.val_sharingPort ==null)
         {
-            Temp.val_udpPort = Integer.parseInt(getValue(Temp.fn_udpport));
+            Temp.val_sharingPort = Integer.parseInt(getValue(Temp.fn_sharingPort));
         }
-        return Temp.val_udpPort.toString();
+        return Temp.val_sharingPort.toString();
     }
 
-    public void setUdpPort(Integer port)
+    public void setSharingPort(Integer port)
     {
-        setValue(Temp.fn_udpport, port.toString());
-        Temp.val_udpPort=port;
+        setValue(Temp.fn_sharingPort, port.toString());
+        Temp.val_sharingPort =port;
     }
 
     private String getValue(String key)
@@ -120,7 +119,7 @@ public class Statics {
     {
         File f_addr = new File(Temp.fn_addr);
         File f_port = new File(Temp.fn_port);
-        File f_udpPort = new File(Temp.fn_udpport);
+        File f_udpPort = new File(Temp.fn_sharingPort);
         File f_udpaddr = new File(Temp.fn_udpaddr);
         try {
             //f_addr.delete();
@@ -140,7 +139,7 @@ public class Statics {
             }
             if (!f_udpPort.exists()) {
                 f_udpPort.createNewFile();
-                setUdpPort(6000);
+                setSharingPort(6000);
             }
         }
         catch (IOException e)

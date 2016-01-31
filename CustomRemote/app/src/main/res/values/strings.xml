@@ -11,6 +11,6 @@
     <string name="error">error</string>
     <string name="executing">Выполняется...</string>
     <string name="tcpPort">Tcp порт</string>
-    <string name="udpPort">Udp порт</string>
+    <string name="tcpSharingPort">Tcp порт раздачи значений</string>
     <string name="IPAddress">IP Адрес</string>
 </resources>

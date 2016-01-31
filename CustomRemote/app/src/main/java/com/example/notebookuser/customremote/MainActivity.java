@@ -25,6 +25,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume()
+    {
+        super.onResume();
+        refresh();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if (keyCode==KeyEvent.KEYCODE_MENU)
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             String category = this.getIntent().getStringExtra(MainActivity.EXTRA_CATEGORY);
             LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
+            main_layout.removeAllViews();
             for (final ActionPair actionPair : new TcpHelper().getAllCommands(category)) {
                 if (actionPair.getCommand()==getString(R.string.error))
                     throw new Exception(actionPair.getName());
