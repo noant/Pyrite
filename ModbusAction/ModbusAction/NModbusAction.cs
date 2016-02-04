@@ -40,14 +40,15 @@ namespace ModbusAction
         [Settings]
         protected int _modbusWriteTimeout = 2000;
 
-        protected SerialPort ConfigurePort() {
-            
+        protected SerialPort ConfigurePort()
+        {
+
             SerialPort port = new SerialPort(_portName);
             port.BaudRate = _portBaudRate;
             port.DataBits = _portDataBits;
             port.Parity = _portParity;
             port.StopBits = _portStopBits;
-            port.Open();            
+            port.Open();
             return port;
         }
 
@@ -63,29 +64,24 @@ namespace ModbusAction
         {
             get
             {
-                using (var master = ConfigureMaster())
+                if (_changeableState == ChangeableState.Off)
+                    return _stateOn;
+                if (_changeableState == ChangeableState.On)
+                    return _stateOff;
+                lock (_comPortsLocker)
                 {
-                    return GetState(master);
-                }
-            }
-        }
-
-        private string GetState(IModbusSerialMaster master)
-        {
-            if (_changeableState == ChangeableState.Off)
-                return _stateOn;
-            if (_changeableState == ChangeableState.On)
-                return _stateOff;
-            lock (_comPortsLocker)
-            {
-                try
-                {
-                    return master.ReadCoils(_modbusSlaveId, _modbusCoilAddress, 1).First() ?
-                        _stateOn : _stateOff;
-                }
-                catch
-                {
-                    return _stateError;
+                    try
+                    {
+                        using (var master = ConfigureMaster())
+                        {
+                            return master.ReadCoils(_modbusSlaveId, _modbusCoilAddress, 1).First() ?
+                               _stateOn : _stateOff;
+                        }
+                    }
+                    catch
+                    {
+                        return _stateError;
+                    }
                 }
             }
         }
@@ -111,8 +107,6 @@ namespace ModbusAction
                             state = true;
 
                         master.WriteSingleCoil(_modbusSlaveId, _modbusCoilAddress, state);
-
-                        return GetState(master);
                     }
                 }
                 catch { }
@@ -125,7 +119,7 @@ namespace ModbusAction
         {
             var form = new CreateForm();
             form.tbPortName.Text = this._portName;
-            form.tbStateOff.Text = this._stateOff; 
+            form.tbStateOff.Text = this._stateOff;
             form.tbStateOn.Text = this._stateOn;
             form.nudBaudRate.Value = this._portBaudRate;
             form.nudReadTimeout.Value = this._modbusReadTimeout;
@@ -170,7 +164,7 @@ namespace ModbusAction
         }
 
         public bool IsBusyNow { get; private set; }
-        
+
         public enum ChangeableState
         {
             Off,
