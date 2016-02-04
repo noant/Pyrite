@@ -22,13 +22,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         new Statics().init();
         refresh();
+        if (!_timerStarted)
+            beginTimer();
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        refresh();
+        refresh(false);
     }
 
     @Override
@@ -47,42 +49,76 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChangeAddressActivity.class);
         startActivity(intent);
     }
+    boolean _timerStarted;
+    public void beginTimer()
+    {
+        final LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(1000 * 60);
+                        main_layout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                refresh(false);
+                            }
+                        });
+                        }
+                    catch (Exception e){}
+                }
+            }
+        }).start();
+        _timerStarted=true;
+    }
 
-    public void refresh()
+    public  void refresh(){
+        refresh(true);
+    }
+
+    private void refresh(boolean errorHandling)
     {
         try {
             String category = this.getIntent().getStringExtra(MainActivity.EXTRA_CATEGORY);
             LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
             main_layout.removeAllViews();
             for (final ActionPair actionPair : new TcpHelper().getAllCommands(category)) {
-                if (actionPair.getCommand()==getString(R.string.error))
-                    throw new Exception(actionPair.getName());
-
-                Button b = new Button(this);
+                final Button b = new Button(this);
                 b.setTag(actionPair);
-                b.setText(!actionPair.isEnabled() ? getString(R.string.executing) : actionPair.getName());
-                b.setEnabled(actionPair.isEnabled());
-                actionPair.setButton(b);
 
-                if (actionPair.isCategory())
+                if (actionPair.isCategory()) {
                     b.getBackground().setColorFilter(new LightingColorFilter(Color.WHITE, Color.DKGRAY));
+                    b.setText(actionPair.getCommand());
+                }
+                else {
+                    b.setText(actionPair.getStatus());
+                    actionPair.setOnStatusUpdated(new ActionPairRunnable() {
+                        @Override
+                        public void run(final ActionPair actionPair) {
+                            b.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (b.getParent() == null)
+                                        actionPair.needDelete();
+                                    else {
+                                        b.setText(actionPair.getStatus());
+                                        b.setEnabled(true);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
 
                 final MainActivity _this = this;
 
                 b.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        final Button b = (Button) v;
                         if (!actionPair.isCategory()) {
                             b.setText(R.string.executing);
                             b.setEnabled(false);
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    new TcpHelper().Do(
-                                            ((ActionPair) b.getTag()).getCommand(),
-                                            ((ActionPair) b.getTag()).getName()
-                                    );
-                                }
-                            }).start();
+                            actionPair.Do();
                         } else {
                             Intent intent = new Intent(_this, MainActivity.class);
                             intent.putExtra(EXTRA_CATEGORY, b.getText());
@@ -96,12 +132,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         catch (Exception e) {
-            Intent intent = new Intent(this, ChangeAddressActivity.class);
-            startActivity(intent);
+            if (errorHandling) {
+                Intent intent = new Intent(this, ChangeAddressActivity.class);
+                startActivity(intent);
 
-            Dialog d = new Dialog(this);
-            d.setTitle(e.getMessage());
-            d.show();
+                Dialog d = new Dialog(this);
+                d.setTitle(e.getMessage());
+                d.show();
+            }
         }
     }
 

@@ -14,9 +14,13 @@ import java.net.ResponseCache;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Created by NotebookUser on 25.10.2015.
@@ -25,9 +29,10 @@ public class TcpHelper {
     public static class Strings{
         public static final String command_getAllCommand="getallcommands";
         public static final String command_getCategoryCommands="getcategorycommands";
+        public static final String command_getState="getstate";
         public static final String command_endFastActions="endfastactions";
     }
-    public void Do(String command, String state)
+    public static String Do(String command, String state)
     {
         try {
             Statics pars = new Statics();
@@ -41,16 +46,39 @@ public class TcpHelper {
 
             sendString(out, command);
             sendString(out, state);
+
+            return getNextString(in);
         }
-        catch (UnknownHostException e1){
+        catch (Exception e1){
             e1.printStackTrace();
-        }
-        catch (IOException e1){
-            e1.printStackTrace();
+            return e1.getMessage();
         }
     }
 
-    public int getNextActionPort()
+    public static String checkState(String command)
+    {
+        try {
+            Statics pars = new Statics();
+
+            InetAddress address = InetAddress.getByName(pars.getAddress());
+
+            Socket socketAction = new Socket(address, getNextActionPort());
+
+            InputStream in = socketAction.getInputStream();
+            OutputStream out = socketAction.getOutputStream();
+
+            sendString(out, Strings.command_getState);
+            sendString(out, command);
+
+            return getNextString(in);
+        }
+        catch (Exception e1){
+            e1.printStackTrace();
+            return e1.getMessage();
+        }
+    }
+
+    public static int getNextActionPort()
     {
         try {
             Statics pars = new Statics();
@@ -65,10 +93,7 @@ public class TcpHelper {
 
             return port;
         }
-        catch (UnknownHostException e1){
-            e1.printStackTrace();
-        }
-        catch (IOException e1){
+        catch (Exception e1){
             e1.printStackTrace();
         }
         return 1;
@@ -87,6 +112,11 @@ public class TcpHelper {
         }
     }
 
+    public static Integer getNextInteger(InputStream in)
+    {
+        return Integer.parseInt(getNextString(in));
+    }
+
     public static void sendString(OutputStream out, String value)
     {
         try {
@@ -99,12 +129,12 @@ public class TcpHelper {
         }
     }
 
-    public ActionPair[] getAllCommands()
+    public static ActionPair[] getAllCommands()
     {
         return getAllCommands(null);
     }
 
-    public ActionPair[] getAllCommands(String category)
+    public static ActionPair[] getAllCommands(String category)
     {
         ActionPair[] actionPairs = new ActionPair[1];
         try {
@@ -129,7 +159,7 @@ public class TcpHelper {
                 sendString(out, category);
             }
 
-            int actionPairsCnt = in.read();
+            int actionPairsCnt = getNextInteger(in);
 
             actionPairs = new ActionPair[actionPairsCnt];
 
@@ -137,36 +167,55 @@ public class TcpHelper {
 
             for (int i=0;i<actionPairsCnt;i++)
             {
-                String name = getNextString(in);
+                String command = getNextString(in);
 
-                if (name.equals(Strings.command_endFastActions)) {
+                if (command.equals(Strings.command_endFastActions)) {
                     categoriesLoading = true;
                     i--;
                     continue;
                 }
                 if (categoriesLoading)
                 {
-                    actionPairs[i]=new ActionPair(name);
+                    actionPairs[i] = new ActionPair(command, true);
                 }
                 else{
-                    Boolean enabled = getNextString(in).equals("1");
-                    String command = getNextString(in);
-                    ActionPair ap = new ActionPair(name, command, enabled);
-                    actionPairs[i]=ap;
+                    actionPairs[i] = new ActionPair(command, false);
+                    actionPairs[i].setStatus(getNextString(in));
+                    TcpSharingHandler.append(actionPairs[i]);
                 }
             }
 
             return actionPairs;
         }
-        catch (UnknownHostException e1){
+        catch (Exception e1){
             e1.printStackTrace();
-            actionPairs[0] = new ActionPair(e1.getMessage(), "error", false);
-        }
-        catch (IOException e1){
-            e1.printStackTrace();
-            actionPairs[0] = new ActionPair(e1.getMessage(), "error", false);
         }
 
         return actionPairs;
+    }
+
+    public static HashMap<String, String> getAllCommandsStates()
+    {
+        HashMap<String, String> _commandsStates = new HashMap<>();
+        try {
+            Statics pars = new Statics();
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 5000);
+
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+            sendString(out, Strings.command_getState);
+            int actionPairsCnt = getNextInteger(in);
+
+            for (int i=0;i<actionPairsCnt;i++)
+            {
+                _commandsStates.put(getNextString(in), getNextString(in));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return _commandsStates;
     }
 }

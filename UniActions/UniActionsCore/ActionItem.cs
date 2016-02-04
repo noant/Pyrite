@@ -37,17 +37,17 @@ namespace UniActionsCore
         public bool IsActive { get; set; }
         public bool IsOnlyOnce { get; set; }
 
-        public event Action<ActionItem> AfterActionAsyncEvent;
+        public event Action<ActionItem> AfterActionServerEvent;
 
         private object _lockerAfterBefore = new object();
 
-        private void RaiseAfterActionAsync()
+        private void RaiseAfterActionServerAsync()
         {
-            if (AfterActionAsyncEvent != null)
+            if (AfterActionServerEvent != null)
                 Helper.AlterThread(() =>
                 {
                     lock (_lockerAfterBefore)
-                        AfterActionAsyncEvent(this);
+                        AfterActionServerEvent(this);
                 });
         }
 
@@ -61,7 +61,7 @@ namespace UniActionsCore
 
         private void RaiseAfterEvent()
         {
-            RaiseAfterActionAsync();
+            RaiseAfterActionServerAsync();
             RaiseAfterAction();
         }
 
@@ -88,7 +88,7 @@ namespace UniActionsCore
             }), Defaults.DispatcherPriority, null);
         }
 
-        public string Execute(string inputState)
+        public string Execute(string inputState, bool withoutServerEvent)
         {
             try
             {
@@ -105,8 +105,16 @@ namespace UniActionsCore
             }
             finally
             {
-                RaiseAfterEvent();
+                if (withoutServerEvent)
+                    RaiseAfterAction();
+                else
+                    RaiseAfterEvent();
             }
+        }
+
+        public string Execute(string inputState)
+        {
+            return Execute(inputState, false);
         }
         
         public void ExecuteAsync(Action<string> callback)

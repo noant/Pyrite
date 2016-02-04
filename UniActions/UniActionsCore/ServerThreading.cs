@@ -17,13 +17,14 @@ namespace UniActionsCore
             {
                 public static readonly ushort DistributionPort = 6001;
                 public static readonly bool ResolveAll = true;
-                public static readonly int ReceiveTimout = 10000;
-                public static readonly int SendTimout = 10000;
+                public static readonly int ReceiveTimout = 1000;
+                public static readonly int SendTimout = 1000;
 
                 public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() { 
                     6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
 
+                public static readonly int SharingTryCount = 4;
                 public static readonly short SharingPort = 6000;
                 public static readonly Encoding ServerEncoding = Encoding.UTF8;
             }
@@ -34,6 +35,7 @@ namespace UniActionsCore
             public List<IPAddress> ResolvedIp { get; internal set; }
             public List<ushort> ActionsPorts { get; internal set; }
 
+            public int SharingTryCount { get; set; }
             public int SharingPort { get; set; }
         }
                 
@@ -127,6 +129,7 @@ namespace UniActionsCore
             this.Settings.ResolvedIp = new List<IPAddress>();
             this.Settings.ActionsPorts = ServerThreadingSettings.Defaults.ActionPorts.ToList();
             this.Settings.SharingPort = ServerThreadingSettings.Defaults.SharingPort;
+            this.Settings.SharingTryCount = ServerThreadingSettings.Defaults.SharingTryCount;
             IsStopped = true;
         }
 
@@ -226,7 +229,7 @@ namespace UniActionsCore
                                     var stream = client.GetStream();
                                     var command = GetNextString(stream);
 
-                                    CommandHandling(stream, command);
+                                    CommandHandling(client, stream, command);
                                 }
                             }
                             catch (Exception e)
@@ -269,18 +272,17 @@ namespace UniActionsCore
             return result;
         }
 
-        private void CommandHandling(NetworkStream stream, string command)
+        private void CommandHandling(TcpClient client, NetworkStream stream, string command)
         {
             if (command == VAC.ServerCommands.Command_GetStartCommands)
             {
                 var fastActions = Uni.TasksPool.ActionItems.Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
                 var categories = Uni.TasksPool.ActionItems.Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category).Distinct().OrderBy(x => x);
-                stream.WriteByte((byte)(fastActions.Count() + categories.Count()));
+                SendString(stream, (fastActions.Count() + categories.Count()).ToString());
                 foreach (var action in fastActions)
                 {
-                    SendString(stream, GetState(action, action.Action.IsBusyNow));
-                    SendString(stream, action.Action.IsBusyNow ? "0" : "1");
                     SendString(stream, action.ServerCommand);
+                    SendString(stream, action.CheckState());
                 }
 
                 SendString(stream, VAC.ServerCommands.Command_EndFastActions);
@@ -296,38 +298,39 @@ namespace UniActionsCore
 
                 var actions = Uni.TasksPool.ActionItems.Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
 
-                stream.WriteByte((byte)actions.Count());
+                SendString(stream, actions.Count().ToString());
 
                 foreach (var action in actions)
                 {
-                    SendString(stream, GetState(action, action.Action.IsBusyNow));
-                    SendString(stream, action.Action.IsBusyNow ? "0" : "1");
                     SendString(stream, action.ServerCommand);
+                    SendString(stream, action.CheckState());
                 }
             }
-            else
+            else if (command == VAC.ServerCommands.Command_GetStatus)
+            {
+                var actions = Uni.TasksPool.ActionItems.Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                SendString(stream, actions.Count().ToString());
+                foreach (var action in Uni.TasksPool.ActionItems)
+                {
+                    SendString(stream, action.ServerCommand);
+                    SendString(stream, action.Action.State);
+                }
+            }
+            else 
             {
                 var remoteAction = Uni.TasksPool.ActionItems.Where(x => x.ServerCommand == command).FirstOrDefault();
                 if (remoteAction != null)
                 {
                     var state = GetNextString(stream);
-                    remoteAction.ExecuteAsync(state, null);
+                    state = remoteAction.Execute(state,true);
+                    SendString(stream, state);
+                    ShareState(remoteAction, ((IPEndPoint)client.Client.RemoteEndPoint).Address);
                 }
             }
         }
-
-        private string GetState(ActionItem action, bool isBusy)
+        
+        public void ShareState(ActionItem exceptItem, IPAddress exceptAddress)
         {
-            if (isBusy)
-                return "-";
-            else return action.CheckState();
-        }
-
-        public void ShareState(ActionItem action)
-        {
-            var udpClient = new UdpClient();
-            var state = GetState(action, false);
-
             foreach(var address in _activeClients.ToArray())
             {
                 new Thread(() =>
@@ -338,8 +341,17 @@ namespace UniActionsCore
                         tcpClient.ReceiveTimeout = UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.ReceiveTimout;
                         tcpClient.SendTimeout = UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.SendTimout;
 
-                        SendString(tcpClient.GetStream(), action.ServerCommand);
-                        SendString(tcpClient.GetStream(), state);
+                        var stream = tcpClient.GetStream(); 
+
+                        SendString(stream,VAC.ServerCommands.Command_NeedUpdate);
+
+                        if (exceptItem != null && exceptAddress != null && address.Equals(exceptAddress))
+                        {
+                            SendString(stream, VAC.ServerCommands.Command_Except);
+                            SendString(stream, exceptItem.ServerCommand);
+                        }
+                        else
+                            SendString(stream, VAC.ServerCommands.Command_All);
                     }
                     catch
                     {
@@ -350,6 +362,11 @@ namespace UniActionsCore
                     IsBackground = true
                 }.Start();
             }
+        }
+
+        public void ShareState()
+        {
+            ShareState(null, null);
         }
     }
 }

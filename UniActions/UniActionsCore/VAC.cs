@@ -30,6 +30,12 @@ namespace UniActionsCore
             public static readonly string Command_GetStartCommands = "getallcommands";
             public static readonly string Command_GetCategoryCommands = "getcategorycommands";
             public static readonly string Command_EndFastActions = "endfastactions";
+
+            public static readonly string Command_NeedUpdate = "needUpdate";
+            public static readonly string Command_Except = "except";
+            public static readonly string Command_All = "all";
+
+            public static readonly string Command_GetStatus = "getstate";
         }
     }
 }

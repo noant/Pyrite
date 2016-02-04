@@ -6,7 +6,7 @@ namespace UniStandartActions.Actions
 #if DEBUG
     public class ChangeTestStatus : ICustomAction
     {
-        private string _lastState = "off";
+        private static string _lastState = "off";
         public string Do(string inputState)
         {
             IsBusyNow = true;
@@ -20,7 +20,8 @@ namespace UniStandartActions.Actions
 
         public string State
         {
-            get {
+            get
+            {
                 return _lastState;
             }
         }

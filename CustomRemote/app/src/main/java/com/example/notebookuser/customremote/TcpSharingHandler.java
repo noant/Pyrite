@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,6 +14,11 @@ import java.util.concurrent.TimeUnit;
 public class TcpSharingHandler {
     private static class Tcp
     {
+        private static class Strings{
+            public  static final String needUpdate = "needUpdate";
+            public  static final String except = "except";
+            public  static final String all = "all";
+        }
         private static ArrayList<ActionPair> _actionPairs = new ArrayList<ActionPair>();
         public static void append(ActionPair action)
         {
@@ -47,33 +53,28 @@ public class TcpSharingHandler {
                             );
                             while (true) {
                                 Socket connection = serverSocket.accept();
+                                if (TcpHelper.getNextString(connection.getInputStream()).equals(Strings.needUpdate)) {
+                                    String except = TcpHelper.getNextString(connection.getInputStream());
+                                    String exceptCommand = "";
+                                    if (except.equals(Strings.except))
+                                        exceptCommand = TcpHelper.getNextString(connection.getInputStream());
 
-                                String command = TcpHelper.getNextString(connection.getInputStream());
-                                final String name = TcpHelper.getNextString(connection.getInputStream());
+                                    HashMap<String,String> commands = TcpHelper.getAllCommandsStates();
 
-                                for (Integer i = 0; i < _actionPairs.size(); i++) {
-                                    final ActionPair action = _actionPairs.get(i);
-                                    if (action.getButton().getParent() == null)
-                                        _actionPairs.remove(action);
-                                    else {
-                                        if (action.getCommand().equals(command))
-                                            if (!action.getButton().getText().equals(name)) {
-                                                action.setName(name);
-                                                action.getButton().post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        action.getButton().setText(name);
-                                                        action.getButton().setEnabled(true);
-                                                    }
-                                                });
-                                            }
+                                    for (Integer i = 0; i < _actionPairs.size(); i++) {
+                                        ActionPair actionPair = _actionPairs.get(i);
+                                        if (actionPair.isNeedDelete())
+                                            _actionPairs.remove(i);
+                                        else if (!actionPair.getCommand().equals(exceptCommand)) {
+                                            if (commands.containsKey(actionPair.getCommand()))
+                                                actionPair.setStatus(commands.get(actionPair.getCommand()));
+                                        }
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            //do nothing
-                            Integer i=0;
-                            i++; // to delete
+                            _started=false;
+                            beginListen();
                         }
                     }
                 });
@@ -84,19 +85,8 @@ public class TcpSharingHandler {
         static Thread _tcpListenThread;
     }
 
-    private  ActionPair _action;
-    public TcpSharingHandler(ActionPair action)
+    public static void append(ActionPair action)
     {
-        _action = action;
-    }
-
-    public void beginHandling()
-    {
-        Tcp.append(_action);
-    }
-
-    public void endHandling()
-    {
-        Tcp.remove(_action);
+        Tcp.append(action);
     }
 }

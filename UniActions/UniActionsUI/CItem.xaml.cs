@@ -47,13 +47,18 @@ namespace UniActionsUI
 
             var actionLock = new Action<ActionItem>(x => ChangeView("", false));
 
-            var actionUnlock = new Action<ActionItem>(x => 
-                _actionItem.CheckStateAsync((state) => ChangeView(state, true))
+            var actionUnlock = new Action<ActionItem>(x =>
+                {
+                    _actionItem.CheckStateAsync((state) => ChangeView(state, true));
+                }
             );
 
             _actionItem.AfterAction += actionUnlock;
-
-            this.Unloaded += (o, e) => _actionItem.AfterAction -= actionUnlock;
+            
+            this.Unloaded += (o, e) =>
+                {
+                    _actionItem.AfterAction -= actionUnlock;
+                };
 
             actionLock(_actionItem);
             actionUnlock(_actionItem);
@@ -125,6 +130,11 @@ namespace UniActionsUI
 
             if (Clicked != null)
                 Clicked();
+        }
+
+        public void Update()
+        {
+            _actionItem.CheckStateAsync((state) => ChangeView(state, true));
         }
 
         private void ChangeView(string state, bool enable)

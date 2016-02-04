@@ -1,59 +1,64 @@
 package com.example.notebookuser.customremote;
 
-import android.widget.Button;
-
 /**
  * Created by NotebookUser on 25.10.2015.
  */
 public class ActionPair {
-    private String _name;
+    private String _status;
     private String _command;
     private Boolean _isCategory=false;
-    private Boolean _isEnabled=true;
-    private Button _button;
+    private Boolean _isNeedDelete=false;
 
-    public void setButton(Button b)
-    {
-        _button = b;
-        if (!_isCategory)
-        {
-            new TcpSharingHandler(this).beginHandling();
-        }
+    public String getStatus(){
+        return _status;
     }
 
-    public Boolean isEnabled()
-    {
-        return  _isEnabled;
+    public void setStatus(String value){
+        _status = value;
+        if (_statusUpdated!=null)
+            _statusUpdated.run(this);
     }
 
-    public Button getButton()
-    {
-        return _button;
-    }
-
-    public String getName(){
-        return _name;
-    }
     public String getCommand(){
         return _command;
     }
 
-    public void setName(String name) { _name=name; }
+    private ActionPairRunnable _statusUpdated;
+
+    public void setOnStatusUpdated(ActionPairRunnable event){
+        _statusUpdated = event;
+    }
 
     public Boolean isCategory(){
         return _isCategory;
     }
 
-    public ActionPair(String name, String command, Boolean isEnabled)
+    public ActionPair(String command, boolean isCategory)
     {
-        _isEnabled = isEnabled;
-        _name=name;
-        _command=command;
+        _command = command;
+        _isCategory = isCategory;
     }
 
-    public ActionPair(String category)
+    public void Do()
     {
-        _isCategory = true;
-        _name = category;
+        final ActionPair _this = this;
+        new Thread(new Runnable() {
+            public void run() {
+                setStatus(
+                    TcpHelper.Do(
+                        getCommand(),
+                        getStatus()
+                ));
+            }
+        }).start();
+    }
+
+    public void needDelete()
+    {
+        _isNeedDelete=true;
+    }
+    public  boolean isNeedDelete()
+    {
+        return  _isNeedDelete;
     }
 }

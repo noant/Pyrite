@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -51,6 +52,20 @@ namespace UniActionsUI
 
         public void Refresh()
         {
+            var actionUpdateAll = new ActionItemExecuted((x) => {
+                this.Dispatcher.BeginInvoke(new Action(() => {
+                    foreach (var cItem in this.spItems.Children)
+                    {
+                        if (cItem is CItem)
+                            ((CItem)cItem).Update();
+                    }
+                }));
+            });
+
+            App.ItemExecuted += actionUpdateAll;
+
+            this.Unloaded += (o, e) => App.ItemExecuted -= actionUpdateAll;
+
             this.spItems.Children.Clear();
 
             int num = 1;
@@ -78,6 +93,7 @@ namespace UniActionsUI
                         if (this.Clicked != null)
                             this.Clicked();
                     };
+                                        
                     this.spItems.Children.Add(cItem);
                 }
             }

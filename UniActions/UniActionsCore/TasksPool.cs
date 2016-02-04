@@ -76,10 +76,10 @@ namespace UniActionsCore
             if (result.Value && !_actionItems.Contains(item))
                 _actionItems.Add(item);
 
-            item.AfterActionAsyncEvent += (x) =>
+            item.AfterActionServerEvent += (x) =>
             {
                 if (item.UseServerThreading && !string.IsNullOrEmpty(item.ServerCommand))
-                    Uni.ServerThreading.ShareState(x);
+                    Uni.ServerThreading.ShareState(null,null);
             };
             return result;
         }

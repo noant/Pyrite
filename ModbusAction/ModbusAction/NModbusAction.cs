@@ -63,24 +63,29 @@ namespace ModbusAction
         {
             get
             {
-                if (_changeableState == ChangeableState.Off)
-                    return _stateOn;
-                if (_changeableState == ChangeableState.On)
-                    return _stateOff;
-                lock (_comPortsLocker)
+                using (var master = ConfigureMaster())
                 {
-                    try
-                    {
-                        using (var master = ConfigureMaster())
-                        {
-                            return master.ReadCoils(_modbusSlaveId, _modbusCoilAddress, 1).First() ?
-                               _stateOn : _stateOff;
-                        }
-                    }
-                    catch
-                    {
-                        return _stateError;
-                    }
+                    return GetState(master);
+                }
+            }
+        }
+
+        private string GetState(IModbusSerialMaster master)
+        {
+            if (_changeableState == ChangeableState.Off)
+                return _stateOn;
+            if (_changeableState == ChangeableState.On)
+                return _stateOff;
+            lock (_comPortsLocker)
+            {
+                try
+                {
+                    return master.ReadCoils(_modbusSlaveId, _modbusCoilAddress, 1).First() ?
+                        _stateOn : _stateOff;
+                }
+                catch
+                {
+                    return _stateError;
                 }
             }
         }
@@ -106,6 +111,8 @@ namespace ModbusAction
                             state = true;
 
                         master.WriteSingleCoil(_modbusSlaveId, _modbusCoilAddress, state);
+
+                        return GetState(master);
                     }
                 }
                 catch { }

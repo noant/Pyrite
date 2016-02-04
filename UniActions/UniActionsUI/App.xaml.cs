@@ -29,21 +29,20 @@ namespace UniActionsUI
             {
                 if (exceptions.Count() != 0)
                 {
-                    //Thread t = new Thread(() =>
-                    //{
-                        var message = "Выброшены следующие ошибки:\r\n";
-                        foreach (var e in exceptions)
-                            message += e.Message + "\r\n";
+                    var message = "Выброшены следующие ошибки:\r\n";
+                    foreach (var e in exceptions)
+                        message += e.Message + "\r\n";
 
-                        MessageBox.Show(message, "Сообщение", MessageBoxButton.OK, MessageBoxImage.Error);
-                    //});
-                    //t.IsBackground = true;
-                    //t.SetApartmentState(ApartmentState.STA);
-                    //t.Start();
+                    MessageBox.Show(message, "Сообщение", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             };
 
             Uni = Uni.Create().Value;
+            foreach (var item in Uni.TasksPool.ActionItems)
+                item.AfterAction += (x) => {
+                    if (ItemExecuted != null)
+                        ItemExecuted(item);
+                };
             Starter.Initialize();
         }
 
@@ -74,9 +73,12 @@ namespace UniActionsUI
                 {
                     SelectedTabChanged(c, e);
                 }
-
         }
+
+        public static event ActionItemExecuted ItemExecuted;
 
         private static Dictionary<TabControl, object> _tempTabsSelected = new Dictionary<TabControl, object>();
     }
+
+    public delegate void ActionItemExecuted(ActionItem item);
 }
