@@ -83,7 +83,7 @@ namespace UniActionsCore
             Uni.TasksPool.Settings.SecondsBetweenActions = TasksPool.TasksPoolSettings.Defaults.SecondsBetweenActions;
             Uni.ServerThreading.Settings.ResolveAllIp = ServerThreading.ServerThreadingSettings.Defaults.ResolveAll;
             Uni.ServerThreading.Settings.DistributionPort = ServerThreading.ServerThreadingSettings.Defaults.DistributionPort;
-            Uni.ServerThreading.Settings.ActionsPorts = ServerThreading.ServerThreadingSettings.Defaults.ActionPorts.ToList();
+            Uni.ServerThreading.Settings.ActionsPorts = SkeddedList<ushort>.Create(ServerThreading.ServerThreadingSettings.Defaults.ActionPorts);
         }
 
         public VoidResult Load()
@@ -104,12 +104,12 @@ namespace UniActionsCore
                 Uni.ServerThreading.Settings.ResolveAllIp = Savior[VAC.AppSettingsNames.ResolveAll];
 
                 if (Savior.ContainsKey(VAC.AppSettingsNames.ActionsPorts))
-                    Uni.ServerThreading.Settings.ActionsPorts = Savior[VAC.AppSettingsNames.ActionsPorts].ToList<ushort>();
+                    Uni.ServerThreading.Settings.ActionsPorts = SkeddedList<ushort>.Create(Savior[VAC.AppSettingsNames.ActionsPorts].ToList<ushort>());
 
                 Uni.TasksPool.Settings.SecondsBetweenActions = Savior[VAC.AppSettingsNames.SecondsBetweenActions];
 
                 if (Savior.ContainsKey(VAC.AppSettingsNames.ResolvedIp))
-                    Uni.ServerThreading.Settings.ResolvedIp = Savior[VAC.AppSettingsNames.ResolvedIp].ToList<IPAddress>();
+                    Uni.ServerThreading.Settings.ResolvedIp = SkeddedList<IPAddress>.Create(Savior[VAC.AppSettingsNames.ResolvedIp].ToList<IPAddress>());
 
                 Uni.ModulesControl.Clear();
 

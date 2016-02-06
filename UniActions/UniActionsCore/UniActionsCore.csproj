@@ -41,10 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionItem.cs" />
-    <Compile Include="ComplexChecker.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ModulesControl.cs" />
-    <Compile Include="Other.cs" />
+    <Compile Include="ExceptionsHandling.cs" />
+    <Compile Include="SkeddedList.cs" />
     <Compile Include="TasksPool.cs" />
     <Compile Include="SaveAndLoad.cs" />
     <Compile Include="TcpListenerEx.cs" />

@@ -45,7 +45,7 @@ namespace UniActionsUI
         {
             btDelete.IsEnabled = listPort.SelectedIndex != -1 && listPort.Items.Count > 1;
             var port = tbPort.GetUShort();
-            btAdd.IsEnabled = !App.Uni.ServerThreading.Settings.ActionsPorts.Any(x => x == port);
+            btAdd.IsEnabled = App.Uni.ServerThreading.Settings.ActionsPorts.CanAdd(port);
         }
 
         public void Refresh()

@@ -17,26 +17,71 @@ namespace UniActionsCore
             {
                 public static readonly ushort DistributionPort = 6001;
                 public static readonly bool ResolveAll = true;
-                public static readonly int ReceiveTimout = 1000;
-                public static readonly int SendTimout = 1000;
+                public static readonly uint ReceiveTimout = 1000;
+                public static readonly uint SendTimout = 1000;
 
                 public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() { 
                     6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
 
-                public static readonly int SharingTryCount = 4;
-                public static readonly short SharingPort = 6000;
+                public static readonly uint SharingTryCount = 4;
+                public static readonly ushort SharingPort = 6000;
                 public static readonly Encoding ServerEncoding = Encoding.UTF8;
             }
 
-            public ushort DistributionPort { get; set; }
+            public ushort _distributionPort;
+            public ushort DistributionPort
+            {
+                get
+                {
+                    return _distributionPort;
+                }
+                set
+                {
+                    if (value != _sharingPort)
+                        if (ActionsPorts == null || !ActionsPorts.Contains(value))
+                            _distributionPort = value;
+                }
+            }
+
             public bool ResolveAllIp { get; set; }
 
-            public List<IPAddress> ResolvedIp { get; internal set; }
-            public List<ushort> ActionsPorts { get; internal set; }
+            public SkeddedList<IPAddress> ResolvedIp { get; internal set; }
 
-            public int SharingTryCount { get; set; }
-            public int SharingPort { get; set; }
+            private SkeddedList<ushort> _actionsPorts;
+            public SkeddedList<ushort> ActionsPorts {
+                get {
+                    return _actionsPorts;
+                }
+                internal set {
+                    value.ItemAdd += (sender, args) => {
+                        if (args.Item == this.DistributionPort ||
+                            args.Item == Defaults.SharingPort ||
+                            _actionsPorts.Any(x=>x.Equals(args.Item))
+                            )
+                            args.Cancel = true;
+                    };
+
+                    _actionsPorts = value;
+                }
+            }
+
+            public uint SharingTryCount { get; set; }
+
+            public ushort _sharingPort;
+            public ushort SharingPort
+            {
+                get
+                {
+                    return _sharingPort;
+                }
+                set
+                {
+                    if (value != DistributionPort)
+                        if (ActionsPorts == null || !ActionsPorts.Contains(value))
+                        _sharingPort = value;
+                }
+            }
         }
                 
         private class ThreadPortOccupation{
@@ -126,8 +171,8 @@ namespace UniActionsCore
         public void Initialize()
         {
             this.Settings = new ServerThreadingSettings();
-            this.Settings.ResolvedIp = new List<IPAddress>();
-            this.Settings.ActionsPorts = ServerThreadingSettings.Defaults.ActionPorts.ToList();
+            this.Settings.ResolvedIp = new SkeddedList<IPAddress>();
+            this.Settings.ActionsPorts = SkeddedList<ushort>.Create(ServerThreadingSettings.Defaults.ActionPorts);
             this.Settings.SharingPort = ServerThreadingSettings.Defaults.SharingPort;
             this.Settings.SharingTryCount = ServerThreadingSettings.Defaults.SharingTryCount;
             IsStopped = true;
@@ -201,8 +246,8 @@ namespace UniActionsCore
 
                     var listener = new TcpListenerEx(port);
 
-                    listener.Server.SendTimeout = ServerThreadingSettings.Defaults.SendTimout;
-                    listener.Server.ReceiveTimeout = ServerThreadingSettings.Defaults.ReceiveTimout;
+                    listener.Server.SendTimeout = (int)ServerThreadingSettings.Defaults.SendTimout;
+                    listener.Server.ReceiveTimeout = (int)ServerThreadingSettings.Defaults.ReceiveTimout;
                     ThreadPortOccupation portOccupation = null;
                     Thread t = new Thread(() => {
                         while (true)
@@ -338,8 +383,8 @@ namespace UniActionsCore
                     try
                     {
                         var tcpClient = new TcpClient(address.ToString(), this.Settings.SharingPort);
-                        tcpClient.ReceiveTimeout = UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.ReceiveTimout;
-                        tcpClient.SendTimeout = UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.SendTimout;
+                        tcpClient.ReceiveTimeout = (int)UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.ReceiveTimout;
+                        tcpClient.SendTimeout = (int)UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.SendTimout;
 
                         var stream = tcpClient.GetStream(); 
 

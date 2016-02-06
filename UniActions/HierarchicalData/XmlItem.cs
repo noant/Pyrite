@@ -25,10 +25,6 @@ namespace HierarchicalData
 
     [Serializable()]
     public class XmlItems : List<XmlItem> {
-        public List<T> ConvertToList<T>()
-        {
-            return this.Select(x => (T)x.Value).ToList();
-        }
     }
 
     public static class Extensions

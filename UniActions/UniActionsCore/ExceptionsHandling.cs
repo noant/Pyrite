@@ -61,6 +61,8 @@ namespace UniActionsCore
         {
             Log.Write(e);
 
+#if RELEASE
+
             if (_exceptions == null)
                 _exceptions = new List<Exception>();
             
@@ -70,6 +72,10 @@ namespace UniActionsCore
             {
                 Resulting.RaiseCriticalHandler(this.Exceptions);
             }
+#endif
+#if DEBUG
+            throw e;
+#endif
         }
         internal void AddExceptions(IEnumerable<Exception> es)
         {
