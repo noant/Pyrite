@@ -52,8 +52,7 @@ namespace UniActionsCore
             ServerThreading.Initialize();
 
             result.AddExceptions(SaveAndLoad.Load().Exceptions);
-
-            result.AddExceptions(TasksPool.BeginStart().Exceptions);
+            
             result.AddExceptions(ServerThreading.BeginStart().Exceptions);
 
             return result;
@@ -64,50 +63,19 @@ namespace UniActionsCore
             var result = new VoidResult();
             ModulesControl.Clear();
             TasksPool.Clear();
-            
-            result.AddExceptions(SaveAndLoad.Load().Exceptions);
 
-            object locker = new object();
-            bool poolStopped = false;
-            bool serverStopped = false;
-            TasksPool.BeginStop(() =>
-            {
-                lock (locker)
-                {
-                    poolStopped = true;
-                    if (serverStopped)
-                    {
-                        try
-                        {
-                            ServerThreading.BeginStart();
-                            TasksPool.BeginStart();
-                        }
-                        catch (Exception e)
-                        {
-                            result.AddException(e);
-                        }
-                        callback(result);
-                    }
-                }
-            });
+            result.AddExceptions(SaveAndLoad.Load().Exceptions);
+            
             ServerThreading.BeginStop(() =>
             {
-                lock (locker)
+                try
                 {
-                    serverStopped = true;
-                    if (poolStopped)
-                    {
-                        try
-                        {
-                            ServerThreading.BeginStart();
-                            TasksPool.BeginStart();
-                        }
-                        catch (Exception e)
-                        {
-                            result.AddException(e);
-                        }
-                        callback(result);                    
-                    }
+                    ServerThreading.BeginStart();
+                    callback(result);
+                }
+                catch (Exception e)
+                {
+                    result.AddException(e);
                 }
             });
 
@@ -116,24 +84,9 @@ namespace UniActionsCore
 
         public void Stop(Action callback)
         {
-            object locker = new object();
-            bool poolStopped = false;
-            bool serverStopped = false;
-            TasksPool.BeginStop(() => {
-                lock (locker)
-                {
-                    poolStopped = true;
-                    if (serverStopped)
-                        callback();
-                }
-            });
-            ServerThreading.BeginStop(() => {
-                lock (locker)
-                {
-                    serverStopped = true;
-                    if (poolStopped)
-                        callback();
-                }
+            ServerThreading.BeginStop(() =>
+            {
+                callback();
             });
         }
     }

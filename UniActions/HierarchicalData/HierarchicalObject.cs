@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
 
 namespace HierarchicalData
 {
@@ -43,13 +42,14 @@ namespace HierarchicalData
 
         public Stream Stream { get; set; }
 
-        public HierarchicalObject(string fileName) {
+        public HierarchicalObject(string fileName)
+        {
             this.FileName = fileName;
         }
 
         public HierarchicalObject() : this(Defaults.FileName) { }
-                
-        private static Encoding CurrentXmlEncoding = Encoding.Default;
+
+        internal static Encoding CurrentXmlEncoding = Encoding.Default;
 
         private Dictionary<dynamic, dynamic> _data = new Dictionary<dynamic, dynamic>();
 
@@ -60,14 +60,15 @@ namespace HierarchicalData
             get
             {
                 if (ThrowsExceptionIfParameterNotExist && !_data.ContainsKey(key))
-                    throw new ParameterNotExistException("Параметр '"+key.ToString()+"' не существует");
+                    throw new ParameterNotExistException("Параметр '" + key.ToString() + "' не существует");
 
                 if (!_data.ContainsKey(key) || _data[key] == null)
                     _data.Add(key, new HierarchicalObject());
 
                 return _data[key];
             }
-            set {
+            set
+            {
                 if (!_data.ContainsKey(key))
                     _data.Add(key, null);
 
@@ -103,7 +104,8 @@ namespace HierarchicalData
 
         private bool IsEmpty
         {
-            get {
+            get
+            {
                 if (this._data.Count == 0)
                     return true;
                 foreach (var pair in this._data)
@@ -112,7 +114,7 @@ namespace HierarchicalData
                         return false;
                     else
                         if (pair.Value is HierarchicalObject && !((HierarchicalObject)pair.Value).IsEmpty)
-                            return false;
+                        return false;
                 }
 
                 return true;
@@ -139,7 +141,7 @@ namespace HierarchicalData
         {
             this.Optimize();
             var memoryStream = new MemoryStream();
-            var serializer = new XmlSerializer(typeof(XmlItems));
+            var serializer = HierarchicalObjectCrutch.GetSerializer(typeof(XmlItems));
             serializer.Serialize(memoryStream, this.GetXmlItems());
             return CurrentXmlEncoding.GetString(memoryStream.GetBuffer());
         }
@@ -162,8 +164,8 @@ namespace HierarchicalData
 
         internal static XmlItems ItemsFromXml(string xmlString)
         {
-            var memoryStream = new MemoryStream(CurrentXmlEncoding.GetBytes(xmlString));            
-            var serializer = new XmlSerializer(typeof(XmlItems));
+            var memoryStream = new MemoryStream(CurrentXmlEncoding.GetBytes(xmlString));
+            var serializer = HierarchicalObjectCrutch.GetSerializer(typeof(XmlItems));
             return (XmlItems)serializer.Deserialize(memoryStream);
         }
 
@@ -203,7 +205,8 @@ namespace HierarchicalData
         }
     }
 
-    public class ParameterNotExistException : Exception {
+    public class ParameterNotExistException : Exception
+    {
         public ParameterNotExistException(string mess) : base(mess)
         {
         }

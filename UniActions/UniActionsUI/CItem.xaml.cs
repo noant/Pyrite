@@ -3,7 +3,6 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using UniActionsCore;
 
 namespace UniActionsUI
 {
@@ -12,12 +11,15 @@ namespace UniActionsUI
     /// </summary>
     public partial class CItem : Grid
     {
-        private ActionItem _actionItem;
-        public ActionItem ActionItem { 
-            get {
+        private Scenario _actionItem;
+        public Scenario ActionItem
+        {
+            get
+            {
                 return _actionItem;
             }
-            set {
+            set
+            {
                 _actionItem = value;
                 Refresh();
             }
@@ -45,16 +47,16 @@ namespace UniActionsUI
         {
             this.Background = this._bg = GetFromString(_actionItem.Category);
 
-            var actionLock = new Action<ActionItem>(x => ChangeView("", false));
+            var actionLock = new Action<Scenario>(x => ChangeView("", false));
 
-            var actionUnlock = new Action<ActionItem>(x =>
+            var actionUnlock = new Action<Scenario>(x =>
                 {
                     _actionItem.CheckStateAsync((state) => ChangeView(state, true));
                 }
             );
 
             _actionItem.AfterAction += actionUnlock;
-            
+
             this.Unloaded += (o, e) =>
                 {
                     _actionItem.AfterAction -= actionUnlock;
@@ -63,7 +65,7 @@ namespace UniActionsUI
             actionLock(_actionItem);
             actionUnlock(_actionItem);
         }
-        
+
         #region color helper
         private Brush SelectBrush = Brushes.Tomato;
 
@@ -77,14 +79,14 @@ namespace UniActionsUI
             var byteG = new byte();
             var byteB = new byte();
 
-            for (int i=0; i < str.Length; i++)
+            for (int i = 0; i < str.Length; i++)
             {
-                var val = (byte) ((((byte)str[i]) / str.Length) * 3);
+                var val = (byte)((((byte)str[i]) / str.Length) * 3);
                 if (i < str.Length / 3)
                     byteR += val;
-                if (i >= str.Length / 3 && i < (str.Length/3)*2)
-                    byteG += val; 
-                if (i >= (str.Length / 3)*2)
+                if (i >= str.Length / 3 && i < (str.Length / 3) * 2)
+                    byteG += val;
+                if (i >= (str.Length / 3) * 2)
                     byteB += val;
             }
 
@@ -106,7 +108,7 @@ namespace UniActionsUI
 
         private bool IsDark(Color color)
         {
-            return color.R + color.G + color.B < 255*2;
+            return color.R + color.G + color.B < 255 * 2;
         }
 
         private Color Light(Color color)
@@ -124,7 +126,8 @@ namespace UniActionsUI
         public void Run()
         {
             ChangeView("", false);
-            _actionItem.ExecuteAsync(new Action<string>((state) => {
+            _actionItem.ExecuteAsync(new Action<string>((state) =>
+            {
                 ChangeView(state, true);
             }));
 
@@ -139,7 +142,8 @@ namespace UniActionsUI
 
         private void ChangeView(string state, bool enable)
         {
-            this.Dispatcher.BeginInvoke(new Action(() => {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
                 try
                 {
                     if (!enable)
@@ -161,20 +165,24 @@ namespace UniActionsUI
         {
             InitializeComponent();
 
-            var actionUp = new Action(() => { 
+            var actionUp = new Action(() =>
+            {
                 this.Background = this._bg;
-            });            
+            });
 
-            this.MouseDown += (o, e) => Run() ;
+            this.MouseDown += (o, e) => Run();
             this.MouseUp += (o, e) => actionUp();
 
-            this.KeyDown += (o, e) => {
+            this.KeyDown += (o, e) =>
+            {
                 if (e.Key == Key.Enter || e.Key == Key.Space)
                 {
                     Run();
-                    var t = new Thread(() => {
+                    var t = new Thread(() =>
+                    {
                         Thread.Sleep(180); //delay before background changed
-                        this.Dispatcher.BeginInvoke(new Action(() => {
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
                             actionUp();
                         }));
                     });
@@ -185,6 +193,6 @@ namespace UniActionsUI
 
         public event Clicked Clicked;
     }
-    
+
     public delegate void Clicked();
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HierarchicalData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -120,7 +121,9 @@ namespace UniActionsCore
                 types = assembly
                     .GetTypes()
                     .Where(x => x.GetInterfaces()
-                        .Contains(typeof(ICustomAction)));
+                        .Contains(typeof(ICustomAction))
+                        && x.CustomAttributes.Any(z=>z.AttributeType.Equals(typeof(SerializableAttribute)))
+                        );
             }
             catch (Exception e)
             {
@@ -129,6 +132,7 @@ namespace UniActionsCore
 
             var addedTypes = types.Where(x => CanRegisterAction(x)).ToList();
             _customActions.AddRange(addedTypes);
+            HierarchicalObjectCrutch.Register(addedTypes);
             result.Value = addedTypes;
             return result;
         }
@@ -159,7 +163,9 @@ namespace UniActionsCore
                 types = assembly
                     .GetTypes()
                     .Where(x => x.GetInterfaces()
-                        .Contains(typeof(ICustomChecker)));
+                        .Contains(typeof(ICustomChecker))
+                        && x.CustomAttributes.Any(z=>z.AttributeType.Equals(typeof(SerializableAttribute)))
+                        );
             }
             catch (Exception e)
             {
@@ -168,6 +174,7 @@ namespace UniActionsCore
 
             var addedTypes = types.Where(x => CanRegisterChecker(x));
             _customCheckers.AddRange(addedTypes);
+            HierarchicalObjectCrutch.Register(addedTypes);
             result.Value = addedTypes;
             return result;
         }
@@ -228,12 +235,12 @@ namespace UniActionsCore
 
         public static ICustomAction Clone(ICustomAction action)
         {
-            return (ICustomAction)HierarchicalData.Helper.CloneHierarchicalObject(action);
+            return (ICustomAction)HierarchicalData.HierarchicalObjectCrutch.CloneObject(action);
         }
 
         public static ICustomChecker Clone(ICustomChecker action)
         {
-            return (ICustomChecker)HierarchicalData.Helper.CloneHierarchicalObject(action);
+            return (ICustomChecker)HierarchicalData.HierarchicalObjectCrutch.CloneObject(action);
         }
     }
 }

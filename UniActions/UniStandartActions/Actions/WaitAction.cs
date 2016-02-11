@@ -1,35 +1,41 @@
 ﻿using HierarchicalData;
+using System;
 using System.Threading;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Actions
 {
 #if DEBUG
+    [Serializable]
     public class WaitAction : ICustomAction
     {
-        [Settings]
-        private decimal _minutes = 5;
+        public decimal Minutes = 5;
 
         public string Do(string inputState)
         {
             IsBusyNow = true;
-            Thread.Sleep((int)(_minutes * 1000 * 60));
+            Thread.Sleep((int)(Minutes * 1000 * 60));
             IsBusyNow = false;
             return State;
         }
 
+
+        [XmlIgnore]
         public string State
         {
             get {
-                return "Ожидать " + _minutes + (_minutes != 1 ? " минут(ы)" : " минуту"); 
+                return "Ожидать " + Minutes + (Minutes != 1 ? " минут(ы)" : " минуту"); 
             }
         }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "Ожидание"; }
         }
 
+        [XmlIgnore]
         public bool AllowUserSettings
         {
             get { return true; }
@@ -38,13 +44,14 @@ namespace UniStandartActions.Actions
         public bool BeginUserSettings()
         {
             WaitActionView form = new WaitActionView();
-            form.nudMinutes.Value = _minutes;
+            form.nudMinutes.Value = Minutes;
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                _minutes = form.nudMinutes.Value;
+                Minutes = form.nudMinutes.Value;
             else return false;
             return true;
         }
 
+        [XmlIgnore]
         public bool IsBusyNow
         {
             get;

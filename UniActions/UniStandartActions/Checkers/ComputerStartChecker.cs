@@ -1,10 +1,13 @@
-﻿using UniActionsClientIntefaces;
+﻿using System.Xml.Serialization;
+using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
     public class ComputerStartChecker : ICustomChecker
     {
         private bool _started;
+
+        [XmlIgnore]
         public bool IsCanDoNow
         {
             get
@@ -17,8 +20,11 @@ namespace UniStandartActions.Checkers
                 else return false;
             }
         }
+
+        [XmlIgnore]
         public bool AllowUserSettings { get { return false; } }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "При включении компьютера";  }

@@ -80,5 +80,5 @@ namespace UniActionsUI
         private static Dictionary<TabControl, object> _tempTabsSelected = new Dictionary<TabControl, object>();
     }
 
-    public delegate void ActionItemExecuted(ActionItem item);
+    public delegate void ActionItemExecuted(Scenario item);
 }

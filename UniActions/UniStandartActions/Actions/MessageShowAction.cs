@@ -1,13 +1,16 @@
 ﻿using HierarchicalData;
+using System;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Actions
 {
+    [Serializable]
     public class MessageShowAction : ICustomAction
     {
-        [Settings]
-        private string _message = "";
+        public string Message { get; set; }
 
+        [XmlIgnore]
         public bool AllowUserSettings { get { return true; } }
 
         public string Do(string inputState)
@@ -15,22 +18,25 @@ namespace UniStandartActions.Actions
             IsBusyNow = true;
             MessageShow.SetMessage(inputState);
             IsBusyNow = false;
-            return _message;
+            return Message;
         }
 
+        [XmlIgnore]
         public string State
         {
             get
             {
-                return _message;
+                return Message;
             }
         }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "Показать сообщение"; }
         }
 
+        [XmlIgnore]
         public bool IsBusyNow
         {
             get;
@@ -40,15 +46,16 @@ namespace UniStandartActions.Actions
         public bool BeginUserSettings()
         {
             var form = new MessageShowActionView();
-            form.Message = _message;
+            form.Message = Message;
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this._message = form.Message;
+                this.Message = form.Message;
                 return true;
             }
             else return false;
         }
 
-        public void Refresh() { }
+        public void Refresh() {
+        }
     }
 }

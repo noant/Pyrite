@@ -1,43 +1,41 @@
 ﻿using HierarchicalData;
+using System;
 using System.Diagnostics;
 using System.IO;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Actions
 {
+    [Serializable]
     public class ProcessAction : ICustomAction
     {
+        [XmlIgnore]
         public bool AllowUserSettings { get { return true; } }
 
-        [Settings]
-        private string _stateOn;
-        [Settings]
-        private string _stateOff;
-        [Settings]
-        private string _path;
-        [Settings]
-        private string _args;
-        [Settings]
-        private bool _closeMainWindow;
-        [Settings]
-        private bool _processTracking;
+        public string StateOn;
+        public string StateOff;
+        public string Path;
+        public string Args;
+        public bool CloseMainWindow;
+        public bool ProcessTracking;
         public string Do(string inputState)
         {
             IsBusyNow = true;
-            if (inputState == _stateOff)
+            if (inputState == StateOff)
             {
-                if (StartProcess(_path, _args) && _processTracking)
-                    return _stateOn;
-                else return _stateOff;
+                if (StartProcess(Path, Args) && ProcessTracking)
+                    return StateOn;
+                else return StateOff;
             }
-            else if (inputState == _stateOn)
+            else if (inputState == StateOn)
             {
-                if (StopProcess() && _processTracking)
-                    return _stateOff;
-                else return _stateOn;
+                if (StopProcess() && ProcessTracking)
+                    return StateOff;
+                else return StateOn;
             }
             IsBusyNow = false;
-            return _stateOff;
+            return StateOff;
         }
 
         private Process _currentProcess;
@@ -57,7 +55,7 @@ namespace UniStandartActions.Actions
                     return false;
                 }
                 finally {
-                    if (!_processTracking)
+                    if (!ProcessTracking)
                         _currentProcess = null;
                 }
             }
@@ -71,7 +69,7 @@ namespace UniStandartActions.Actions
             {
                 try
                 {
-                    if (!_closeMainWindow)
+                    if (!CloseMainWindow)
                         _currentProcess.Kill();
                     else _currentProcess.CloseMainWindow();
                     _currentProcess.WaitForExit();
@@ -91,16 +89,18 @@ namespace UniStandartActions.Actions
             return true;
         }
 
+        [XmlIgnore]
         public string State
         {
             get
             {
-                if (_currentProcess == null || !_processTracking) return _stateOff;
-                if (_currentProcess.HasExited) return _stateOff;
-                else return _stateOn;
+                if (_currentProcess == null || !ProcessTracking) return StateOff;
+                if (_currentProcess.HasExited) return StateOff;
+                else return StateOn;
             }
         }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "Запуск процесса"; }
@@ -109,25 +109,26 @@ namespace UniStandartActions.Actions
         public bool BeginUserSettings()
         {
             var form = new ProcessActionView();
-            form.Path = this._path;
-            form.Args = this._args;
-            form.StateOn = this._stateOn;
-            form.StateOff = this._stateOff;
-            form.Tracking = this._processTracking;
-            form.CloseMainWindow = this._closeMainWindow;
+            form.Path = this.Path;
+            form.Args = this.Args;
+            form.StateOn = this.StateOn;
+            form.StateOff = this.StateOff;
+            form.Tracking = this.ProcessTracking;
+            form.CloseMainWindow = this.CloseMainWindow;
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this._path = form.Path;
-                this._args = form.Args;
-                this._stateOn = form.StateOn;
-                this._stateOff = form.StateOff;
-                this._processTracking = form.Tracking;
-                this._closeMainWindow = form.CloseMainWindow;
+                this.Path = form.Path;
+                this.Args = form.Args;
+                this.StateOn = form.StateOn;
+                this.StateOff = form.StateOff;
+                this.ProcessTracking = form.Tracking;
+                this.CloseMainWindow = form.CloseMainWindow;
                 return true;
             }
             else return false;
         }
 
+        [XmlIgnore]        
         public bool IsBusyNow
         {
             get;

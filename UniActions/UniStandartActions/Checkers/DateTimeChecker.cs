@@ -1,96 +1,88 @@
 ﻿using HierarchicalData;
 using System;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
     public class DateTimeChecker : ICustomChecker
     {
+        public DateTimeChecker() { 
+            Year = DateTime.Now.Year;
+            Month = DateTime.Now.Month;
+            Day = DateTime.Now.Day;
+            Hour = DateTime.Now.Hour;
+            Minute = DateTime.Now.Minute;
+        }
+
         private bool _fWasStarted;
         private DateTime _lastUpdate;
 
-        [Settings]
-        private bool _onlyOnComputerStart;
+        public bool OnlyOnComputerStart { get; set; }
 
-        [Settings]
-        private bool _everyYear;
+        public bool EveryYear { get; set; }
 
-        [Settings]
-        private bool _everyMonth;
+        public bool EveryMonth { get; set; }
 
-        [Settings]
-        private bool _everyDay;
+        public bool EveryDay { get; set; }
 
-        [Settings]
-        private bool _everyHour;
+        public bool EveryHour { get; set; }
 
-        [Settings]
-        private bool _everyMinute;
+        public bool EveryMinute { get; set; }
 
-        [Settings]
-        private bool _d_monday;
+        public bool D_monday { get; set; }
 
-        [Settings]
-        private bool _d_tuesday;
+        public bool D_tuesday { get; set; }
 
-        [Settings]
-        private bool _d_wednesday;
+        public bool D_wednesday { get; set; }
 
-        [Settings]
-        private bool _d_thursday;
+        public bool D_thursday { get; set; }
 
-        [Settings]
-        private bool _d_friday;
+        public bool D_friday { get; set; }
 
-        [Settings]
-        private bool _d_saturday;
+        public bool D_saturday { get; set; }
 
-        [Settings]
-        private bool _d_sunday;
+        public bool D_sunday { get; set; }
 
-        [Settings]
-        private int _year = DateTime.Now.Year;
+        public int Year { get; set; }
 
-        [Settings]
-        private int _month = DateTime.Now.Month;
+        public int Month { get; set; }
 
-        [Settings]
-        private int _day = DateTime.Now.Day;
+        public int Day { get; set; }
 
-        [Settings]
-        private int _hour = DateTime.Now.Hour;
+        public int Hour { get; set; }
 
-        [Settings]
-        private int _minute = DateTime.Now.Minute;
+        public int Minute { get; set; }
 
+        [XmlIgnore]
         public bool IsCanDoNow
         {
             get
             {
-                if (_fWasStarted && _onlyOnComputerStart)
+                if (_fWasStarted && OnlyOnComputerStart)
                     return false;
                 if ((DateTime.Now - _lastUpdate).TotalSeconds < 59)
                     return false;
                 else _lastUpdate = DateTime.Now;
 
                 var dayOfWeekFlag =
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Monday && _d_monday) ||
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday && _d_tuesday) ||
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday && _d_wednesday) ||
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Thursday && _d_thursday) ||
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Friday && _d_friday) ||
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Saturday && _d_saturday) ||
-                    (DateTime.Now.DayOfWeek == DayOfWeek.Sunday && _d_sunday);
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Monday && D_monday) ||
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday && D_tuesday) ||
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday && D_wednesday) ||
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Thursday && D_thursday) ||
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Friday && D_friday) ||
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Saturday && D_saturday) ||
+                    (DateTime.Now.DayOfWeek == DayOfWeek.Sunday && D_sunday);
 
                 if (dayOfWeekFlag == false)
                     return false;
 
                 var dateFlag =
-                    (DateTime.Now.Year == _year || _everyYear) &&
-                    (DateTime.Now.Month == _month || _everyMonth) &&
-                    (DateTime.Now.Day == _day || _everyDay) &&
-                    (DateTime.Now.Hour == _hour || _everyHour) &&
-                    (DateTime.Now.Minute == _minute || _everyMinute);
+                    (DateTime.Now.Year == Year || EveryYear) &&
+                    (DateTime.Now.Month == Month || EveryMonth) &&
+                    (DateTime.Now.Day == Day || EveryDay) &&
+                    (DateTime.Now.Hour == Hour || EveryHour) &&
+                    (DateTime.Now.Minute == Minute || EveryMinute);
 
                 if (dateFlag)
                 {
@@ -102,8 +94,10 @@ namespace UniStandartActions.Checkers
             }
         }
 
+        [XmlIgnore]
         public bool AllowUserSettings { get { return true; } }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "Проверка по дате"; }
@@ -113,50 +107,50 @@ namespace UniStandartActions.Checkers
         {
             var form = new DateTimeCheckerView();
 
-            form.cbFriday.Checked = this._d_friday;
-            form.cbMonday.Checked = this._d_monday;
-            form.cbSaturday.Checked = this._d_saturday;
-            form.cbSunday.Checked = this._d_sunday;
-            form.cbThursday.Checked = this._d_thursday;
-            form.cbTuesday.Checked = this._d_tuesday;
-            form.cbWednesday.Checked = this._d_wednesday;
+            form.cbFriday.Checked = this.D_friday;
+            form.cbMonday.Checked = this.D_monday;
+            form.cbSaturday.Checked = this.D_saturday;
+            form.cbSunday.Checked = this.D_sunday;
+            form.cbThursday.Checked = this.D_thursday;
+            form.cbTuesday.Checked = this.D_tuesday;
+            form.cbWednesday.Checked = this.D_wednesday;
 
-            form.cbEveryDay.Checked = this._everyDay;
-            form.cbEveryHour.Checked = this._everyHour;
-            form.cbEveryMinute.Checked = this._everyMinute;
-            form.cbEveryMonth.Checked = this._everyMonth;
-            form.cbEveryYear.Checked = this._everyYear;
+            form.cbEveryDay.Checked = this.EveryDay;
+            form.cbEveryHour.Checked = this.EveryHour;
+            form.cbEveryMinute.Checked = this.EveryMinute;
+            form.cbEveryMonth.Checked = this.EveryMonth;
+            form.cbEveryYear.Checked = this.EveryYear;
 
-            form.dtPicker.Value = new DateTime(this._year, this._month, this._day, this._hour, this._minute, 0);
+            form.dtPicker.Value = new DateTime(this.Year, this.Month, this.Day, this.Hour, this.Minute, 0);
 
-            form.nudHour.Value = this._hour;
-            form.nudMinute.Value = this._minute;
+            form.nudHour.Value = this.Hour;
+            form.nudMinute.Value = this.Minute;
 
-            form.cbOnlyWhenCompStart.Checked = this._onlyOnComputerStart;
+            form.cbOnlyWhenCompStart.Checked = this.OnlyOnComputerStart;
 
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this._d_friday = form.cbFriday.Checked;
-                this._d_monday = form.cbMonday.Checked;
-                this._d_saturday = form.cbSaturday.Checked;
-                this._d_sunday = form.cbSunday.Checked;
-                this._d_thursday = form.cbThursday.Checked;
-                this._d_tuesday = form.cbTuesday.Checked;
-                this._d_wednesday = form.cbWednesday.Checked;
+                this.D_friday = form.cbFriday.Checked;
+                this.D_monday = form.cbMonday.Checked;
+                this.D_saturday = form.cbSaturday.Checked;
+                this.D_sunday = form.cbSunday.Checked;
+                this.D_thursday = form.cbThursday.Checked;
+                this.D_tuesday = form.cbTuesday.Checked;
+                this.D_wednesday = form.cbWednesday.Checked;
 
-                this._everyDay = form.cbEveryDay.Checked;
-                this._everyHour = form.cbEveryHour.Checked;
-                this._everyMinute = form.cbEveryMinute.Checked;
-                this._everyMonth = form.cbEveryMonth.Checked;
-                this._everyYear = form.cbEveryYear.Checked;
+                this.EveryDay = form.cbEveryDay.Checked;
+                this.EveryHour = form.cbEveryHour.Checked;
+                this.EveryMinute = form.cbEveryMinute.Checked;
+                this.EveryMonth = form.cbEveryMonth.Checked;
+                this.EveryYear = form.cbEveryYear.Checked;
 
-                this._year = form.dtPicker.Value.Year;
-                this._month = form.dtPicker.Value.Month;
-                this._day = form.dtPicker.Value.Day;
-                this._hour = (int)form.nudHour.Value;
-                this._minute = (int)form.nudMinute.Value;
+                this.Year = form.dtPicker.Value.Year;
+                this.Month = form.dtPicker.Value.Month;
+                this.Day = form.dtPicker.Value.Day;
+                this.Hour = (int)form.nudHour.Value;
+                this.Minute = (int)form.nudMinute.Value;
 
-                this._onlyOnComputerStart = form.cbOnlyWhenCompStart.Checked;
+                this.OnlyOnComputerStart = form.cbOnlyWhenCompStart.Checked;
 
                 return true;
             }

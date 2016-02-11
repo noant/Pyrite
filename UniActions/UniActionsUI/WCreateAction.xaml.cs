@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using UniActionsCore;
 
 namespace UniActionsUI
 {
@@ -16,12 +15,13 @@ namespace UniActionsUI
             this.Background = App.WindowBackground;
             this.bUseInPool.Value = true;
 
-            _item = new ActionItem();
+            _item = new Scenario();
 
             UniActionsCore.Resulting.EnableExceptionHandling = false;
             ProcessOkEnable();
 
-            this.cbAction.SelectionChanged += (o, e) => {
+            this.cbAction.SelectionChanged += (o, e) =>
+            {
                 if (_blockSelectActions) return;
                 if (this.cbAction.SelectedIndex != 0)
                 {
@@ -55,17 +55,20 @@ namespace UniActionsUI
                 ProcessOkEnable();
             };
 
-            this.tbName.TextChanged += (o, e) => {
+            this.tbName.TextChanged += (o, e) =>
+            {
                 _item.Name = tbName.Text;
                 ProcessOkEnable();
             };
 
-            this.tbServerCommand.TextChanged += (o, e) => {
+            this.tbServerCommand.TextChanged += (o, e) =>
+            {
                 _item.ServerCommand = tbServerCommand.Text;
                 ProcessOkEnable();
             };
 
-            this.cbCategory.SelectionChanged += (o, e) => {
+            this.cbCategory.SelectionChanged += (o, e) =>
+            {
                 _item.Category = this.cbCategory.SelectedItem.ToString();
                 tbCategory.Text = this.cbCategory.SelectedItem.ToString();
                 ProcessOkEnable();
@@ -74,10 +77,11 @@ namespace UniActionsUI
             this.tbCategory.TextChanged += (o, e) =>
             {
                 _item.Category = this.tbCategory.Text;
-                ProcessOkEnable();                
+                ProcessOkEnable();
             };
 
-            this.bUseInPool.BoolChanged += (o) => {
+            this.bUseInPool.BoolChanged += (o) =>
+            {
                 _item.IsActive = o.Value;
                 ProcessOkEnable();
             };
@@ -88,11 +92,13 @@ namespace UniActionsUI
                 ProcessOkEnable();
             };
 
-            this.btCancel.Click += (o, e) => {
+            this.btCancel.Click += (o, e) =>
+            {
                 this.DialogResult = false;
             };
 
-            this.btCreate.Click += (o, e) => {
+            this.btCreate.Click += (o, e) =>
+            {
                 if (!this.IsEdit)
                 {
                     var res = App.Uni.TasksPool.AddItem(_item);
@@ -134,7 +140,8 @@ namespace UniActionsUI
             this.cbChecker.ItemsSource = new string[] { "-" }.Union(App.Uni.ModulesControl.CustomCheckers
                 .Select(x => App.Uni.ModulesControl.GetViewName(x).Value));
 
-            this.bOnlyOnce.BoolChanged += (o) => {
+            this.bOnlyOnce.BoolChanged += (o) =>
+            {
                 _item.IsOnlyOnce = o.Value;
                 ProcessOkEnable();
             };
@@ -142,15 +149,18 @@ namespace UniActionsUI
             this.btEditAction.Click += (o, e) => _item.Action.BeginUserSettings();
             this.btEditChecker.Click += (o, e) => _item.Checker.BeginUserSettings();
 
-            UniActionsCore.Resulting.EnableExceptionHandling = true; 
+            UniActionsCore.Resulting.EnableExceptionHandling = true;
         }
 
         private bool _isEdit;
-        public bool IsEdit {
-            get {
+        public bool IsEdit
+        {
+            get
+            {
                 return _isEdit;
             }
-            set {
+            set
+            {
                 _isEdit = value;
                 if (value)
                 {
@@ -165,8 +175,8 @@ namespace UniActionsUI
             }
         }
 
-        private ActionItem _tempItem;
-        public void SetItem(ActionItem item)
+        private Scenario _tempItem;
+        public void SetItem(Scenario item)
         {
             if (!this.IsEdit)
                 throw new Exception("IsEdit is false");
@@ -188,14 +198,14 @@ namespace UniActionsUI
             _blockSelectActions = false;
         }
 
-        private ActionItem _item;
+        private Scenario _item;
         bool _blockSelectActions = false;
 
         private void ProcessOkEnable()
         {
             btEditAction.IsEnabled = _item.Action != null && _item.Action.AllowUserSettings;
             btEditChecker.IsEnabled = _item.Checker != null && _item.Checker.AllowUserSettings;
-            
+
             var result = App.Uni.TasksPool.CheckItem(_item);
             if (result.Value)
             {

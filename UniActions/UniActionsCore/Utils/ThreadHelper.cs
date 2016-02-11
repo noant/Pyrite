@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace UniActionsCore
 {
-    internal static class Helper
+    internal static class ThreadHelper
     {
-        public static string MassToString(IEnumerable<object> objs, string splitter)
-        {
-            return objs.Aggregate<object>((x0, x1) => x0.ToString() + splitter + x1.ToString()).ToString();
-        }
-
         public static Thread AlterThread(Action action, bool isBackground, ApartmentState apartmentState)
         {
-            Thread t = new Thread(() => {
+            Thread t = new Thread(() =>
+            {
                 action();
             });
             t.SetApartmentState(apartmentState);

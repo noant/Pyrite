@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HumanFriendlyNameAttribute.cs" />
     <Compile Include="ICustomAction.cs" />
     <Compile Include="ICustomChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

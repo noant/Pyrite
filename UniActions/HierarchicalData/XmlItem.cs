@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace HierarchicalData
 {
     [Serializable()]
+    [XmlInclude(typeof(SerializedObject))]
     public class XmlItem //public for xml serializator
     {
         public XmlItem(object key, object value)

@@ -1,9 +1,13 @@
-﻿using UniActionsClientIntefaces;
+﻿using System;
+using System.Xml.Serialization;
+using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
+    [Serializable]
     public class EveryIterationChecker : ICustomChecker
     {
+        [XmlIgnore]
         public bool IsCanDoNow
         {
             get{
@@ -11,6 +15,7 @@ namespace UniStandartActions.Checkers
             }
         }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "Всегда"; }
@@ -21,6 +26,7 @@ namespace UniStandartActions.Checkers
             return true;
         }
 
+        [XmlIgnore]
         public bool AllowUserSettings { get { return false; } }
 
         public void Refresh() { }

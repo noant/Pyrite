@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using UniActionsCore;
 
 namespace UniActionsUI
 {
@@ -14,43 +13,47 @@ namespace UniActionsUI
             InitializeComponent();
             Refresh();
 
-            this.btCreate.Click += (o, e) => {
+            this.btCreate.Click += (o, e) =>
+            {
                 WCreateAction w = new WCreateAction();
                 if (w.ShowDialog().Value)
                     Refresh();
                 ProcessButtonsEnable();
             };
 
-            this.btEdit.Click += (o, e) => {
+            this.btEdit.Click += (o, e) =>
+            {
                 if (this.lvItems.SelectedItem != null)
                 {
                     WCreateAction w = new WCreateAction();
                     w.IsEdit = true;
-                    w.SetItem((ActionItem)this.lvItems.SelectedItem);
+                    w.SetItem((Scenario)this.lvItems.SelectedItem);
                     if (w.ShowDialog().Value)
                         Refresh();
                 }
                 ProcessButtonsEnable();
             };
 
-            this.lvItems.MouseDoubleClick += (o, e) => {
+            this.lvItems.MouseDoubleClick += (o, e) =>
+            {
                 if (this.lvItems.SelectedItem != null)
                 {
                     WCreateAction w = new WCreateAction();
                     w.IsEdit = true;
-                    w.SetItem((ActionItem)this.lvItems.SelectedItem);
+                    w.SetItem((Scenario)this.lvItems.SelectedItem);
                     if (w.ShowDialog().Value)
                         Refresh();
                 }
                 ProcessButtonsEnable();
             };
 
-            this.btRemove.Click += (o, e) => {
+            this.btRemove.Click += (o, e) =>
+            {
                 if (this.lvItems.SelectedItem != null)
                 {
                     if (MessageBox.Show("Удалить выбранный сценарий?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        App.Uni.TasksPool.RemoveItem((ActionItem)this.lvItems.SelectedItem);
+                        App.Uni.TasksPool.RemoveItem((Scenario)this.lvItems.SelectedItem);
                         App.Uni.CommitChanges();
                         Refresh();
                     }
@@ -58,7 +61,8 @@ namespace UniActionsUI
                 ProcessButtonsEnable();
             };
 
-            this.lvItems.SelectionChanged += (o, e) => {
+            this.lvItems.SelectionChanged += (o, e) =>
+            {
                 ProcessButtonsEnable();
             };
         }
@@ -71,7 +75,7 @@ namespace UniActionsUI
 
         private void ProcessButtonsEnable()
         {
-            this.btEdit.IsEnabled = this.btRemove.IsEnabled 
+            this.btEdit.IsEnabled = this.btRemove.IsEnabled
                 = this.lvItems.SelectedItem != null;
         }
     }

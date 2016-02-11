@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UniActionsCore
 {
@@ -38,7 +35,9 @@ namespace UniActionsCore
                 this.Insert(index++, item);
         }
 
+#pragma warning disable CS0109 // Member does not hide an inherited member; new keyword is not required
         public new void RemoveRange(IEnumerable<T> collection)
+#pragma warning restore CS0109 // Member does not hide an inherited member; new keyword is not required
         {
             foreach (var item in collection)
                 Remove(item);
@@ -51,7 +50,7 @@ namespace UniActionsCore
         {
             if (ItemAdd == null)
                 return true;
-            else 
+            else
             {
                 var args = new ItemWorkEventArgs<T>(item);
                 ItemAdd(this, args);
@@ -83,7 +82,8 @@ namespace UniActionsCore
 
     public class ItemWorkEventArgs<T> : EventArgs
     {
-        public ItemWorkEventArgs(T item){
+        public ItemWorkEventArgs(T item)
+        {
             Item = item;
         }
         public bool Cancel { get; set; }

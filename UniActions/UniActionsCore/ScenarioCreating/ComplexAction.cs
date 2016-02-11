@@ -1,42 +1,47 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
-namespace UniStandartActions.Actions
+namespace UniActionsCore.ScenarioCreating
 {
-#if DEBUG
     [Serializable]
-    public class ChangeTestStatus : ICustomAction
+    public class ComplexAction : ICustomAction, IHasChecker
     {
-        private static string _lastState = "off";
         public string Do(string inputState)
         {
             IsBusyNow = true;
-            Thread.Sleep(500);
-            if (inputState == "on")
-                _lastState = "off";
-            else _lastState = "on";
+
+            foreach (var action in Actions)
+                action.Do(action.State);
+
             IsBusyNow = false;
+
             return State;
         }
+
         [XmlIgnore]
         public string State
         {
             get
             {
-                return _lastState;
+                return "";
             }
         }
+
         [XmlIgnore]
         public string Name
         {
-            get { return "Проверка тест"; }
+            get { return "Комплексная операция"; }
         }
+
         [XmlIgnore]
         public bool AllowUserSettings
         {
-            get { return false; }
+            get
+            {
+                return true;
+            }
         }
 
         public bool BeginUserSettings()
@@ -54,6 +59,18 @@ namespace UniStandartActions.Actions
         public void Refresh()
         {
         }
+
+        public bool HasChecker(Type checker)
+        {
+            foreach (var action in Actions)
+            {
+                if (action is IHasChecker)
+                    if (((IHasChecker)action).HasChecker(checker))
+                        return true;
+            }
+            return false;
+        }
+
+        public List<ICustomAction> Actions { get; set; }
     }
-#endif
 }

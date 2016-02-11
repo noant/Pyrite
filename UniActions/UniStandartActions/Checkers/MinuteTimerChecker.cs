@@ -1,27 +1,32 @@
 ﻿using HierarchicalData;
 using System;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
+    [Serializable]
     public class MinuteTimerChecker : ICustomChecker
     {
-        [Settings]
-        private DateTime _dtFinish = DateTime.Now.AddMinutes(-5);
+        public DateTime DateTimeFinish { get; set; }
+
         private bool _shown;
+
+        [XmlIgnore]
         public bool IsCanDoNow
         {
             get
             {
                 if (_shown) return false;
-                return _shown = (DateTime.Now.Minute == _dtFinish.Minute &&
-                    DateTime.Now.Hour == _dtFinish.Hour &&
-                    DateTime.Now.Day == _dtFinish.Day &&
-                    DateTime.Now.Month == _dtFinish.Month &&
-                    DateTime.Now.Year == _dtFinish.Year);
+                return _shown = (DateTime.Now.Minute == DateTimeFinish.Minute &&
+                    DateTime.Now.Hour == DateTimeFinish.Hour &&
+                    DateTime.Now.Day == DateTimeFinish.Day &&
+                    DateTime.Now.Month == DateTimeFinish.Month &&
+                    DateTime.Now.Year == DateTimeFinish.Year);
             }
         }
 
+        [XmlIgnore]
         public string Name
         {
             get { return "Таймер"; }
@@ -30,10 +35,10 @@ namespace UniStandartActions.Checkers
         public bool BeginUserSettings()
         {
             var form = new MinuteTimerCheckerView();
-            form.Minutes = (decimal)(DateTime.Now - _dtFinish).TotalMinutes;
+            form.Minutes = (decimal)(DateTime.Now - DateTimeFinish).TotalMinutes;
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                _dtFinish = DateTime.Now.AddMinutes((double)form.Minutes);
+                DateTimeFinish = DateTime.Now.AddMinutes((double)form.Minutes);
                 return true;
             }
             return false;
@@ -41,6 +46,7 @@ namespace UniStandartActions.Checkers
 
         public void Refresh() { }
 
+        [XmlIgnore]
         public bool AllowUserSettings { get { return true; } }
     }
 }

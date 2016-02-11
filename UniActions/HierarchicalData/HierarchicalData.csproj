@@ -42,6 +42,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="HierarchicalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializedObject.cs" />
     <Compile Include="XmlItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -201,7 +201,7 @@ namespace UniActionsCore
             IsStopped = false;
             _prepareToStop = false;
 
-            _threadPortDistribution = Helper.AlterThread(() => { 
+            _threadPortDistribution = ThreadHelper.AlterThread(() => { 
                 _listenerPortDistribution = new TcpListenerEx(Settings.DistributionPort);
                 _listenerPortDistribution.Start();
                 while (!_prepareToStop)
@@ -374,7 +374,7 @@ namespace UniActionsCore
             }
         }
         
-        public void ShareState(ActionItem exceptItem, IPAddress exceptAddress)
+        public void ShareState(Scenario exceptItem, IPAddress exceptAddress)
         {
             foreach(var address in _activeClients.ToArray())
             {

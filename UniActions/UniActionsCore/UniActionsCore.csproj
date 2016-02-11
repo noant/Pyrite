@@ -40,15 +40,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionItem.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="ScenarioCreating\Scenario.cs" />
+    <Compile Include="ScenarioCreating\ComplexAction.cs" />
+    <Compile Include="ScenarioCreating\ComplexChecker.cs" />
+    <Compile Include="ScenarioCreating\Helper.cs" />
+    <Compile Include="ScenarioCreating\IfAction.cs" />
+    <Compile Include="ScenarioCreating\IHasChecker.cs" />
+    <Compile Include="Utils\ThreadHelper.cs" />
     <Compile Include="ModulesControl.cs" />
-    <Compile Include="ExceptionsHandling.cs" />
-    <Compile Include="SkeddedList.cs" />
+    <Compile Include="Utils\ExceptionsHandling.cs" />
+    <Compile Include="ScenarioCreating\WhileAction.cs" />
+    <Compile Include="Utils\SkeddedList.cs" />
     <Compile Include="TasksPool.cs" />
     <Compile Include="SaveAndLoad.cs" />
     <Compile Include="TcpListenerEx.cs" />
-    <Compile Include="UdpClientExtensions.cs" />
     <Compile Include="Uni.cs" />
     <Compile Include="ServerThreading.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

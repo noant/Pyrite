@@ -1,9 +1,13 @@
-﻿using UniActionsClientIntefaces;
+﻿using System;
+using System.Xml.Serialization;
+using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
+    [Serializable]
     public class NeverChecker : ICustomChecker
     {
+        [XmlIgnore]
         public bool IsCanDoNow
         {
             get
@@ -12,8 +16,10 @@ namespace UniStandartActions.Checkers
             }
         }
 
+        [XmlIgnore]        
         public bool AllowUserSettings { get { return false; } }
 
+        [XmlIgnore]        
         public string Name
         {
             get { return "Никогда"; }

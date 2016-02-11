@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace UniActionsUI
 {
@@ -14,15 +13,17 @@ namespace UniActionsUI
 
             ControlsHelper.AppendOnlyInteger(tbPort, 0, ushort.MaxValue);
 
-            btAdd.Click += (o, e) => {
+            btAdd.Click += (o, e) =>
+            {
                 App.Uni.ServerThreading.Settings.ActionsPorts.Add(tbPort.GetUShort());
                 ProcessButtonsEnabled();
                 Refresh();
             };
 
-            btDelete.Click += (o, e) => {
+            btDelete.Click += (o, e) =>
+            {
                 var portToDelete = ushort.Parse(listPort.SelectedItem.ToString());
-                App.Uni.ServerThreading.Settings.ActionsPorts.RemoveAll(x => 
+                App.Uni.ServerThreading.Settings.ActionsPorts.RemoveAll(x =>
                     x == portToDelete
                     );
                 Refresh();
@@ -34,7 +35,8 @@ namespace UniActionsUI
                 ProcessButtonsEnabled();
             };
 
-            this.tbPort.TextChanged += (o, e) => {
+            this.tbPort.TextChanged += (o, e) =>
+            {
                 ProcessButtonsEnabled();
             };
 

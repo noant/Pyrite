@@ -3,9 +3,9 @@ using System.Threading;
 using System.Windows.Threading;
 using UniActionsClientIntefaces;
 
-namespace UniActionsCore
+namespace UniActionsCore.ScenarioCreating
 {
-    public class ActionItem : IDisposable
+    public class Scenario : IDisposable
     {
         private static class Defaults
         {
@@ -13,7 +13,7 @@ namespace UniActionsCore
         }
 
         private Thread _thread;
-        public ActionItem()
+        public Scenario()
         {
             this.IsActive = true;
             Guid = Guid.NewGuid();
@@ -28,7 +28,6 @@ namespace UniActionsCore
         }
 
         public ICustomAction Action { get; set; }
-        public ICustomChecker Checker { get; set; }
         
         public bool UseServerThreading { get; set; }
         public string ServerCommand { get; set; }
@@ -37,21 +36,21 @@ namespace UniActionsCore
         public bool IsActive { get; set; }
         public bool IsOnlyOnce { get; set; }
 
-        public event Action<ActionItem> AfterActionServerEvent;
+        public event Action<Scenario> AfterActionServerEvent;
 
         private object _lockerAfterBefore = new object();
 
         private void RaiseAfterActionServerAsync()
         {
             if (AfterActionServerEvent != null)
-                Helper.AlterThread(() =>
+                ThreadHelper.AlterThread(() =>
                 {
                     lock (_lockerAfterBefore)
                         AfterActionServerEvent(this);
                 });
         }
 
-        public event Action<ActionItem> AfterAction;
+        public event Action<Scenario> AfterAction;
 
         private void RaiseAfterAction()
         {
@@ -164,12 +163,11 @@ namespace UniActionsCore
             }
         }
         
-        public ActionItem Clone()
+        public Scenario Clone()
         {
-            var item = new ActionItem()
+            var item = new Scenario()
             {
                 Action = ModulesControl.Clone(this.Action),
-                Checker = ModulesControl.Clone(this.Checker),
                 Category = this.Category,
                 Guid = this.Guid,
                 IsActive = this.IsActive,
