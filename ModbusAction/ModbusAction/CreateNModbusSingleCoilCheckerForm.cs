@@ -4,22 +4,20 @@ using System.Windows.Forms;
 
 namespace ModbusAction
 {
-    public partial class CreateForm : Form
+    public partial class CreateNModbusSingleCoilCheckerForm : Form
     {
-        public CreateForm()
+        public CreateNModbusSingleCoilCheckerForm()
         {
             InitializeComponent();
 
             this.tbPortName.TextChanged += (o, e) => ProcessOkEnable();
-            this.tbStateOff.TextChanged += (o, e) => ProcessOkEnable();
-            this.tbStateOn.TextChanged += (o, e) => ProcessOkEnable();
-            
+
             Refresh();
         }
 
         public void ProcessOkEnable()
         {
-            btOk.Enabled = this.tbPortName.Text.Any() && this.tbStateOff.Text.Any() && this.tbStateOn.Text.Any();
+            btOk.Enabled = this.tbPortName.Text.Any();
         }
 
         public new void Refresh()

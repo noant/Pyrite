@@ -1,6 +1,6 @@
 ﻿namespace ModbusAction
 {
-    partial class CreateForm
+    partial class CreateNModbusSingleCoilActionForm
     {
         /// <summary>
         /// Required designer variable.
@@ -407,7 +407,7 @@
             this.btOk.Text = "Ok";
             this.btOk.UseVisualStyleBackColor = true;
             // 
-            // CreateForm
+            // CreateNModbusSingleCoilActionForm
             // 
             this.AcceptButton = this.btOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -421,10 +421,10 @@
             this.Controls.Add(this.btCancel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.Name = "CreateForm";
+            this.Name = "CreateNModbusSingleCoilActionForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Действие Modbus RTU";
+            this.Text = "Запись в single coil Modbus RTU";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaudRate)).EndInit();
