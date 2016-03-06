@@ -47,7 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\ChangeTestStatus.cs" />
+    <Compile Include="Actions\_Debug_ChangeTestStatus.cs" />
     <Compile Include="Actions\MessageShow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,8 +104,7 @@
     <Compile Include="Checkers\MinuteTimerCheckerView.Designer.cs">
       <DependentUpon>MinuteTimerCheckerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Checkers\NeverChecker.cs" />
-    <Compile Include="NotUsedClass.cs" />
+    <Compile Include="DoNotDeleteThisClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

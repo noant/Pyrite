@@ -5,6 +5,11 @@ namespace UniActionsCore
 {
     public class Uni
     {
+        static Uni()
+        {
+            Сrutches.Execute();
+        }
+
         public static Result<Uni> Create(SaveAndLoad sal)
         {
             var result = new Result<Uni>();
@@ -52,7 +57,7 @@ namespace UniActionsCore
             ServerThreading.Initialize();
 
             result.AddExceptions(SaveAndLoad.Load().Exceptions);
-            
+
             result.AddExceptions(ServerThreading.BeginStart().Exceptions);
 
             return result;
@@ -65,7 +70,7 @@ namespace UniActionsCore
             TasksPool.Clear();
 
             result.AddExceptions(SaveAndLoad.Load().Exceptions);
-            
+
             ServerThreading.BeginStop(() =>
             {
                 try

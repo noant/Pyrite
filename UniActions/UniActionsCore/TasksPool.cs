@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsCore
 {
@@ -8,49 +9,44 @@ namespace UniActionsCore
     {
         public Uni Uni { get; internal set; }
 
-        private List<Scenario> _actionItems;
-        public IEnumerable<Scenario> ActionItems
+        private List<Scenario> _scenarios;
+        public IEnumerable<Scenario> Scenarios
         {
             get
             {
-                return _actionItems.ToArray();
+                return _scenarios.ToArray();
             }
         }
 
-        public void RemoveItem(Scenario item)
+        public void RemoveScenario(Scenario item)
         {
-            _actionItems.Remove(item);
+            _scenarios.Remove(item);
         }
 
-        public void RemoveAll(Func<Scenario, bool> func)
-        {
-            _actionItems.RemoveAll(x => func(x));
-        }
-
-        public Result<bool> CheckItem(Scenario item)
+        public Result<bool> CheckScenario(Scenario item)
         {
             var result = new Result<bool>();
 
-            if (item.Action == null)
+            if (item.ActionBag == null)
                 result.AddWarning(new Warning("Необходимо выбрать вид действия"));
             if (string.IsNullOrEmpty(item.Name))
                 result.AddWarning(new Warning("Необходимо ввести имя сценария"));
-            if (_actionItems.Count(x => x.Name == item.Name && item.Guid != x.Guid) > 0)
+            if (_scenarios.Count(x => x.Name == item.Name && item.Guid != x.Guid) > 0)
                 result.AddWarning(new Warning("Действие с таким именем уже существует"));
-            if (_actionItems.Count(x => x.ServerCommand == item.ServerCommand && !string.IsNullOrEmpty(x.ServerCommand) && item.Guid != x.Guid) > 0)
+            if (_scenarios.Count(x => x.ServerCommand == item.ServerCommand && !string.IsNullOrEmpty(x.ServerCommand) && item.Guid != x.Guid) > 0)
                 result.AddWarning(new Warning("Действие с такой командой сервера уже существует"));
 
             result.Value = result.Warnings.Count() == 0;
             return result;
         }
 
-        public Result<bool> AddItem(Scenario item)
+        public Result<bool> Add(Scenario item)
         {
-            UniActionsCore.Resulting.EnableExceptionHandling = false;
-            var result = CheckItem(item);
-            UniActionsCore.Resulting.EnableExceptionHandling = true;
-            if (result.Value && !_actionItems.Contains(item))
-                _actionItems.Add(item);
+            Resulting.EnableExceptionHandling = false;
+            var result = CheckScenario(item);
+            Resulting.EnableExceptionHandling = true;
+            if (result.Value && !_scenarios.Contains(item))
+                _scenarios.Add(item);
 
             item.AfterActionServerEvent += (x) =>
             {
@@ -62,18 +58,18 @@ namespace UniActionsCore
 
         public IEnumerable<string> GetCategories()
         {
-            return ActionItems.Where(x => x.Category != "").Select(x => x.Category);
+            return Scenarios.Where(x => x.Category != "").Select(x => x.Category);
         }
 
         internal void Initialize()
         {
-            _actionItems = new List<Scenario>();
+            _scenarios = new List<Scenario>();
         }
 
         internal void Clear()
         {
-            _actionItems.ForEach(x => x.Dispose());
-            _actionItems.Clear();
+            _scenarios.ForEach(x => x.Dispose());
+            _scenarios.Clear();
         }
 
 

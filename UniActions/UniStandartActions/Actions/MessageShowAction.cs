@@ -8,6 +8,7 @@ namespace UniStandartActions.Actions
     [Serializable]
     public class MessageShowAction : ICustomAction
     {
+        [HumanFriendlyName("Сообщение")]
         public string Message { get; set; }
 
         [XmlIgnore]

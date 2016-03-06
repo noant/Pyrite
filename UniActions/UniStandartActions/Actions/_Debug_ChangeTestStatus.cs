@@ -7,7 +7,7 @@ namespace UniStandartActions.Actions
 {
 #if DEBUG
     [Serializable]
-    public class ChangeTestStatus : ICustomAction
+    public class _Debug_ChangeTestStatus : ICustomAction
     {
         private static string _lastState = "off";
         public string Do(string inputState)

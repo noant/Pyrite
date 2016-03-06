@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using UniActionsClientIntefaces;
 using UniActionsCore;
+using UniActionsCore.ScenarioCreation;
+using UniStandartActions.Actions;
+using UniStandartActions.Checkers;
 
 namespace UniActionsUI
 {
@@ -13,7 +18,8 @@ namespace UniActionsUI
     public partial class App : Application
     {
         public static Uni Uni { get; private set; }
-        public App() {
+        public App()
+        {
             this.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
 
             Resulting.NeedShutdown += () =>
@@ -38,15 +44,17 @@ namespace UniActionsUI
             };
 
             Uni = Uni.Create().Value;
-            foreach (var item in Uni.TasksPool.ActionItems)
-                item.AfterAction += (x) => {
+            foreach (var item in Uni.TasksPool.Scenarios)
+                item.AfterAction += (x) =>
+                {
                     if (ItemExecuted != null)
                         ItemExecuted(item);
                 };
+
             Starter.Initialize();
         }
 
-        public static Brush WindowBackground = new SolidColorBrush(SystemColors.ControlColor); 
+        public static Brush WindowBackground = new SolidColorBrush(SystemColors.ControlColor);
 
         public void SelectedTabChanged(object sender, RoutedEventArgs e)
         {
@@ -68,7 +76,7 @@ namespace UniActionsUI
                 ((ControlsHelper.IRefreshable)contentControl).Refresh();
             else if (contentControl is TabControl)
                 SelectedTabChanged(contentControl, e);
-            else if (contentControl is Grid && ((Grid)contentControl).Children.OfType<TabControl>().Count()>0)
+            else if (contentControl is Grid && ((Grid)contentControl).Children.OfType<TabControl>().Count() > 0)
                 foreach (var c in ((Grid)contentControl).Children.OfType<TabControl>())
                 {
                     SelectedTabChanged(c, e);

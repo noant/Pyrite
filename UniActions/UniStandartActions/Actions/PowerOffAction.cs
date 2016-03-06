@@ -11,11 +11,16 @@ namespace UniStandartActions.Actions
         [XmlIgnore]
         public bool AllowUserSettings { get { return true; } }
 
+        [HumanFriendlyName("Таймаут(секунд)")]
         public int Timeout { get;set; }
+        [HumanFriendlyName("Возможность отменить")]
         public bool CanCancel { get; set; }
+        [HumanFriendlyName("Перезапуск")]
         public bool Restart { get; set; }
 
+        [XmlIgnore]
         public string StateOff = "Выключить компьютер";
+        [XmlIgnore]
         public string StateRestart = "Перезагрузить компьютер";
 
         public string Do(string inputState)

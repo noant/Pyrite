@@ -14,7 +14,8 @@ namespace UniActionsUI
 
         public static void AppendOnlyInteger(TextBox tb, int min, int max)
         {
-            tb.PreviewTextInput += (o, e) => {
+            tb.PreviewTextInput += (o, e) =>
+            {
                 var futureText = tb.Text.Insert(tb.CaretIndex, e.Text);
                 int r;
                 var handled = !int.TryParse(futureText, out r);
@@ -30,7 +31,8 @@ namespace UniActionsUI
         }
     }
 
-    public static class ControlsExtensions {
+    public static class ControlsExtensions
+    {
         public static int GetInt(this TextBox tb)
         {
             if (tb.Text == "")
@@ -49,11 +51,11 @@ namespace UniActionsUI
             ushort res;
             if (!ushort.TryParse(tb.Text, out res))
                 throw new Exception("Not an short");
-            else return res;   
+            else return res;
         }
     }
 
-    [ValueConversion(typeof(bool), typeof(bool))]
+    [ValueConversion(typeof(bool), typeof(string))]
     public class YesNoBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

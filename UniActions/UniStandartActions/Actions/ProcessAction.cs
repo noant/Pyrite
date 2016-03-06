@@ -15,9 +15,14 @@ namespace UniStandartActions.Actions
 
         public string StateOn;
         public string StateOff;
+
+        [HumanFriendlyName("Файл")]
         public string Path;
+        [HumanFriendlyName("Аргументы")]
         public string Args;
+        [HumanFriendlyName("Закрывать главное окно")]
         public bool CloseMainWindow;
+        [HumanFriendlyName("Отслеживание состояния")]
         public bool ProcessTracking;
         public string Do(string inputState)
         {
@@ -54,7 +59,8 @@ namespace UniStandartActions.Actions
                     _currentProcess = null;
                     return false;
                 }
-                finally {
+                finally
+                {
                     if (!ProcessTracking)
                         _currentProcess = null;
                 }
@@ -74,7 +80,8 @@ namespace UniStandartActions.Actions
                     else _currentProcess.CloseMainWindow();
                     _currentProcess.WaitForExit();
                 }
-                catch{
+                catch
+                {
                 }
                 try
                 {
@@ -128,7 +135,7 @@ namespace UniStandartActions.Actions
             else return false;
         }
 
-        [XmlIgnore]        
+        [XmlIgnore]
         public bool IsBusyNow
         {
             get;

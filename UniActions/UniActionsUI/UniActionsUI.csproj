@@ -76,9 +76,46 @@
     <Compile Include="CPorts.xaml.cs">
       <DependentUpon>CPorts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScenarioCreation\ActionViewExtended.xaml.cs">
+      <DependentUpon>ActionViewExtended.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\ActionView.xaml.cs">
+      <DependentUpon>ActionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\ActionViewContext.cs" />
+    <Compile Include="ScenarioCreation\CheckerViewContext.cs" />
+    <Compile Include="ScenarioCreation\CheckerView.xaml.cs">
+      <DependentUpon>CheckerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\ComplexActionView.xaml.cs">
+      <DependentUpon>ComplexActionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\ComplexActionViewContext.cs" />
+    <Compile Include="ScenarioCreation\ComplexCheckerView.xaml.cs">
+      <DependentUpon>ComplexCheckerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\ComplexCheckerViewContext.cs" />
+    <Compile Include="ScenarioCreation\EditableUserControl.cs" />
+    <Compile Include="ScenarioCreation\SingleActionScenarioView.xaml.cs">
+      <DependentUpon>SingleActionScenarioView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\ScenarioView.xaml.cs">
+      <DependentUpon>ScenarioView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\WhileViewContext.cs" />
+    <Compile Include="ScenarioCreation\WhileView.xaml.cs">
+      <DependentUpon>WhileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\IfView.xaml.cs">
+      <DependentUpon>IfView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScenarioCreation\IfViewContext.cs" />
     <Compile Include="Starter.cs" />
-    <Compile Include="WCreateAction.xaml.cs">
-      <DependentUpon>WCreateAction.xaml</DependentUpon>
+    <Compile Include="TestWindow.xaml.cs">
+      <DependentUpon>TestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="СCreateScenario.xaml.cs">
+      <DependentUpon>СCreateScenario.xaml</DependentUpon>
     </Compile>
     <Compile Include="WFast.xaml.cs">
       <DependentUpon>WFast.xaml</DependentUpon>
@@ -159,7 +196,59 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WCreateAction.xaml">
+    <Page Include="ScenarioCreation\ActionViewExtended.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScenarioCreation\ActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScenarioCreation\CheckerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScenarioCreation\ComplexActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScenarioCreation\ComplexCheckerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScenarioCreation\SingleActionScenarioView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScenarioCreation\ScenarioView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScenarioCreation\WhileView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScenarioCreation\IfView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\LabelStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="СCreateScenario.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -226,7 +315,12 @@
       <Project>{69f1b8ad-4722-40d0-b61e-55371dc5e987}</Project>
       <Name>UniActionsCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UniStandartActions\UniStandartActions.csproj">
+      <Project>{4bfe95b0-d94f-4022-a120-fde11392229c}</Project>
+      <Name>UniStandartActions</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,4 @@
-﻿
-namespace UniActionsClientIntefaces
+﻿namespace UniActionsClientIntefaces
 {
     public interface ICustomAction
     {

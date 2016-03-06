@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace UniStandartActions.Actions
 {
@@ -8,17 +10,32 @@ namespace UniStandartActions.Actions
         private static int _startupHeight = 116;
         private static MessageShow _messageShow;
 
+        private static Dispatcher _dispatcher;
+
         public static void SetMessage(string message)
         {
             if (_messageShow == null)
             {
-                _messageShow = new MessageShow();
-                _messageShow.Show();
+                new Thread(() =>
+                {
+                    _messageShow = new MessageShow();
+                    _messageShow.Show();
+                    _messageShow.AddMessage(message);
+                    _dispatcher = Dispatcher.CurrentDispatcher;
+                    Dispatcher.Run();
+                })
+                {
+                    IsBackground = true,
+                    ApartmentState = ApartmentState.STA,
+                    //Priority = ThreadPriority.AboveNormal
+                }.Start();
             }
-
-            _messageShow.BeginInvoke(new Action(() => {
-                _messageShow.AddMessage(message);                
-            }));
+            else {
+                _dispatcher.Invoke(new Action(() =>
+                {
+                    _messageShow.AddMessage(message);
+                }), DispatcherPriority.Send);
+            }
         }
 
         public MessageShow()

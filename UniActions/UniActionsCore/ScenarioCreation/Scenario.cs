@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
-namespace UniActionsCore.ScenarioCreating
+namespace UniActionsCore.ScenarioCreation
 {
+    [Serializable]
     public class Scenario : IDisposable
     {
         private static class Defaults
@@ -27,14 +29,35 @@ namespace UniActionsCore.ScenarioCreating
             _thread.Start();
         }
 
-        public ICustomAction Action { get; set; }
-        
+        private ActionBag _actionBag;
+        public ActionBag ActionBag
+        {
+            get
+            {
+                return _actionBag;
+            }
+            set
+            {
+                _actionBag = value;
+            }
+        }
+
+        [XmlIgnore]
+        public ICustomAction Action
+        {
+            get
+            {
+                return ActionBag.Action;
+            }
+        }
+
         public bool UseServerThreading { get; set; }
         public string ServerCommand { get; set; }
         public string Name { get; set; }
+        public string OnState { get; set; }
+        public string OffState { get; set; }
         public string Category { get; set; }
         public bool IsActive { get; set; }
-        public bool IsOnlyOnce { get; set; }
 
         public event Action<Scenario> AfterActionServerEvent;
 
@@ -111,11 +134,6 @@ namespace UniActionsCore.ScenarioCreating
             }
         }
 
-        public string Execute(string inputState)
-        {
-            return Execute(inputState, false);
-        }
-        
         public void ExecuteAsync(Action<string> callback)
         {
             this.Dispatcher.BeginInvoke(new Action(() =>
@@ -128,53 +146,35 @@ namespace UniActionsCore.ScenarioCreating
             }), Defaults.DispatcherPriority, null);
         }
 
-        public void ExecuteAsync(string state, Action<string> callback)
+        public void Shutdown()
         {
-            this.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                lock (_locker)
-                    state = this.Action.Do(state);
-
-                if (callback != null)
-                    callback(state);
-
-                RaiseAfterEvent();
-            }), Defaults.DispatcherPriority, null);
+            this.Dispatcher.InvokeShutdown();
         }
-        
-        public string Execute()
+
+        public void ShutdownWithCloseAction()
         {
-            try
+
+        }
+
+        public bool IsBusyNow
+        {
+            get
             {
-                var result = this.Dispatcher.Invoke(new Func<string>(() =>
-                {
-                    lock (_locker)
-                        return this.Action.Do(this.Action.State);
-                }), Defaults.DispatcherPriority, null);
-                return result.ToString();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                RaiseAfterEvent();
+                return this.Action.IsBusyNow;
             }
         }
-        
+
         public Scenario Clone()
         {
             var item = new Scenario()
             {
-                Action = ModulesControl.Clone(this.Action),
+                ActionBag = new ActionBag() { Action = ModulesControl.Clone(this.Action) },
                 Category = this.Category,
                 Guid = this.Guid,
                 IsActive = this.IsActive,
                 Name = this.Name,
                 ServerCommand = this.ServerCommand,
-                UseServerThreading = this.UseServerThreading,
-                IsOnlyOnce = this.IsOnlyOnce
+                UseServerThreading = this.UseServerThreading
             };
 
             return item;

@@ -2,14 +2,14 @@
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
-namespace UniActionsCore.ScenarioCreating
+namespace UniActionsCore.ScenarioCreation
 {
     [Serializable]
-    public class WhileAction : ICustomAction, IHasChecker
+    public class WhileAction : ICustomAction, IHasCheckerAction
     {
-        public ICustomAction Action { get; set; }
+        public ComplexAction Action { get; set; }
 
-        public ICustomChecker Checker { get; set; }
+        public ComplexChecker Checker { get; set; }
 
         [XmlIgnore]
         public bool AllowUserSettings
@@ -51,10 +51,9 @@ namespace UniActionsCore.ScenarioCreating
 
         public string Do(string inputState)
         {
-            while (Checker.IsCanDoNow)
-            {
-                Action.Do("");
-            }
+            if (Checker != null)
+                while (Checker.IsCanDoNow)
+                    Action.Do("");
             return "";
         }
 
@@ -63,18 +62,22 @@ namespace UniActionsCore.ScenarioCreating
 
         }
 
-        public bool HasChecker(Type checkerType)
+        public void RemoveChecker(Type checkerType)
         {
             if (Checker.GetType().Equals(checkerType))
-                return true;
+                Checker = null;
+            else if (Checker != null && Checker is IHasCheckerAction)
+                ((IHasCheckerAction)Checker).RemoveChecker(checkerType);
 
-            if (Checker is IHasChecker && ((IHasChecker)Checker).HasChecker(checkerType))
-                return true;
+            if (Action != null && Action is IHasCheckerAction)
+                ((IHasCheckerAction)Action).RemoveChecker(checkerType);
+        }
 
-            if (Action is IHasChecker && ((IHasChecker)Action).HasChecker(checkerType))
-                return true;
 
-            return false;
+        public void RemoveAction(Type actionType)
+        {
+            if (Action != null && Action is IHasCheckerAction)
+                ((IHasCheckerAction)Action).RemoveAction(actionType);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace UniStandartActions
 {
-    public class NotUsedClass
+    public class DoNotDeleteThisClass
     {
     }
 }

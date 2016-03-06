@@ -5,38 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UniActionsUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="700">
     <Grid>
         <Grid.Resources>
             <local:YesNoBoolConverter x:Key="YesNoBoolConverter"></local:YesNoBoolConverter>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <ListView Name="lvItems">
-                <ListView.View>
-                    <GridView>
-                        <GridView.Columns>
-                            <GridViewColumn Header="Имя" Width="100" DisplayMemberBinding="{Binding Path=Name}" ></GridViewColumn>
-                            <GridViewColumn Header="Тип действия" Width="100" DisplayMemberBinding="{Binding Path=Action.Name}" ></GridViewColumn>
-                            <GridViewColumn Header="Тип проверки" Width="100" DisplayMemberBinding="{Binding Path=Checker.Name}" ></GridViewColumn>
-                            <GridViewColumn Header="Категория" Width="100" DisplayMemberBinding="{Binding Path=Category}" ></GridViewColumn>
-                            <GridViewColumn Header="Используется в потоке задач" Width="100" DisplayMemberBinding="{Binding Path=IsActive, Converter={StaticResource YesNoBoolConverter}}" ></GridViewColumn>
-                            <GridViewColumn Header="Используется в потоке сервера" Width="100" DisplayMemberBinding="{Binding Path=UseServerThreading, Converter={StaticResource YesNoBoolConverter}}"></GridViewColumn>
-                            <GridViewColumn Header="Команда сервера" Width="100" DisplayMemberBinding="{Binding Path=ServerCommand}" ></GridViewColumn>
-                        </GridView.Columns>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="3" Background="DarkGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label HorizontalContentAlignment="Center">ВСЕ СЦЕНАРИИ</Label>
+            <Grid Grid.Row="1">
+                <ListView Name="lvItems" BorderThickness="0">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="Имя" Width="100" DisplayMemberBinding="{Binding Path=Name}" ></GridViewColumn>
+                                <GridViewColumn Header="Категория" Width="100" DisplayMemberBinding="{Binding Path=Category}" ></GridViewColumn>
+                                <GridViewColumn Header="Используется в потоке задач" Width="100" DisplayMemberBinding="{Binding Path=IsActive, Converter={StaticResource YesNoBoolConverter}}" ></GridViewColumn>
+                                <GridViewColumn Header="Используется в потоке сервера" Width="100" DisplayMemberBinding="{Binding Path=UseServerThreading, Converter={StaticResource YesNoBoolConverter}}"></GridViewColumn>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+            <Grid Grid.Row="2" >
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Width="100" Margin="10,0,0,0" Name="btRemove">Удалить</Button>
+                    <Button Width="Auto" Padding="4" Margin="10,0,0,0" Name="btCreateSingle">Создать одиночное действие</Button>
+                    <Button Width="Auto" Padding="4" Margin="10,0,0,0" Name="btCreate">Создать сложный сценарий</Button>
+                </StackPanel>
+            </Grid>
+            <Border Grid.RowSpan="3" BorderThickness="1" BorderBrush="Gray"></Border>
         </Grid>
-        <Grid Grid.Row="1">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Width="100" Margin="10,0,0,0" Name="btEdit">Редактировать</Button>
-                <Button Width="100" Margin="10,0,0,0" Name="btRemove">Удалить</Button>
-                <Button Width="100" Margin="10,0,0,0" Name="btCreate">Создать</Button>
-            </StackPanel>
+        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="5"></GridSplitter>
+        <Grid Grid.Column="2">
+            <local:CCreateScenario x:Name="scenarioView"></local:CCreateScenario>
         </Grid>
     </Grid>
 </UserControl>

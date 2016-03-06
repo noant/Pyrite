@@ -32,12 +32,14 @@ namespace UniActionsUI
             }));
         }
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             _hkManager = new HotKeysManager();
-            _hkManager.AddHotKey(new HotKeyCombination(new System.Windows.Forms.Keys[] { 
+            _hkManager.AddHotKey(new HotKeyCombination(new System.Windows.Forms.Keys[] {
                 System.Windows.Forms.Keys.LWin,
                 System.Windows.Forms.Keys.Y
-            }, new HotKeyEventHandler(()=>{
+            }, new HotKeyEventHandler(() =>
+            {
                 ShowFastWindow();
             })));
 
@@ -57,7 +59,7 @@ namespace UniActionsUI
                         App.Current.Dispatcher.BeginInvoke(new Action(() =>
                             {
                                 _mainWindow.Show();
-                            }), 
+                            }),
                         System.Windows.Threading.DispatcherPriority.Normal, null);
                         _mainWindow.Closing += (oo, ee) =>
                         {

@@ -10,6 +10,16 @@ namespace UniStandartActions.Checkers
     {
         public DateTime DateTimeFinish { get; set; }
 
+        [XmlIgnore]
+        [HumanFriendlyName("Минут")]
+        public double Minutes
+        {
+            get
+            {
+                return (DateTimeFinish - DateTime.Now).TotalMinutes;
+            }
+        }
+
         private bool _shown;
 
         [XmlIgnore]
@@ -35,7 +45,7 @@ namespace UniStandartActions.Checkers
         public bool BeginUserSettings()
         {
             var form = new MinuteTimerCheckerView();
-            form.Minutes = (decimal)(DateTime.Now - DateTimeFinish).TotalMinutes;
+            form.Minutes = DateTimeFinish > DateTime.Now ? (decimal)(DateTimeFinish - DateTime.Now).TotalMinutes : 5;
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 DateTimeFinish = DateTime.Now.AddMinutes((double)form.Minutes);

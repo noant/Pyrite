@@ -1,8 +1,10 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
+    [Serializable]
     public class ComputerStartChecker : ICustomChecker
     {
         private bool _started;

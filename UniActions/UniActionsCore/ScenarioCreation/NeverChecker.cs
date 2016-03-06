@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
-namespace UniStandartActions.Checkers
+namespace UniActionsCore.ScenarioCreation
 {
     [Serializable]
     public class NeverChecker : ICustomChecker
@@ -16,10 +16,10 @@ namespace UniStandartActions.Checkers
             }
         }
 
-        [XmlIgnore]        
+        [XmlIgnore]
         public bool AllowUserSettings { get { return false; } }
 
-        [XmlIgnore]        
+        [XmlIgnore]
         public string Name
         {
             get { return "Никогда"; }

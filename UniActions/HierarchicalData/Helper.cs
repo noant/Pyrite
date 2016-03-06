@@ -37,9 +37,10 @@ namespace HierarchicalData
         public static object CloneObject(object obj)
         {
             var serializedObject = new SerializedObject(obj);
-            var serializer = GetSerializer(obj.GetType());
+            var serializer = GetSerializer(serializedObject.GetType());
             var memoryStream = new MemoryStream();
             serializer.Serialize(memoryStream, serializedObject);
+            memoryStream.Position = 0;
             return (((SerializedObject)serializer.Deserialize(memoryStream))).Value;
         }
 

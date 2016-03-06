@@ -1,27 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
-namespace UniActionsCore.ScenarioCreating
+namespace UniActionsCore.ScenarioCreation
 {
     [Serializable]
-    public class ComplexChecker : ICustomChecker, IHasChecker
+    public class DoNothingAction : ICustomAction
     {
         [XmlIgnore]
         public bool AllowUserSettings
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
         [XmlIgnore]
-        public bool IsCanDoNow
+        public bool IsBusyNow
         {
             get
             {
-                throw new NotImplementedException();
+                return false;
             }
         }
 
@@ -30,7 +34,16 @@ namespace UniActionsCore.ScenarioCreating
         {
             get
             {
-                return "Сложная проверка";
+                return "Ничего не делать";
+            }
+        }
+
+        [XmlIgnore]
+        public string State
+        {
+            get
+            {
+                return "";
             }
         }
 
@@ -39,14 +52,13 @@ namespace UniActionsCore.ScenarioCreating
             return true;
         }
 
-        public bool HasChecker(Type checkerType)
+        public string Do(string inputState)
         {
-            return false;
+            return "";
         }
 
         public void Refresh()
         {
-
         }
     }
 }

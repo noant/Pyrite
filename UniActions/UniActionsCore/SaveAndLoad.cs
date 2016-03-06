@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsCore
 {
@@ -45,24 +46,22 @@ namespace UniActionsCore
                 Savior[VAC.AppSettingsNames.ActionsPorts] = Uni.ServerThreading.Settings.ActionsPorts.ToHierarchicalObject();
                 Savior[VAC.AppSettingsNames.ResolvedIp] = Uni.ServerThreading.Settings.ResolvedIp.ToHierarchicalObject();
 
-                for (int i = 0; i < Uni.TasksPool.ActionItems.Count(); i++)
+                for (int i = 0; i < Uni.TasksPool.Scenarios.Count(); i++)
                 {
                     try
                     {
-                        var item = Uni.TasksPool.ActionItems.ElementAt(i);
+                        var item = Uni.TasksPool.Scenarios.ElementAt(i);
 
-                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedActionCustomSettings] = new SerializedObject(item.Action);
+                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedActionCustomSettings] = new SerializedObject(item.ActionBag);
 
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedActionName] = item.Name;
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedActionServerCommand] = item.ServerCommand;
 
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedCategory] = item.Category;
-                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedCustomAction] = item.Action.GetType().FullName;
+                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedCustomAction] = item.ActionBag.GetType().FullName;
 
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedUseServerCommand] = item.UseServerThreading;
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedIsActive] = item.IsActive;
-
-                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedIsOnlyOnce] = item.IsOnlyOnce;
                     }
                     catch (Exception e)
                     {
@@ -88,8 +87,10 @@ namespace UniActionsCore
         public VoidResult Load()
         {
             var result = new VoidResult();
+            //#if !DEBUG
             try
             {
+                //#endif
                 //plugins load
                 if (!File.Exists(_pluginsFileName))
                 {
@@ -133,31 +134,34 @@ namespace UniActionsCore
                     foreach (var hobject in Savior[VAC.AppSettingsNames.Action].Values)
                     {
                         var actionItem = new Scenario();
+#if !DEBUG
+                    try
+                    {
+#endif
+                        actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
+                        actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
+                        actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
+                        actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
 
-                        try
-                        {
-                            actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
-                            actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
-                            actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
-                            actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
+                        var actionTypeName = hobject[VAC.AppSettingsNames.UsedCustomAction];
+                        var actionType = Uni.ModulesControl.GetActionTypeByName(actionTypeName);
+                        if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
+                            actionItem.ActionBag = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
 
-                            var actionTypeName = hobject[VAC.AppSettingsNames.UsedCustomAction];
-                            var actionType = Uni.ModulesControl.CustomActions.Single(x => x.FullName == actionTypeName);
-                            if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
-                                actionItem.Action = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
+                        actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
 
-                            actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
-                            actionItem.IsOnlyOnce = hobject[VAC.AppSettingsNames.UsedIsOnlyOnce];
+                        actionItem.Action.Refresh();
 
-                            actionItem.Action.Refresh();
-
-                            Uni.TasksPool.AddItem(actionItem);
-                        }
-                        catch (Exception e)
-                        {
-                            result.AddException(e);
-                        }
+                        Uni.TasksPool.Add(actionItem);
+#if !DEBUG
                     }
+                    catch (Exception e)
+                    {
+                        result.AddException(e);
+                    }
+#endif
+                    }
+                //#if !DEBUG
             }
             catch (Exception e)
             {
@@ -170,9 +174,12 @@ namespace UniActionsCore
             }
             finally
             {
+                //#endif
                 Savior.ThrowsExceptionIfParameterNotExist = false;
                 PluginsSavior.ThrowsExceptionIfParameterNotExist = false;
+                //#if !DEBUG
             }
+            //#endif
             return result;
         }
     }

@@ -10,7 +10,13 @@ namespace UniStandartActions.Actions
     [Serializable]
     public class WaitAction : ICustomAction
     {
-        public decimal Minutes = 5;
+        [HumanFriendlyName("Минут")]
+        public decimal Minutes { get; set; }
+
+        public WaitAction()
+        {
+            Minutes = 5;
+        }
 
         public string Do(string inputState)
         {
@@ -20,12 +26,12 @@ namespace UniStandartActions.Actions
             return State;
         }
 
-
         [XmlIgnore]
         public string State
         {
-            get {
-                return "Ожидать " + Minutes + (Minutes != 1 ? " минут(ы)" : " минуту"); 
+            get
+            {
+                return "Ожидать " + Minutes + (Minutes != 1 ? " минут(ы)" : " минуту");
             }
         }
 
@@ -59,7 +65,7 @@ namespace UniStandartActions.Actions
         }
 
         public void Refresh()
-        {}
+        { }
     }
 #endif
 }

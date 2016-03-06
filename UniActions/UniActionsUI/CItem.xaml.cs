@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsUI
 {
@@ -11,16 +12,16 @@ namespace UniActionsUI
     /// </summary>
     public partial class CItem : Grid
     {
-        private Scenario _actionItem;
-        public Scenario ActionItem
+        private Scenario _scenario;
+        public Scenario Scenario
         {
             get
             {
-                return _actionItem;
+                return _scenario;
             }
             set
             {
-                _actionItem = value;
+                _scenario = value;
                 Refresh();
             }
         }
@@ -45,25 +46,25 @@ namespace UniActionsUI
         private Brush _bg;
         public void Refresh()
         {
-            this.Background = this._bg = GetFromString(_actionItem.Category);
+            this.Background = this._bg = GetFromString(_scenario.Category);
 
             var actionLock = new Action<Scenario>(x => ChangeView("", false));
 
             var actionUnlock = new Action<Scenario>(x =>
                 {
-                    _actionItem.CheckStateAsync((state) => ChangeView(state, true));
+                    _scenario.CheckStateAsync((state) => ChangeView(state, true));
                 }
             );
 
-            _actionItem.AfterAction += actionUnlock;
+            _scenario.AfterAction += actionUnlock;
 
             this.Unloaded += (o, e) =>
                 {
-                    _actionItem.AfterAction -= actionUnlock;
+                    _scenario.AfterAction -= actionUnlock;
                 };
 
-            actionLock(_actionItem);
-            actionUnlock(_actionItem);
+            actionLock(_scenario);
+            actionUnlock(_scenario);
         }
 
         #region color helper
@@ -126,7 +127,7 @@ namespace UniActionsUI
         public void Run()
         {
             ChangeView("", false);
-            _actionItem.ExecuteAsync(new Action<string>((state) =>
+            _scenario.ExecuteAsync(new Action<string>((state) =>
             {
                 ChangeView(state, true);
             }));
@@ -137,7 +138,7 @@ namespace UniActionsUI
 
         public void Update()
         {
-            _actionItem.CheckStateAsync((state) => ChangeView(state, true));
+            _scenario.CheckStateAsync((state) => ChangeView(state, true));
         }
 
         private void ChangeView(string state, bool enable)

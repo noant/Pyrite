@@ -5,9 +5,11 @@ using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Checkers
 {
+    [Serializable]
     public class DateTimeChecker : ICustomChecker
     {
-        public DateTimeChecker() { 
+        public DateTimeChecker()
+        {
             Year = DateTime.Now.Year;
             Month = DateTime.Now.Month;
             Day = DateTime.Now.Day;
@@ -16,43 +18,61 @@ namespace UniStandartActions.Checkers
         }
 
         private bool _fWasStarted;
-        private DateTime _lastUpdate;
+        //private DateTime _lastUpdate;
 
+        [HumanFriendlyName("Только при старте компьютера")]
         public bool OnlyOnComputerStart { get; set; }
 
-        public bool EveryYear { get; set; }
-
-        public bool EveryMonth { get; set; }
-
-        public bool EveryDay { get; set; }
-
-        public bool EveryHour { get; set; }
-
-        public bool EveryMinute { get; set; }
-
-        public bool D_monday { get; set; }
-
-        public bool D_tuesday { get; set; }
-
-        public bool D_wednesday { get; set; }
-
-        public bool D_thursday { get; set; }
-
-        public bool D_friday { get; set; }
-
-        public bool D_saturday { get; set; }
-
-        public bool D_sunday { get; set; }
-
+        [HumanFriendlyName("Год")]
         public int Year { get; set; }
 
+        [HumanFriendlyName("Месяц")]
         public int Month { get; set; }
 
+        [HumanFriendlyName("День")]
         public int Day { get; set; }
 
+        [HumanFriendlyName("Час")]
         public int Hour { get; set; }
 
+        [HumanFriendlyName("Минута")]
         public int Minute { get; set; }
+
+        [HumanFriendlyName("Каждый год")]
+        public bool EveryYear { get; set; }
+
+        [HumanFriendlyName("Каждый месяц")]
+        public bool EveryMonth { get; set; }
+
+        [HumanFriendlyName("Каждый день")]
+        public bool EveryDay { get; set; }
+
+        [HumanFriendlyName("Каждый час")]
+        public bool EveryHour { get; set; }
+
+        [HumanFriendlyName("Каждую минуту")]
+        public bool EveryMinute { get; set; }
+
+        [HumanFriendlyName("Понедельник")]
+        public bool D_monday { get; set; }
+
+        [HumanFriendlyName("Вторник")]
+        public bool D_tuesday { get; set; }
+
+        [HumanFriendlyName("Среда")]
+        public bool D_wednesday { get; set; }
+
+        [HumanFriendlyName("Четверг")]
+        public bool D_thursday { get; set; }
+
+        [HumanFriendlyName("Пятница")]
+        public bool D_friday { get; set; }
+
+        [HumanFriendlyName("Суббота")]
+        public bool D_saturday { get; set; }
+
+        [HumanFriendlyName("Воскресенье")]
+        public bool D_sunday { get; set; }
 
         [XmlIgnore]
         public bool IsCanDoNow
@@ -61,9 +81,9 @@ namespace UniStandartActions.Checkers
             {
                 if (_fWasStarted && OnlyOnComputerStart)
                     return false;
-                if ((DateTime.Now - _lastUpdate).TotalSeconds < 59)
-                    return false;
-                else _lastUpdate = DateTime.Now;
+                //if ((DateTime.Now - _lastUpdate).TotalSeconds < 59)
+                //    return false;
+                //else _lastUpdate = DateTime.Now;
 
                 var dayOfWeekFlag =
                     (DateTime.Now.DayOfWeek == DayOfWeek.Monday && D_monday) ||

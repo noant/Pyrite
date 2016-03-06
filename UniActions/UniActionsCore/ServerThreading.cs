@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsCore
 {
@@ -321,8 +322,8 @@ namespace UniActionsCore
         {
             if (command == VAC.ServerCommands.Command_GetStartCommands)
             {
-                var fastActions = Uni.TasksPool.ActionItems.Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
-                var categories = Uni.TasksPool.ActionItems.Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category).Distinct().OrderBy(x => x);
+                var fastActions = Uni.TasksPool.Scenarios.Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var categories = Uni.TasksPool.Scenarios.Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category).Distinct().OrderBy(x => x);
                 SendString(stream, (fastActions.Count() + categories.Count()).ToString());
                 foreach (var action in fastActions)
                 {
@@ -341,7 +342,7 @@ namespace UniActionsCore
             {
                 var category = GetNextString(stream);
 
-                var actions = Uni.TasksPool.ActionItems.Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var actions = Uni.TasksPool.Scenarios.Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
 
                 SendString(stream, actions.Count().ToString());
 
@@ -353,9 +354,9 @@ namespace UniActionsCore
             }
             else if (command == VAC.ServerCommands.Command_GetStatus)
             {
-                var actions = Uni.TasksPool.ActionItems.Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var actions = Uni.TasksPool.Scenarios.Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
                 SendString(stream, actions.Count().ToString());
-                foreach (var action in Uni.TasksPool.ActionItems)
+                foreach (var action in Uni.TasksPool.Scenarios)
                 {
                     SendString(stream, action.ServerCommand);
                     SendString(stream, action.Action.State);
@@ -363,7 +364,7 @@ namespace UniActionsCore
             }
             else 
             {
-                var remoteAction = Uni.TasksPool.ActionItems.Where(x => x.ServerCommand == command).FirstOrDefault();
+                var remoteAction = Uni.TasksPool.Scenarios.Where(x => x.ServerCommand == command).FirstOrDefault();
                 if (remoteAction != null)
                 {
                     var state = GetNextString(stream);

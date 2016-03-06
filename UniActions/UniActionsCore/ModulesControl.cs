@@ -4,13 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UniActionsClientIntefaces;
+using UniActionsCore.ScenarioCreation;
+using UniStandartActions;
 
 namespace UniActionsCore
 {
     public class ModulesControl
     {
-        private static readonly string _uniActionsStandart = "UniStandartActions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-        
+        private static readonly string _uniActionsStandart;
+
+        static ModulesControl()
+        {
+            _uniActionsStandart = typeof(DoNotDeleteThisClass).Assembly.FullName;
+        }
+
         public Uni Uni { get; internal set; }
 
         private List<Type> _customActions;
@@ -18,7 +25,7 @@ namespace UniActionsCore
         {
             get
             {
-                return _customActions.ToArray();
+                return _customActions.Union(new[] { typeof(DoNothingAction) });
             }
         }
 
@@ -27,7 +34,7 @@ namespace UniActionsCore
         {
             get
             {
-                return _customCheckers.ToArray();
+                return _customCheckers.Union(new[] { typeof(NeverChecker) });
             }
         }
 
@@ -43,6 +50,13 @@ namespace UniActionsCore
                 result.AddException(e);
             }
             return result;
+        }
+
+        internal Type GetActionTypeByName(string name)
+        {
+            if (name == typeof(ComplexAction).FullName)
+                return typeof(ComplexAction);
+            return this.CustomActions.Single(x => x.FullName == name);
         }
 
         public Result<ICustomAction> CreateActionInstance(Type type)
@@ -91,8 +105,8 @@ namespace UniActionsCore
                     _customCheckers = new List<Type>();
                 else _customCheckers.Clear();
 
-                RegisterAction(new Uri(typeof(UniStandartActions.NotUsedClass).Assembly.CodeBase).LocalPath);
-                RegisterChecker(new Uri(typeof(UniStandartActions.NotUsedClass).Assembly.CodeBase).LocalPath);
+                RegisterAction(new Uri(typeof(UniStandartActions.DoNotDeleteThisClass).Assembly.CodeBase).LocalPath);
+                RegisterChecker(new Uri(typeof(UniStandartActions.DoNotDeleteThisClass).Assembly.CodeBase).LocalPath);
             }
             catch (Exception e)
             {
@@ -108,13 +122,15 @@ namespace UniActionsCore
 
         public bool IsStandart(Type type)
         {
-            return type.Assembly.FullName == _uniActionsStandart;
+            return
+                type.Assembly.FullName == _uniActionsStandart ||
+                type.Assembly.FullName == this.GetType().Assembly.FullName;
         }
 
         public Result<IEnumerable<Type>> RegisterAction(string filename)
         {
             var result = new Result<IEnumerable<Type>>();
-            IEnumerable<Type> types=null;
+            IEnumerable<Type> types = null;
             try
             {
                 var assembly = Assembly.LoadFrom(filename);
@@ -122,7 +138,7 @@ namespace UniActionsCore
                     .GetTypes()
                     .Where(x => x.GetInterfaces()
                         .Contains(typeof(ICustomAction))
-                        && x.CustomAttributes.Any(z=>z.AttributeType.Equals(typeof(SerializableAttribute)))
+                        && x.CustomAttributes.Any(z => z.AttributeType.Equals(typeof(SerializableAttribute)))
                         );
             }
             catch (Exception e)
@@ -149,7 +165,7 @@ namespace UniActionsCore
                 exception = new Exception("Type has no ICustomAction interface");
             else if (_customActions.Where(x => x.FullName == actionType.FullName).Count() != 0)
                 exception = new Exception("Is exist");
-                        
+
             return exception == null;
         }
 
@@ -164,7 +180,7 @@ namespace UniActionsCore
                     .GetTypes()
                     .Where(x => x.GetInterfaces()
                         .Contains(typeof(ICustomChecker))
-                        && x.CustomAttributes.Any(z=>z.AttributeType.Equals(typeof(SerializableAttribute)))
+                        && x.CustomAttributes.Any(z => z.AttributeType.Equals(typeof(SerializableAttribute)))
                         );
             }
             catch (Exception e)
@@ -200,11 +216,13 @@ namespace UniActionsCore
             var result = new VoidResult();
             try
             {
-                lock (Uni.TasksPool.ActionItems)
+                lock (Uni.TasksPool.Scenarios)
                 {
                     var assemblyName = checkerType.Assembly.FullName;
                     _customCheckers.RemoveAll(x => x.Assembly.FullName == assemblyName);
-                    Uni.TasksPool.RemoveAll(x => x.Checker.GetType().Assembly.FullName == assemblyName);
+                    foreach (var action in Uni.TasksPool.Scenarios)
+                        if (action.ActionBag is IHasCheckerAction)
+                            ((IHasCheckerAction)action).RemoveChecker(checkerType);
                 }
             }
             catch (Exception e)
@@ -219,11 +237,13 @@ namespace UniActionsCore
             var result = new VoidResult();
             try
             {
-                lock (Uni.TasksPool.ActionItems)
+                lock (Uni.TasksPool.Scenarios)
                 {
                     var assemblyName = actionType.Assembly.FullName;
                     _customActions.RemoveAll(x => x.Assembly.FullName == assemblyName);
-                    Uni.TasksPool.RemoveAll(x => x.Action.GetType().Assembly.FullName == assemblyName);
+                    foreach (var action in Uni.TasksPool.Scenarios)
+                        if (action.ActionBag is IHasCheckerAction)
+                            ((IHasCheckerAction)action).RemoveAction(actionType);
                 }
             }
             catch (Exception e)
