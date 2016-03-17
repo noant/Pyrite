@@ -29,7 +29,7 @@ namespace UniActionsUI.ScenarioCreation
                 return;
             var context = new CheckerViewContext(checkerPair);
             this.DataContext = context;
-            
+
             InitializeComponent();
             tbParams.MouseLeftButtonDown += (o, e) =>
             {
@@ -40,12 +40,26 @@ namespace UniActionsUI.ScenarioCreation
 
             btDelete.Click += (o, e) =>
             {
+                RaiseRemove();
+            };
+
+            this.KeyDown += (o, e) =>
+            {
+                if (e.Key == Key.Delete)
+                {
+                    RaiseRemove();
+                }
+            };
+        }
+
+        public void RaiseRemove()
+        {
+            if (Utils.IsUserSureToDeleteCurrentOperator())
                 if (Remove != null)
                 {
                     Remove(this, new EventArgs());
                     RaiseChanged();
                 }
-            };
         }
 
         public bool IsFirst

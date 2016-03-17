@@ -16,6 +16,10 @@ namespace UniActionsCore
             HierarchicalObjectCrutch.Register(typeof(IfAction));
             HierarchicalObjectCrutch.Register(typeof(WhileAction));
             HierarchicalObjectCrutch.Register(typeof(ComplexChecker));
+            HierarchicalObjectCrutch.Register(typeof(ActionBag));
+            HierarchicalObjectCrutch.Register(typeof(DoNothingAction));
+            HierarchicalObjectCrutch.Register(typeof(NeverChecker));
+            HierarchicalObjectCrutch.Register(typeof(DoubleComplexAction));
         }
     }
 }

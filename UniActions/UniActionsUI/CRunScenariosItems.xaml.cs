@@ -8,9 +8,9 @@ namespace UniActionsUI
     /// <summary>
     /// Interaction logic for CItems.xaml
     /// </summary>
-    public partial class CItems : Grid, ControlsHelper.IRefreshable
+    public partial class CRunScenariosItems : Grid, ControlsHelper.IRefreshable
     {
-        public CItems()
+        public CRunScenariosItems()
         {
             InitializeComponent();
 
@@ -19,11 +19,11 @@ namespace UniActionsUI
 
         public void Run(int number)
         {
-            foreach (var it in this.spItems.Children)
+            foreach (var control in this.spItems.Children)
             {
-                if (it is CItem)
+                if (control is CRunScenario)
                 {
-                    var item = (CItem)it;
+                    var item = (CRunScenario)control;
                     var num = item.Number;
                     if (num == number)
                     {
@@ -36,10 +36,10 @@ namespace UniActionsUI
 
         public void SelectFirstControl()
         {
-            foreach (var item in this.spItems.Children)
-                if (item is CItem)
+            foreach (var control in this.spItems.Children)
+                if (control is CRunScenario)
                 {
-                    ((CItem)item).Activate();
+                    ((CRunScenario)control).Focus();
                     break;
                 }
         }
@@ -52,12 +52,14 @@ namespace UniActionsUI
 
         public void Refresh()
         {
-            var actionUpdateAll = new ActionItemExecuted((x) => {
-                this.Dispatcher.BeginInvoke(new Action(() => {
-                    foreach (var cItem in this.spItems.Children)
+            var actionUpdateAll = new ActionItemExecuted((x) =>
+            {
+                this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    foreach (var control in this.spItems.Children)
                     {
-                        if (cItem is CItem)
-                            ((CItem)cItem).Update();
+                        if (control is CRunScenario)
+                            ((CRunScenario)control).Refresh();
                     }
                 }));
             });
@@ -70,9 +72,9 @@ namespace UniActionsUI
 
             int num = 1;
 
-            foreach (var category in App.Uni.TasksPool.Scenarios.Where(x => 
+            foreach (var category in App.Uni.TasksPool.Scenarios.Where(x =>
                 (x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)) || !this.ShowOnlyServerActions)
-                .Select(x=>x.Category).Distinct().OrderBy(x=>x))
+                .Select(x => x.Category).Distinct().OrderBy(x => x))
             {
                 if (!string.IsNullOrEmpty(category) && category.Length > 0)
                 {
@@ -82,19 +84,20 @@ namespace UniActionsUI
                     this.spItems.Children.Add(lbl);
                 }
 
-                foreach (var item in App.Uni.TasksPool.Scenarios.Where(x => 
+                foreach (var item in App.Uni.TasksPool.Scenarios.Where(x =>
                     (x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)) || !this.ShowOnlyServerActions)
-                    .Where(x => x.Category == category))
+                    .Where(x => x.Category == category).OrderBy(x => x.Index))
                 {
-                    var cItem = new CItem();
-                    cItem.Number = num++;
-                    cItem.Scenario = item;
-                    cItem.Clicked += () => {
+                    var cRunScenario = new CRunScenario();
+                    cRunScenario.Number = num++;
+                    cRunScenario.Scenario = item;
+                    cRunScenario.NeedClose += (o, e) =>
+                    {
                         if (this.Clicked != null)
-                            this.Clicked();
+                            this.Clicked(this, new EventArgs());
                     };
-                                        
-                    this.spItems.Children.Add(cItem);
+
+                    this.spItems.Children.Add(cRunScenario);
                 }
             }
         }
@@ -103,10 +106,10 @@ namespace UniActionsUI
         {
             get
             {
-                return this.spItems.Children.Count>0;
+                return this.spItems.Children.Count > 0;
             }
         }
 
-        public event Clicked Clicked;
+        public event Action<object, EventArgs> Clicked;
     }
 }

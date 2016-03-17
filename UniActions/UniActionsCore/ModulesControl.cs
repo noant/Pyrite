@@ -54,8 +54,8 @@ namespace UniActionsCore
 
         internal Type GetActionTypeByName(string name)
         {
-            if (name == typeof(ComplexAction).FullName)
-                return typeof(ComplexAction);
+            if (name == typeof(DoubleComplexAction).FullName)
+                return typeof(DoubleComplexAction);
             return this.CustomActions.Single(x => x.FullName == name);
         }
 

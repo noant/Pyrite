@@ -133,7 +133,7 @@ namespace UniActionsUI.ScenarioCreation
             var checkerString = Helper.CreateParamsViewString(Checker);
             if (!string.IsNullOrWhiteSpace(checkerString))
             {
-                this.CheckerString = " (" + checkerString + ")";
+                this.CheckerString = " (" + checkerString + ") ";
             }
             else
             {

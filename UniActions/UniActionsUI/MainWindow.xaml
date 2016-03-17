@@ -7,10 +7,10 @@
     <Grid>
         <TabControl>
             <TabItem Name="tabTasks" Header="Сценарии">
-                <local:CItems></local:CItems>
+                <local:CRunScenariosItems></local:CRunScenariosItems>
             </TabItem>
             <TabItem Name="tabTasksSettings" Header="Настройки сценариев">
-                <local:CActions></local:CActions>
+                <local:ScenariosView></local:ScenariosView>
             </TabItem>
             <TabItem Name="tabSettings" Header="Настройки">
                 <Grid>

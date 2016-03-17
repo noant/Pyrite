@@ -17,7 +17,9 @@
                 SelectedValue="{Binding Path=ActionNamePair}"
                 Style="{StaticResource ComboBoxFlatActionStyle}"></ComboBox>
             <TextBlock
-                Text="{Binding Path=ActionStringSplitted}"
+                Padding="7"
+                Background="LightCyan"
+                Text="{Binding Path=ActionString}"
                 TextWrapping="Wrap"                
                 Name="tbParams"
                 Height="Auto"

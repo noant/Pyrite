@@ -11,7 +11,8 @@ namespace UniActionsUI
         public WFast()
         {
             InitializeComponent();
-            this.KeyDown += (o, e) => {
+            this.KeyDown += (o, e) =>
+            {
                 if (e.Key == Key.Escape)
                     this.Close();
                 else if (e.Key == Key.Up || e.Key == Key.Down)
@@ -21,10 +22,7 @@ namespace UniActionsUI
                 else
                     Run(e.Key);
             };
-            this.ShowActivated = true;
-            this.cItems.Clicked += () => this.Close();
-            this.Deactivated += (o, e) => this.Close();
-            this.gridBg.MouseDown += (o, e) => this.Close();
+            this.cItems.Clicked += (o, e) => this.Close();
         }
 
         private void Run(Key key)
@@ -34,18 +32,20 @@ namespace UniActionsUI
             if (keyStr[0] == 'F' && int.TryParse(keyStr.Replace("F", ""), out num))
             {
                 cItems.Run(num);
+                Close();
             }
         }
 
         public bool IsClosed { get; private set; }
-        public new void Close() {
+        public new void Close()
+        {
             if (IsClosed) return;
             IsClosed = true;
             try
             {
                 base.Close();
             }
-            catch {}
+            catch { }
         }
 
         public bool Refresh()
@@ -55,15 +55,9 @@ namespace UniActionsUI
             return cItems.IsMoreThenZero;
         }
 
-        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void gridBack_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.Close();
-        }
-
-        private void Label_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter || e.Key == Key.Space)
-                this.Close();
+            Close();
         }
     }
 }

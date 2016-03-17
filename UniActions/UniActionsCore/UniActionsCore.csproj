@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScenarioCreation\DoNothingAction.cs" />
+    <Compile Include="ScenarioCreation\DoubleComplexAction.cs" />
     <Compile Include="ScenarioCreation\NeverChecker.cs" />
     <Compile Include="ScenarioCreation\Scenario.cs" />
     <Compile Include="ScenarioCreation\ComplexAction.cs" />
@@ -53,7 +54,7 @@
     <Compile Include="Utils\ExceptionsHandling.cs" />
     <Compile Include="ScenarioCreation\WhileAction.cs" />
     <Compile Include="Utils\SkeddedList.cs" />
-    <Compile Include="TasksPool.cs" />
+    <Compile Include="ScenariosPool.cs" />
     <Compile Include="SaveAndLoad.cs" />
     <Compile Include="Utils\TcpListenerEx.cs" />
     <Compile Include="Uni.cs" />

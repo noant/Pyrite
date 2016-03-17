@@ -19,25 +19,25 @@ namespace UniActionsUI.ScenarioCreation
     /// <summary>
     /// Interaction logic for ScenarioView.xaml
     /// </summary>
-    public partial class ScenarioView : EditableUserControl
+    public partial class ScenarioActionView : EditableUserControl
     {
-        public ScenarioView()
+        public ScenarioActionView()
         {
             InitializeComponent();
         }
 
-        private Scenario _scenario;
-        public Scenario Scenario
+        private ActionBag _actionBag;
+        public ActionBag ActionBag
         {
             get
             {
-                return _scenario;
+                return _actionBag;
             }
             set
             {
-                _scenario = value;
+                _actionBag = value;
 
-                var action = new ComplexActionView((ComplexAction)_scenario.Action)
+                var action = new ComplexActionView((ComplexAction)_actionBag.Action)
                 {
                     IgnoreChangedEvent = true, //ignore changes on initialize
                     RootControlsVisibility = Visibility.Collapsed,
@@ -46,9 +46,21 @@ namespace UniActionsUI.ScenarioCreation
 
                 action.Changed += (o, e) => RaiseChanged();
 
-                borderScenarionHolder.Child = action;
+                contentScenarionHolder.Content = action;
 
                 action.IgnoreChangedEvent = false;
+            }
+        }
+
+        public string Caption
+        {
+            get
+            {
+                return lblCaption.Content.ToString();
+            }
+            set
+            {
+                lblCaption.Content = value;
             }
         }
 

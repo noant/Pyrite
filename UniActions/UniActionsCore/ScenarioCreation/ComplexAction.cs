@@ -18,9 +18,6 @@ namespace UniActionsCore.ScenarioCreation
         {
             IsBusyNow = true;
 
-            if (this.ActionBags.Count == 1)
-                return this.ActionBags.First().Action.Do(State);
-
             if (ActionBags != null)
                 foreach (var bag in ActionBags)
                     bag.Action.Do(bag.Action.State);

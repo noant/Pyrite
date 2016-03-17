@@ -35,15 +35,16 @@ namespace UniActionsUI.ScenarioCreation
             elseControl.Changed += (o, e) => RaiseChanged();
             this.gridElseHolder.Children.Add(elseControl);
             var checkerControl = new ComplexCheckerView(new OperatorCheckerPair() { Checker = context.Checker }) { RootControlsVisibility = Visibility.Collapsed };
-            elseControl.Changed += (o, e) => RaiseChanged();
+            checkerControl.Changed += (o, e) => RaiseChanged();
             this.gridCheckerHolder.Children.Add(checkerControl);
             this.btRemove.Click += (o, e) =>
             {
-                if (Remove != null)
-                {
-                    Remove(this, new EventArgs());
-                    RaiseChanged();
-                }
+                if (Utils.IsUserSureToDeleteCurrentOperator())
+                    if (Remove != null)
+                    {
+                        Remove(this, new EventArgs());
+                        RaiseChanged();
+                    }
             };
         }
 

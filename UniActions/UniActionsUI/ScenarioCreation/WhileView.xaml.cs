@@ -36,11 +36,12 @@ namespace UniActionsUI.ScenarioCreation
             this.gridCheckerHolder.Children.Add(checkerControl);
             this.btRemove.Click += (o, e) =>
             {
-                if (Remove != null)
-                {
-                    Remove(this, new EventArgs());
-                    RaiseChanged();
-                }
+                if (Utils.IsUserSureToDeleteCurrentOperator())
+                    if (Remove != null)
+                    {
+                        Remove(this, new EventArgs());
+                        RaiseChanged();
+                    }
             };
         }
 

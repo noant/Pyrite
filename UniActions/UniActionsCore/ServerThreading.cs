@@ -21,7 +21,7 @@ namespace UniActionsCore
                 public static readonly uint ReceiveTimout = 1000;
                 public static readonly uint SendTimout = 1000;
 
-                public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() { 
+                public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() {
                     6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
 
@@ -50,15 +50,19 @@ namespace UniActionsCore
             public SkeddedList<IPAddress> ResolvedIp { get; internal set; }
 
             private SkeddedList<ushort> _actionsPorts;
-            public SkeddedList<ushort> ActionsPorts {
-                get {
+            public SkeddedList<ushort> ActionsPorts
+            {
+                get
+                {
                     return _actionsPorts;
                 }
-                internal set {
-                    value.ItemAdd += (sender, args) => {
+                internal set
+                {
+                    value.ItemAdd += (sender, args) =>
+                    {
                         if (args.Item == this.DistributionPort ||
                             args.Item == Defaults.SharingPort ||
-                            _actionsPorts.Any(x=>x.Equals(args.Item))
+                            _actionsPorts.Any(x => x.Equals(args.Item))
                             )
                             args.Cancel = true;
                     };
@@ -80,12 +84,13 @@ namespace UniActionsCore
                 {
                     if (value != DistributionPort)
                         if (ActionsPorts == null || !ActionsPorts.Contains(value))
-                        _sharingPort = value;
+                            _sharingPort = value;
                 }
             }
         }
-                
-        private class ThreadPortOccupation{
+
+        private class ThreadPortOccupation
+        {
             public ThreadPortOccupation(Thread t, TcpListenerEx listener, ushort port)
             {
                 Thread = t;
@@ -101,7 +106,7 @@ namespace UniActionsCore
 
         public Uni Uni { get; internal set; }
 
-        public ServerThreadingSettings Settings {get; private set;}
+        public ServerThreadingSettings Settings { get; private set; }
 
         private volatile List<ThreadPortOccupation> _threadPortOccupations;
 
@@ -142,7 +147,8 @@ namespace UniActionsCore
             {
                 return _isStopped;
             }
-            private set {
+            private set
+            {
                 _isStopped = value;
                 if (value && _whenStoppedCallback != null)
                 {
@@ -168,7 +174,7 @@ namespace UniActionsCore
             stream.Read(buff, 0, buff.Length);
             return ServerThreadingSettings.Defaults.ServerEncoding.GetString(buff);
         }
-        
+
         public void Initialize()
         {
             this.Settings = new ServerThreadingSettings();
@@ -202,7 +208,8 @@ namespace UniActionsCore
             IsStopped = false;
             _prepareToStop = false;
 
-            _threadPortDistribution = ThreadHelper.AlterThread(() => { 
+            _threadPortDistribution = ThreadHelper.AlterThread(() =>
+            {
                 _listenerPortDistribution = new TcpListenerEx(Settings.DistributionPort);
                 _listenerPortDistribution.Start();
                 while (!_prepareToStop)
@@ -250,7 +257,8 @@ namespace UniActionsCore
                     listener.Server.SendTimeout = (int)ServerThreadingSettings.Defaults.SendTimout;
                     listener.Server.ReceiveTimeout = (int)ServerThreadingSettings.Defaults.ReceiveTimout;
                     ThreadPortOccupation portOccupation = null;
-                    Thread t = new Thread(() => {
+                    Thread t = new Thread(() =>
+                    {
                         while (true)
                         {
                             try
@@ -315,6 +323,9 @@ namespace UniActionsCore
                 }
             }
 
+            if (ServerStarted != null)
+                ServerStarted();
+
             return result;
         }
 
@@ -322,8 +333,14 @@ namespace UniActionsCore
         {
             if (command == VAC.ServerCommands.Command_GetStartCommands)
             {
-                var fastActions = Uni.TasksPool.Scenarios.Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
-                var categories = Uni.TasksPool.Scenarios.Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category).Distinct().OrderBy(x => x);
+                var fastActions = Uni.TasksPool.Scenarios
+                    .Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
+                    .OrderBy(x => x.Index)
+                    .OrderBy(x => x.Name);
+                var categories = Uni.TasksPool.Scenarios
+                    .Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category)
+                    .Distinct()
+                    .OrderBy(x => x);
                 SendString(stream, (fastActions.Count() + categories.Count()).ToString());
                 foreach (var action in fastActions)
                 {
@@ -342,7 +359,10 @@ namespace UniActionsCore
             {
                 var category = GetNextString(stream);
 
-                var actions = Uni.TasksPool.Scenarios.Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var actions = Uni.TasksPool.Scenarios
+                    .Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
+                    .OrderBy(x => x.Index)
+                    .OrderBy(x => x.Name);
 
                 SendString(stream, actions.Count().ToString());
 
@@ -354,42 +374,43 @@ namespace UniActionsCore
             }
             else if (command == VAC.ServerCommands.Command_GetStatus)
             {
-                var actions = Uni.TasksPool.Scenarios.Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                var actions = Uni.TasksPool.Scenarios
+                    .Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
                 SendString(stream, actions.Count().ToString());
                 foreach (var action in Uni.TasksPool.Scenarios)
                 {
                     SendString(stream, action.ServerCommand);
-                    SendString(stream, action.Action.State);
+                    SendString(stream, action.CheckState());
                 }
             }
-            else 
+            else
             {
                 var remoteAction = Uni.TasksPool.Scenarios.Where(x => x.ServerCommand == command).FirstOrDefault();
                 if (remoteAction != null)
                 {
                     var state = GetNextString(stream);
-                    state = remoteAction.Execute(state,true);
+                    state = remoteAction.Execute(state, false);
                     SendString(stream, state);
                     ShareState(remoteAction, ((IPEndPoint)client.Client.RemoteEndPoint).Address);
                 }
             }
         }
-        
+
         public void ShareState(Scenario exceptItem, IPAddress exceptAddress)
         {
-            foreach(var address in _activeClients.ToArray())
+            foreach (var address in _activeClients.ToArray())
             {
                 new Thread(() =>
                 {
                     try
                     {
                         var tcpClient = new TcpClient(address.ToString(), this.Settings.SharingPort);
-                        tcpClient.ReceiveTimeout = (int)UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.ReceiveTimout;
-                        tcpClient.SendTimeout = (int)UniActionsCore.ServerThreading.ServerThreadingSettings.Defaults.SendTimout;
+                        tcpClient.ReceiveTimeout = (int)ServerThreadingSettings.Defaults.ReceiveTimout;
+                        tcpClient.SendTimeout = (int)ServerThreadingSettings.Defaults.SendTimout;
 
-                        var stream = tcpClient.GetStream(); 
+                        var stream = tcpClient.GetStream();
 
-                        SendString(stream,VAC.ServerCommands.Command_NeedUpdate);
+                        SendString(stream, VAC.ServerCommands.Command_NeedUpdate);
 
                         if (exceptItem != null && exceptAddress != null && address.Equals(exceptAddress))
                         {
@@ -414,5 +435,7 @@ namespace UniActionsCore
         {
             ShareState(null, null);
         }
+
+        public event Action ServerStarted;
     }
 }

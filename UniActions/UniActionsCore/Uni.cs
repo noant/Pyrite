@@ -31,7 +31,7 @@ namespace UniActionsCore
 
         public ServerThreading ServerThreading { get; private set; }
 
-        public TasksPool TasksPool { get; private set; }
+        public ScenariosPool TasksPool { get; private set; }
 
         public ModulesControl ModulesControl { get; private set; }
 
@@ -46,7 +46,7 @@ namespace UniActionsCore
 
             var result = new VoidResult();
 
-            TasksPool = new TasksPool();
+            TasksPool = new ScenariosPool();
             TasksPool.Uni = this;
             TasksPool.Initialize();
             ModulesControl = new ModulesControl();
@@ -54,10 +54,10 @@ namespace UniActionsCore
             result.AddExceptions(ModulesControl.Initialize().Exceptions);
             ServerThreading = new UniActionsCore.ServerThreading();
             ServerThreading.Uni = this;
+            ServerThreading.ServerStarted += () => TasksPool.StartActiveScenarios();
             ServerThreading.Initialize();
 
             result.AddExceptions(SaveAndLoad.Load().Exceptions);
-
             result.AddExceptions(ServerThreading.BeginStart().Exceptions);
 
             return result;
@@ -89,6 +89,9 @@ namespace UniActionsCore
 
         public void Stop(Action callback)
         {
+            foreach (var scenario in TasksPool.Scenarios)
+                scenario.KillDispatcher();
+
             ServerThreading.BeginStop(() =>
             {
                 callback();

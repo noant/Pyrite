@@ -64,12 +64,13 @@ namespace UniActionsUI.ScenarioCreation
 
             this.btDelete.Click += (o1, e1) =>
             {
-                if (Remove != null)
-                {
-                    Remove(this, new EventArgs());
-                    RaiseChanged();
-                }
-                ProcessFirstItem();
+                if (Utils.IsUserSureToDeleteCurrentOperator())
+                    if (Remove != null)
+                    {
+                        Remove(this, new EventArgs());
+                        RaiseChanged();
+                        ProcessFirstItem();
+                    }
             };
 
             foreach (var oPair in context.AllOperatorCheckerPairs)

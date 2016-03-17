@@ -17,16 +17,19 @@ using UniActionsCore.ScenarioCreation;
 namespace UniActionsUI.ScenarioCreation
 {
     /// <summary>
-    /// Interaction logic for ScenarioView.xaml
+    /// Interaction logic for DoubleScenarioActionView.xaml
     /// </summary>
-    public partial class SingleActionScenarioView : EditableUserControl
+    public partial class DoubleScenarioActionView : UserControl
     {
-        public SingleActionScenarioView()
+        public DoubleScenarioActionView()
         {
             InitializeComponent();
+
+            svScenarioAlg.Changed += (o, e) => RaiseChanged();
+            svScenarioEndingAlg.Changed += (o, e) => RaiseChanged();
         }
 
-        private ActionBag _actionBag;
+        public ActionBag _actionBag;
         public ActionBag ActionBag
         {
             get
@@ -36,18 +39,8 @@ namespace UniActionsUI.ScenarioCreation
             set
             {
                 _actionBag = value;
-
-                var action = new ActionViewExtended(_actionBag)
-                {
-                    IgnoreChangedEvent = true, //ignore changes on initialize
-                    IsInEditMode = this.IsInEditMode
-                };
-
-                action.Changed += (o, e) => RaiseChanged();
-
-                contentScenarioHolder.Content = action;
-
-                action.IgnoreChangedEvent = false;
+                svScenarioAlg.ActionBag = ((DoubleComplexAction)_actionBag.Action).ActionBagBegin;
+                svScenarioEndingAlg.ActionBag = ((DoubleComplexAction)_actionBag.Action).ActionBagEnd;
             }
         }
 
@@ -57,6 +50,6 @@ namespace UniActionsUI.ScenarioCreation
                 Changed(this, new EventArgs());
         }
 
-        public event Action<object, EventArgs> Changed;
+        public Action<object, EventArgs> Changed;
     }
 }

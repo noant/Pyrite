@@ -4,23 +4,56 @@
         xmlns:local="clr-namespace:UniActionsUI"
         WindowStyle="None"
         ShowInTaskbar="False"
+        ShowActivated="True"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         ResizeMode="NoResize"
-        ShowActivated="True"
         MinHeight="0"
         Background="Transparent"
         WindowState="Maximized"
         Title="WFast" VerticalAlignment="Center" Topmost="True">
-    <Grid>
-        <Border Background="Black" Opacity=".5" Name="gridBg" />
-        <StackPanel VerticalAlignment="Center" Width="800">
-            <Grid HorizontalAlignment="Right" Focusable="True" KeyDown="Label_KeyDown" Visibility="Collapsed">
-                <Label Background="Tomato" Foreground="White" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">Закрыть</Label>
+    <Window.Template>
+        <ControlTemplate TargetType="Window">
+            <Grid>
+                <Grid Background="Black" Opacity="0.5" Name="gridBack" MouseDown="gridBack_MouseDown">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard SpeedRatio="2">
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="0.5" Duration="00:00:1"></DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Content="{TemplateBinding Content}">
+                    <ContentPresenter.Effect>
+                        <BlurEffect RenderingBias="Performance" Radius="30" x:Name="ContentBlurEffect">
+                        </BlurEffect>
+                    </ContentPresenter.Effect>
+                    <ContentPresenter.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard SpeedRatio="2">
+                                    <ParallelTimeline>
+                                        <ThicknessAnimation Storyboard.TargetProperty="Margin" From="90,0,0,0" To="0,0,0,0" Duration="00:00:1"></ThicknessAnimation>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="00:00:1"></DoubleAnimation>
+                                        <DoubleAnimation 
+                                                Storyboard.TargetName="ContentBlurEffect"
+                                                Storyboard.TargetProperty="Radius"
+                                                To="0" SpeedRatio="1" Duration="00:00:1"></DoubleAnimation>
+                                    </ParallelTimeline>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ContentPresenter.Triggers>
+                </ContentPresenter>
             </Grid>
-            <local:CItems x:Name="cItems" VerticalAlignment="Center"></local:CItems>
-        </StackPanel>
-    </Grid>
-
-
+        </ControlTemplate>
+    </Window.Template>
+    <local:CRunScenariosItems x:Name="cItems" VerticalAlignment="Center" Width="800"></local:CRunScenariosItems>
 </Window>

@@ -5,7 +5,7 @@ using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsCore
 {
-    public class TasksPool
+    public class ScenariosPool
     {
         public Uni Uni { get; internal set; }
 
@@ -20,6 +20,7 @@ namespace UniActionsCore
 
         public void RemoveScenario(Scenario item)
         {
+            item.PrepareToRemove();
             _scenarios.Remove(item);
         }
 
@@ -50,10 +51,16 @@ namespace UniActionsCore
 
             item.AfterActionServerEvent += (x) =>
             {
-                if (item.UseServerThreading && !string.IsNullOrEmpty(item.ServerCommand))
-                    Uni.ServerThreading.ShareState(null, null);
+                Uni.ServerThreading.ShareState();
             };
+
             return result;
+        }
+
+        public void StartActiveScenarios()
+        {
+            foreach (var scenario in _scenarios.Where(x => x.IsActive))
+                scenario.ExecuteAsync(null);
         }
 
         public IEnumerable<string> GetCategories()

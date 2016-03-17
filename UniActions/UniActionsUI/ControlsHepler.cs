@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -43,6 +44,7 @@ namespace UniActionsUI
                 throw new Exception("Not an int");
             else return res;
         }
+
         public static ushort GetUShort(this TextBox tb)
         {
             if (tb.Text == "")

@@ -58,10 +58,12 @@ namespace UniActionsCore
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedActionServerCommand] = item.ServerCommand;
 
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedCategory] = item.Category;
-                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedCustomAction] = item.ActionBag.GetType().FullName;
+                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedCustomAction] = item.Action.GetType().FullName;
 
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedUseServerCommand] = item.UseServerThreading;
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedIsActive] = item.IsActive;
+                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedIndex] = item.Index;
+                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedOffOnState] = item.UseOnOffState;
                     }
                     catch (Exception e)
                     {
@@ -135,13 +137,15 @@ namespace UniActionsCore
                     {
                         var actionItem = new Scenario();
 #if !DEBUG
-                    try
-                    {
+                        try
+                        {
 #endif
                         actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
                         actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
                         actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
                         actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
+                        actionItem.Index = hobject[VAC.AppSettingsNames.UsedIndex];
+                        actionItem.UseOnOffState = hobject[VAC.AppSettingsNames.UsedOffOnState];
 
                         var actionTypeName = hobject[VAC.AppSettingsNames.UsedCustomAction];
                         var actionType = Uni.ModulesControl.GetActionTypeByName(actionTypeName);
@@ -154,11 +158,11 @@ namespace UniActionsCore
 
                         Uni.TasksPool.Add(actionItem);
 #if !DEBUG
-                    }
-                    catch (Exception e)
-                    {
-                        result.AddException(e);
-                    }
+                        }
+                        catch (Exception e)
+                        {
+                            result.AddException(e);
+                        }
 #endif
                     }
                 //#if !DEBUG

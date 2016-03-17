@@ -101,7 +101,7 @@ namespace UniActionsUI.ScenarioCreation
         {
             var actionString = Helper.CreateParamsViewString(_actionBag.Action).Replace(";", ActionStringSplitter);
             if (!string.IsNullOrWhiteSpace(actionString))
-                this.ActionString = " (" + actionString + ")";
+                this.ActionString = " (" + actionString + ") ";
             else
                 this.ActionString = actionString;
         }

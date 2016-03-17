@@ -12,6 +12,11 @@ namespace UniStandartActions.Actions
 
         private static Dispatcher _dispatcher;
 
+        protected override bool ShowWithoutActivation
+        {
+            get { return true; }
+        }
+
         public static void SetMessage(string message)
         {
             if (_messageShow == null)
@@ -26,8 +31,7 @@ namespace UniStandartActions.Actions
                 })
                 {
                     IsBackground = true,
-                    ApartmentState = ApartmentState.STA,
-                    //Priority = ThreadPriority.AboveNormal
+                    ApartmentState = ApartmentState.STA
                 }.Start();
             }
             else {

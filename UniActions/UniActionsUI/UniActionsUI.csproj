@@ -61,21 +61,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CActions.xaml.cs">
-      <DependentUpon>CActions.xaml</DependentUpon>
+    <Compile Include="ScenarioCreation\Utils.cs" />
+    <Compile Include="ScenariosView.xaml.cs">
+      <DependentUpon>ScenariosView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CBoolSelect.xaml.cs">
-      <DependentUpon>CBoolSelect.xaml</DependentUpon>
+    <Compile Include="BooleanSelector.xaml.cs">
+      <DependentUpon>BooleanSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CItem.xaml.cs">
-      <DependentUpon>CItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CItems.xaml.cs">
-      <DependentUpon>CItems.xaml</DependentUpon>
+    <Compile Include="CRunScenariosItems.xaml.cs">
+      <DependentUpon>CRunScenariosItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="CPorts.xaml.cs">
       <DependentUpon>CPorts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CRunScenario.xaml.cs">
+      <DependentUpon>CRunScenario.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditScenarioViewContext.cs" />
     <Compile Include="ScenarioCreation\ActionViewExtended.xaml.cs">
       <DependentUpon>ActionViewExtended.xaml</DependentUpon>
     </Compile>
@@ -95,12 +97,15 @@
       <DependentUpon>ComplexCheckerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScenarioCreation\ComplexCheckerViewContext.cs" />
+    <Compile Include="ScenarioCreation\DoubleScenarioActionView.xaml.cs">
+      <DependentUpon>DoubleScenarioActionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScenarioCreation\EditableUserControl.cs" />
     <Compile Include="ScenarioCreation\SingleActionScenarioView.xaml.cs">
       <DependentUpon>SingleActionScenarioView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScenarioCreation\ScenarioView.xaml.cs">
-      <DependentUpon>ScenarioView.xaml</DependentUpon>
+    <Compile Include="ScenarioCreation\ScenarioActionView.xaml.cs">
+      <DependentUpon>ScenarioActionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScenarioCreation\WhileViewContext.cs" />
     <Compile Include="ScenarioCreation\WhileView.xaml.cs">
@@ -110,21 +115,22 @@
       <DependentUpon>IfView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScenarioCreation\IfViewContext.cs" />
+    <Compile Include="ScenariosViewContext.cs" />
     <Compile Include="Starter.cs" />
     <Compile Include="TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="СCreateScenario.xaml.cs">
-      <DependentUpon>СCreateScenario.xaml</DependentUpon>
+    <Compile Include="EditScenarioView.xaml.cs">
+      <DependentUpon>EditScenarioView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WFast.xaml.cs">
       <DependentUpon>WFast.xaml</DependentUpon>
     </Compile>
-    <Page Include="CActions.xaml">
+    <Page Include="ScenariosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CBoolSelect.xaml">
+    <Page Include="BooleanSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,15 +146,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CItems.xaml">
+    <Page Include="CRunScenariosItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CPorts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CRunScenario.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -216,11 +222,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ScenarioCreation\DoubleScenarioActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScenarioCreation\SingleActionScenarioView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ScenarioCreation\ScenarioView.xaml">
+    <Page Include="ScenarioCreation\ScenarioActionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -244,11 +254,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\ListViewStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\TextBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="СCreateScenario.xaml">
+    <Page Include="EditScenarioView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -14,11 +14,17 @@ namespace UniActionsCore.ScenarioCreation
             public static readonly DispatcherPriority DispatcherPriority = System.Windows.Threading.DispatcherPriority.Background;
         }
 
-        private Thread _thread;
         public Scenario()
         {
             this.IsActive = true;
+            this.UseOnOffState = true;
             Guid = Guid.NewGuid();
+            StartDispatcher();
+        }
+
+        private void StartDispatcher()
+        {
+            this.Dispatcher = null;
             _thread = new Thread(() =>
             {
                 this.Dispatcher = Dispatcher.CurrentDispatcher;
@@ -27,7 +33,37 @@ namespace UniActionsCore.ScenarioCreation
             _thread.SetApartmentState(ApartmentState.STA);
             _thread.IsBackground = true;
             _thread.Start();
+            while (this.Dispatcher == null) //waitinig while dispatcher starts
+                Thread.Sleep(1);
         }
+
+        internal void PrepareToRemove()
+        {
+            ClearDispatcher();
+        }
+
+        private void ClearDispatcher()
+        {
+            KillDispatcher();
+            StartDispatcher();
+        }
+
+        public void KillDispatcher()
+        {
+            this.IsBusyNow = false;
+            if (_thread != null)
+                _thread.Abort();
+        }
+
+        public void Refresh()
+        {
+            bool wasBusy = this.IsBusyNow;
+            ClearDispatcher();
+            if (wasBusy)
+                ExecuteAsync(null);
+        }
+
+        private Thread _thread;
 
         private ActionBag _actionBag;
         public ActionBag ActionBag
@@ -54,10 +90,30 @@ namespace UniActionsCore.ScenarioCreation
         public bool UseServerThreading { get; set; }
         public string ServerCommand { get; set; }
         public string Name { get; set; }
-        public string OnState { get; set; }
-        public string OffState { get; set; }
+        public bool UseOnOffState { get; set; }
         public string Category { get; set; }
         public bool IsActive { get; set; }
+        public int Index { get; set; }
+
+        private string OnState_DCAction
+        {
+            get
+            {
+                if (UseOnOffState)
+                    return "Завершить: " + this.Name;
+                else return this.Name;
+            }
+        }
+
+        private string OffState_DCAction
+        {
+            get
+            {
+                if (UseOnOffState)
+                    return "Начать: " + this.Name;
+                else return this.Name;
+            }
+        }
 
         public event Action<Scenario> AfterActionServerEvent;
 
@@ -81,9 +137,10 @@ namespace UniActionsCore.ScenarioCreation
                 AfterAction(this);
         }
 
-        private void RaiseAfterEvent()
+        private void RaiseAfterEvent(bool withoutServerEvent)
         {
-            RaiseAfterActionServerAsync();
+            if (!withoutServerEvent)
+                RaiseAfterActionServerAsync();
             RaiseAfterAction();
         }
 
@@ -93,31 +150,81 @@ namespace UniActionsCore.ScenarioCreation
 
         public string CheckState()
         {
-            var result = this.Dispatcher.Invoke(new Func<string>(() =>
+            if (this.Action is DoubleComplexAction)
             {
-                lock (_locker)
-                    return this.Action.State;
-            }), Defaults.DispatcherPriority, null);
-            return result.ToString();
+                return Action.State == DoubleComplexAction.BeginState ?
+                        OffState_DCAction :
+                        OnState_DCAction;
+            }
+            else
+            {
+                var result = this.Dispatcher.Invoke(new Func<string>(() =>
+                {
+                    lock (_locker)
+                    {
+                        return Action.State;
+                    }
+                }), Defaults.DispatcherPriority, null);
+                return result.ToString();
+            }
         }
 
         public void CheckStateAsync(Action<string> callback)
         {
-            var result = this.Dispatcher.BeginInvoke(new Action(() =>
+            if (this.Action is DoubleComplexAction)
             {
-                lock (_locker)
-                    callback(this.Action.State);
-            }), Defaults.DispatcherPriority, null);
+                callback(Action.State == DoubleComplexAction.BeginState ?
+                        OffState_DCAction :
+                        OnState_DCAction);
+            }
+            else
+            {
+                var result = this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    lock (_locker)
+                    {
+                        callback(Action.State);
+                    }
+                }), Defaults.DispatcherPriority);
+            }
+        }
+
+        private string ExecuteWithoutDispatcherInvoking(string inputState, bool withoutServerEvent)
+        {
+            lock (_locker)
+            {
+                if (this.Action is DoubleComplexAction)
+                {
+                    var state = DoubleComplexAction.BeginState;
+                    if (((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Ended)
+                        state = DoubleComplexAction.EndState;
+
+                    this.Dispatcher.InvokeAsync(new Action(() =>
+                    {
+                        this.IsBusyNow = true;
+                        this.Action.Do(state);
+                        this.IsBusyNow = false;
+                        RaiseAfterEvent(withoutServerEvent);
+                    }));
+
+                    return state == DoubleComplexAction.BeginState ?
+                        OffState_DCAction :
+                        OnState_DCAction;
+                }
+                else
+                    return this.Action.Do(inputState);
+            }
         }
 
         public string Execute(string inputState, bool withoutServerEvent)
         {
             try
             {
+                if (this.Action is DoubleComplexAction)
+                    ClearDispatcher();
                 var result = this.Dispatcher.Invoke(new Func<string>(() =>
                 {
-                    lock (_locker)
-                        return this.Action.Do(inputState);
+                    return ExecuteWithoutDispatcherInvoking(inputState, withoutServerEvent);
                 }), Defaults.DispatcherPriority, null);
                 return result.ToString();
             }
@@ -127,41 +234,28 @@ namespace UniActionsCore.ScenarioCreation
             }
             finally
             {
-                if (withoutServerEvent)
-                    RaiseAfterAction();
-                else
-                    RaiseAfterEvent();
+                RaiseAfterEvent(withoutServerEvent);
             }
         }
 
         public void ExecuteAsync(Action<string> callback)
         {
+            if (this.Action is DoubleComplexAction)
+                ClearDispatcher();
             this.Dispatcher.BeginInvoke(new Action(() =>
             {
-                var state = "";
-                lock (_locker)
-                    state = this.Action.Do(this.Action.State);
-                callback(state);
-                RaiseAfterEvent();
-            }), Defaults.DispatcherPriority, null);
-        }
-
-        public void Shutdown()
-        {
-            this.Dispatcher.InvokeShutdown();
-        }
-
-        public void ShutdownWithCloseAction()
-        {
-
+                var res = ExecuteWithoutDispatcherInvoking(CheckState(), false);
+                if (callback != null)
+                    callback(res);
+                RaiseAfterEvent(false);
+            }), Defaults.DispatcherPriority);
+            if (this.Action is DoubleComplexAction)
+                RaiseAfterEvent(false);
         }
 
         public bool IsBusyNow
         {
-            get
-            {
-                return this.Action.IsBusyNow;
-            }
+            get; private set;
         }
 
         public Scenario Clone()
@@ -172,6 +266,8 @@ namespace UniActionsCore.ScenarioCreation
                 Category = this.Category,
                 Guid = this.Guid,
                 IsActive = this.IsActive,
+                UseOnOffState = this.UseOnOffState,
+                Index = this.Index,
                 Name = this.Name,
                 ServerCommand = this.ServerCommand,
                 UseServerThreading = this.UseServerThreading

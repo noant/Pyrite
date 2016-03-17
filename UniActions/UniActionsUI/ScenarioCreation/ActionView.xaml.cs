@@ -44,12 +44,24 @@ namespace UniActionsUI.ScenarioCreation
 
             this.btDelete.Click += (o, e) =>
             {
+                RaiseRemove();
+            };
+
+            this.KeyDown += (o, e) =>
+            {
+                if (e.Key == Key.Delete)
+                    RaiseRemove();
+            };
+        }
+
+        public void RaiseRemove()
+        {
+            if (Utils.IsUserSureToDeleteCurrentOperator())
                 if (Remove != null)
                 {
                     Remove(this, new EventArgs());
                     RaiseChanged();
                 }
-            };
         }
 
         public event Action<object, EventArgs> Remove;

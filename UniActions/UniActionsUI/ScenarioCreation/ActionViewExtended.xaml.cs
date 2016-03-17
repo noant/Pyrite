@@ -46,8 +46,13 @@ namespace UniActionsUI.ScenarioCreation
 
         public void RaiseChanged()
         {
-            if (Changed != null)
+            if (Changed != null && !IgnoreChangedEvent)
                 Changed(this, new EventArgs());
+        }
+
+        public bool IgnoreChangedEvent
+        {
+            get; set;
         }
 
         public event Action<object, EventArgs> Changed;
