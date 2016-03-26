@@ -5,7 +5,8 @@ using System.Linq;
 
 namespace UniActionsCore
 {
-    public static class Resulting{
+    public static class Resulting
+    {
         static Resulting()
         {
             EnableExceptionHandling = true;
@@ -38,8 +39,10 @@ namespace UniActionsCore
     public class Result<T>
     {
         private List<Exception> _exceptions;
-        public IEnumerable<Exception> Exceptions { 
-            get {
+        public IEnumerable<Exception> Exceptions
+        {
+            get
+            {
                 if (_exceptions == null)
                     _exceptions = new List<Exception>();
                 return _exceptions;
@@ -61,11 +64,11 @@ namespace UniActionsCore
         {
             Log.Write(e);
 
-#if RELEASE
+#if !DEBUG
 
             if (_exceptions == null)
                 _exceptions = new List<Exception>();
-            
+
             _exceptions.Add(e);
 
             if (!Resulting.NotCriticalExceptions.Any(x => x.Equals(e.GetType())))
@@ -97,13 +100,14 @@ namespace UniActionsCore
         }
     }
 
-    public class Warning : Exception {
+    public class Warning : Exception
+    {
         public Warning(string message) : base(message) { }
     }
 
     public class VoidResult : Result<object>
-    { 
-        
+    {
+
     }
 
     public delegate void CriticalHandler(IEnumerable<Exception> exceptions);

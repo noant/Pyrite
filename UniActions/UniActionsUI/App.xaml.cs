@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using UniActionsClientIntefaces;
 using UniActionsCore;
 using UniActionsCore.ScenarioCreation;
-using UniStandartActions.Actions;
-using UniStandartActions.Checkers;
 
 namespace UniActionsUI
 {
@@ -27,7 +21,10 @@ namespace UniActionsUI
                     try
                     {
                         lock (App.Current)
+                        {
+                            MessageBox.Show("Критическая ошибка. Программа будет выключена");
                             App.Current.Shutdown();
+                        }
                     }
                     catch { }
                 };
@@ -44,7 +41,7 @@ namespace UniActionsUI
             };
 
             Uni = Uni.Create().Value;
-            foreach (var item in Uni.TasksPool.Scenarios)
+            foreach (var item in Uni.ScenariosPool.Scenarios)
                 item.AfterAction += (x) =>
                 {
                     if (ItemExecuted != null)
@@ -54,38 +51,10 @@ namespace UniActionsUI
             Starter.Initialize();
         }
 
-        public static Brush WindowBackground = new SolidColorBrush(SystemColors.ControlColor);
-
-        public void SelectedTabChanged(object sender, RoutedEventArgs e)
-        {
-            var tabControl = (TabControl)sender;
-
-            if (tabControl.SelectedIndex == -1) return;
-            var contentControl = ((TabItem)tabControl.Items[tabControl.SelectedIndex]).Content;
-
-            if (!_tempTabsSelected.ContainsKey(tabControl))
-            {
-                _tempTabsSelected.Add(tabControl, contentControl);
-            }
-
-            if (_tempTabsSelected[tabControl] != contentControl)
-                _tempTabsSelected[tabControl] = contentControl;
-            else return;
-
-            if (contentControl is ControlsHelper.IRefreshable)
-                ((ControlsHelper.IRefreshable)contentControl).Refresh();
-            else if (contentControl is TabControl)
-                SelectedTabChanged(contentControl, e);
-            else if (contentControl is Grid && ((Grid)contentControl).Children.OfType<TabControl>().Count() > 0)
-                foreach (var c in ((Grid)contentControl).Children.OfType<TabControl>())
-                {
-                    SelectedTabChanged(c, e);
-                }
-        }
+        public static readonly Brush WindowBackground = new SolidColorBrush(SystemColors.ControlColor);
 
         public static event ActionItemExecuted ItemExecuted;
 
-        private static Dictionary<TabControl, object> _tempTabsSelected = new Dictionary<TabControl, object>();
     }
 
     public delegate void ActionItemExecuted(Scenario item);

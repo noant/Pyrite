@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
@@ -53,7 +54,10 @@ namespace UniActionsCore.ScenarioCreation
         {
             if (Checker != null)
                 while (Checker.IsCanDoNow)
+                {
                     Action.Do("");
+                    Thread.Sleep(1);
+                }
             return "";
         }
 
@@ -62,22 +66,28 @@ namespace UniActionsCore.ScenarioCreation
 
         }
 
-        public void RemoveChecker(Type checkerType)
+        public bool RemoveChecker(Type checkerType)
         {
+            bool result = false;
             if (Checker.GetType().Equals(checkerType))
                 Checker = null;
             else if (Checker != null && Checker is IHasCheckerAction)
-                ((IHasCheckerAction)Checker).RemoveChecker(checkerType);
+                if (((IHasCheckerAction)Checker).RemoveChecker(checkerType))
+                    result = true;
 
             if (Action != null && Action is IHasCheckerAction)
-                ((IHasCheckerAction)Action).RemoveChecker(checkerType);
+                if (((IHasCheckerAction)Action).RemoveChecker(checkerType))
+                    result = true;
+            return result;
         }
 
 
-        public void RemoveAction(Type actionType)
+        public bool RemoveAction(Type actionType)
         {
             if (Action != null && Action is IHasCheckerAction)
-                ((IHasCheckerAction)Action).RemoveAction(actionType);
+                if (((IHasCheckerAction)Action).RemoveAction(actionType))
+                    return true;
+            return false;
         }
     }
 }

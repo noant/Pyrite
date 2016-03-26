@@ -71,8 +71,8 @@
     <Compile Include="CreateNModbusSingleCoilActionForm.Designer.cs">
       <DependentUpon>CreateNModbusSingleCoilActionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NModbusSingleCoilAction.cs" />
-    <Compile Include="NModbusSingleCoilChecker.cs" />
+    <Compile Include="NModbusRtuSingleCoilAction.cs" />
+    <Compile Include="NModbusRtuSingleCoilChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statics.cs" />
   </ItemGroup>

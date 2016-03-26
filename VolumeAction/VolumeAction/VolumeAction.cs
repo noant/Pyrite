@@ -77,6 +77,7 @@ namespace VolumeAction
         [XmlIgnore]
         public bool IsBusyNow { get; private set; }
 
+        [HumanFriendlyName("Режим")]
         public VolumeChangeMode Mode
         {
             get
@@ -90,6 +91,7 @@ namespace VolumeAction
             }
         }
 
+        [HumanFriendlyName("Значение")]
         public byte Value
         {
             get
@@ -106,8 +108,8 @@ namespace VolumeAction
 
     public enum VolumeChangeMode
     {
-        Set,
-        Plus,
-        Minus
+        Set = 1,
+        Plus = 2,
+        Minus = 4
     }
 }

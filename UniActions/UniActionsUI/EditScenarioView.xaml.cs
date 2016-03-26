@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,13 +11,15 @@ namespace UniActionsUI
     /// <summary>
     /// Interaction logic for WCreateAction.xaml
     /// </summary>
-    public partial class EditScenarioView : UserControl
+    public partial class EditScenarioView : UserControl, ControlsHelper.IRefreshable
     {
         public EditScenarioView()
         {
             InitializeComponent();
 
             ControlsHelper.AppendOnlyInteger(tbIndex, int.MinValue, int.MaxValue);
+
+            SetScenario(null);
 
             this.tbName.TextChanged += (o, e) => ProcessOkEnable();
 
@@ -49,14 +50,16 @@ namespace UniActionsUI
                 ProcessOkEnable();
 
             this.btCancel.Click += (o, e) =>
-                ProcessOkEnable();
+                SetScenario(_tempItem);
 
             this.btCreate.Click += (o, e) =>
             {
-                var res = App.Uni.TasksPool.CheckScenario(Scenario);
+                var res = App.Uni.ScenariosPool.CheckScenario(Scenario);
 
                 if (res.Value)
                 {
+                    var wasBusy = _tempItem.IsBusyNow;
+                    _tempItem.KillDispatcher();
                     _tempItem.ActionBag = Scenario.ActionBag;
                     _tempItem.Category = Scenario.Category;
                     _tempItem.IsActive = Scenario.IsActive;
@@ -65,15 +68,22 @@ namespace UniActionsUI
                     _tempItem.ServerCommand = Scenario.ServerCommand;
                     _tempItem.UseServerThreading = Scenario.UseServerThreading;
                     _tempItem.Index = Scenario.Index;
-                    _tempItem.Refresh();
+                    if (wasBusy)
+                        _tempItem.ExecuteAsync(null);
                     DisableButtons();
                     App.Uni.CommitChanges();
                     if (Applying != null)
                         Applying(this, new EventArgs());
+                    SetScenario(_tempItem);
                 }
             };
 
-            SetScenario(null);
+            this.Loaded += (o, e) => DisableButtons();
+        }
+
+        public void Refresh()
+        {
+            SetScenario(_tempItem);
         }
 
         private Scenario _tempItem;
@@ -116,7 +126,7 @@ namespace UniActionsUI
                 DisableButtons();
             else
             {
-                var result = App.Uni.TasksPool.CheckScenario(Scenario);
+                var result = App.Uni.ScenariosPool.CheckScenario(Scenario);
                 if (result.Value)
                 {
                     tbStatus.Text = "";

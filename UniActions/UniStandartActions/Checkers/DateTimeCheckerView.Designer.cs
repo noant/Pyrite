@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbOnlyWhenCompStart = new System.Windows.Forms.CheckBox();
             this.cbMonday = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbSunday = new System.Windows.Forms.CheckBox();
@@ -57,16 +56,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudHour)).BeginInit();
             this.SuspendLayout();
             // 
-            // cbOnlyWhenCompStart
-            // 
-            this.cbOnlyWhenCompStart.AutoSize = true;
-            this.cbOnlyWhenCompStart.Location = new System.Drawing.Point(12, 12);
-            this.cbOnlyWhenCompStart.Name = "cbOnlyWhenCompStart";
-            this.cbOnlyWhenCompStart.Size = new System.Drawing.Size(242, 17);
-            this.cbOnlyWhenCompStart.TabIndex = 0;
-            this.cbOnlyWhenCompStart.Text = "Только один раз при запуске компьютера";
-            this.cbOnlyWhenCompStart.UseVisualStyleBackColor = true;
-            // 
             // cbMonday
             // 
             this.cbMonday.AutoSize = true;
@@ -88,7 +77,7 @@
             this.groupBox1.Controls.Add(this.cbWednesday);
             this.groupBox1.Controls.Add(this.cbTuesday);
             this.groupBox1.Controls.Add(this.cbMonday);
-            this.groupBox1.Location = new System.Drawing.Point(12, 35);
+            this.groupBox1.Location = new System.Drawing.Point(12, 10);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(110, 185);
             this.groupBox1.TabIndex = 1;
@@ -180,7 +169,7 @@
             this.groupBox2.Controls.Add(this.cbEveryYear);
             this.groupBox2.Controls.Add(this.tbDateView);
             this.groupBox2.Controls.Add(this.dtPicker);
-            this.groupBox2.Location = new System.Drawing.Point(128, 35);
+            this.groupBox2.Location = new System.Drawing.Point(128, 10);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(230, 185);
             this.groupBox2.TabIndex = 2;
@@ -299,7 +288,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(283, 231);
+            this.btCancel.Location = new System.Drawing.Point(283, 206);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 4;
@@ -309,7 +298,7 @@
             // btOk
             // 
             this.btOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btOk.Location = new System.Drawing.Point(196, 231);
+            this.btOk.Location = new System.Drawing.Point(196, 206);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
             this.btOk.TabIndex = 3;
@@ -322,12 +311,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(371, 263);
+            this.ClientSize = new System.Drawing.Size(371, 239);
             this.Controls.Add(this.btOk);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.cbOnlyWhenCompStart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
             this.Name = "DateTimeCheckerView";
@@ -340,7 +328,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMinute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHour)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -353,7 +340,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btCancel;
         private System.Windows.Forms.Button btOk;
-        internal System.Windows.Forms.CheckBox cbOnlyWhenCompStart;
         internal System.Windows.Forms.CheckBox cbMonday;
         internal System.Windows.Forms.CheckBox cbSunday;
         internal System.Windows.Forms.CheckBox cbSaturday;

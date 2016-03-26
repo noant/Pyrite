@@ -30,8 +30,10 @@
             Style="{StaticResource ComboBoxFlatCheckerStyle}"></ComboBox>
         <Label Style="{StaticResource LabelParams}"
                 IsEnabled="{Binding IsInEditMode,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}"
+                Padding="5"
                 Content="{Binding Path=CheckerString}" 
                 Name="tbParams"
+                Visibility="{Binding ParamsVisibility}"
                 Cursor="Hand">
         </Label>
     </StackPanel>

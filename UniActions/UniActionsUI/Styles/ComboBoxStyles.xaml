@@ -4,75 +4,63 @@
     <ControlTemplate x:Key="ComboBoxToggleButton"
                 TargetType="{x:Type ToggleButton}">
         <Grid x:Name="Arrow" Background="{TemplateBinding Background}" IsEnabled="{TemplateBinding IsEnabled}">
+            <!--<Grid.Effect>
+                <DropShadowEffect x:Name="shadow" BlurRadius="4" Direction="180" Opacity="0.2"></DropShadowEffect>
+            </Grid.Effect>-->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <ColorAnimation To="Gray" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1">
+                            </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.5" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ColorAnimation To="SteelBlue" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1" AutoReverse="True">
+                            </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.7" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
             <Grid x:Name="fill" Background="Transparent" Panel.ZIndex="-1">
-                <Grid.Style>
-                    <Style TargetType="{x:Type Grid}">
-                        <Style.Triggers>
-                            <EventTrigger RoutedEvent="Mouse.MouseEnter">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation
-                                                To="SteelBlue"
-                                                Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                                Duration="0:0:0.1">
-                                        </ColorAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="Mouse.MouseLeave">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation
-                                                To="Transparent"
-                                                Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                                Duration="0:0:0.1">
-                                        </ColorAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
             </Grid>
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="ComboBoxToggleButtonOnlySelect"
                 TargetType="{x:Type ToggleButton}">
         <Grid Margin="0" x:Name="Arrow" Background="{TemplateBinding Background}" IsEnabled="{TemplateBinding IsEnabled}">
+            <!--<Grid.Effect>
+                <DropShadowEffect x:Name="shadow" BlurRadius="4" Direction="180" Opacity="0.2"></DropShadowEffect>
+            </Grid.Effect>-->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <ColorAnimation To="Gray" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1">
+                            </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.5" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ColorAnimation To="SteelBlue" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1" AutoReverse="True">
+                            </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.7" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
             <Grid Margin="0" x:Name="fill" Background="Transparent">
-                <Grid Height="14" VerticalAlignment="Stretch" HorizontalAlignment="Center">
-                    <Line Stroke="White" VerticalAlignment="Top" HorizontalAlignment="Center" X1="0" Y1="0" X2="10" Y2="0"></Line>
-                    <Line Stroke="White" VerticalAlignment="Center" HorizontalAlignment="Center" X1="0" Y1="0" X2="10" Y2="0"></Line>
-                    <Line Stroke="White" VerticalAlignment="Bottom" HorizontalAlignment="Center" X1="0" Y1="0" X2="10" Y2="0"></Line>
+                <Grid Height="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Line Stroke="Gray" VerticalAlignment="Top" HorizontalAlignment="Center" X1="0" Y1="0" X2="10" Y2="0"></Line>
+                    <Line Stroke="Gray" VerticalAlignment="Center" HorizontalAlignment="Center" X1="0" Y1="0" X2="10" Y2="0"></Line>
+                    <Line Stroke="Gray" VerticalAlignment="Bottom" HorizontalAlignment="Center" X1="0" Y1="0" X2="10" Y2="0"></Line>
                 </Grid>
-                <Grid.Style>
-                    <Style TargetType="{x:Type Grid}">
-                        <Style.Triggers>
-                            <EventTrigger RoutedEvent="Mouse.MouseEnter">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation
-                                                To="LightSkyBlue"
-                                                Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                                Duration="0:0:0.1">
-                                        </ColorAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="Mouse.MouseLeave">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation
-                                                To="SlateBlue"
-                                                Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                                Duration="0:0:0.1">
-                                        </ColorAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
             </Grid>
         </Grid>
     </ControlTemplate>
@@ -129,7 +117,7 @@
                                 </ScrollViewer>
                             </Grid>
                         </Popup>
-                        <Border BorderBrush="Black" BorderThickness="0,0,1,1" Opacity="0.2"></Border>
+                        <Border Opacity="0.2" BorderBrush="Black" BorderThickness="1,0,0,0"></Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -197,7 +185,7 @@
                                 </ScrollViewer>
                             </Grid>
                         </Popup>
-                        <Border BorderBrush="Black" BorderThickness="0,0,1,1" Opacity="0.2"></Border>
+                        <Border Opacity="0.2" BorderBrush="Black" BorderThickness="1,0,0,0"></Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

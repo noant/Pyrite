@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using UniActionsCore.ScenarioCreation;
 
@@ -155,7 +152,7 @@ namespace UniActionsUI
         {
             get
             {
-                return App.Uni.TasksPool.Scenarios.
+                return App.Uni.ScenariosPool.Scenarios.
                     Where(x => !string.IsNullOrEmpty(x.Category)).
                     Select(x => x.Category).
                     Distinct().

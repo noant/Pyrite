@@ -72,21 +72,29 @@ namespace UniActionsCore.ScenarioCreation
             return true;
         }
 
-        public void RemoveChecker(Type checkerType)
+        public bool RemoveChecker(Type checkerType)
         {
+            bool result = false;
             if (OperatorCheckers != null)
                 foreach (var operatorPair in this.OperatorCheckers.ToList())
                 {
                     if (operatorPair.Checker.GetType().Equals(checkerType))
-                        this.OperatorCheckers.Remove(operatorPair);
+                    {
+                        if (this.OperatorCheckers.Remove(operatorPair))
+                            result = true;
+                    }
                     else if (operatorPair.Checker is IHasCheckerAction)
-                        ((IHasCheckerAction)operatorPair).RemoveChecker(checkerType);
+                    {
+                        if (((IHasCheckerAction)operatorPair).RemoveChecker(checkerType))
+                            result = true;
+                    }
                 }
+            return result;
         }
 
-        public void RemoveAction(Type actionType)
+        public bool RemoveAction(Type actionType)
         {
-
+            return false;
         }
 
         public void Refresh()

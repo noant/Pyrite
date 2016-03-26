@@ -211,56 +211,70 @@ namespace UniActionsCore
             return exception == null;
         }
 
-        public VoidResult RemoveChecker(Type checkerType)
+        public Result<IEnumerable<Scenario>> RemoveChecker(Type checkerType)
         {
-            var result = new VoidResult();
+            var result = new Result<IEnumerable<Scenario>>();
+            var scenariosWasEdited = new List<Scenario>();
             try
             {
-                lock (Uni.TasksPool.Scenarios)
+                lock (Uni.ScenariosPool.Scenarios)
                 {
                     var assemblyName = checkerType.Assembly.FullName;
                     _customCheckers.RemoveAll(x => x.Assembly.FullName == assemblyName);
-                    foreach (var action in Uni.TasksPool.Scenarios)
-                        if (action.ActionBag is IHasCheckerAction)
-                            ((IHasCheckerAction)action).RemoveChecker(checkerType);
+                    foreach (var action in Uni.ScenariosPool.Scenarios)
+                        if (action.Action is IHasCheckerAction)
+                            if (((IHasCheckerAction)action.Action).RemoveChecker(checkerType))
+                                scenariosWasEdited.Add(action);
                 }
             }
             catch (Exception e)
             {
                 result.AddException(e);
             }
+            result.Value = scenariosWasEdited;
             return result;
         }
 
-        public VoidResult RemoveAction(Type actionType)
+        public Result<IEnumerable<Scenario>> RemoveAction(Type actionType)
         {
-            var result = new VoidResult();
+            var result = new Result<IEnumerable<Scenario>>();
+            var scenariosWasEdited = new List<Scenario>();
             try
             {
-                lock (Uni.TasksPool.Scenarios)
+                lock (Uni.ScenariosPool.Scenarios)
                 {
                     var assemblyName = actionType.Assembly.FullName;
                     _customActions.RemoveAll(x => x.Assembly.FullName == assemblyName);
-                    foreach (var action in Uni.TasksPool.Scenarios)
-                        if (action.ActionBag is IHasCheckerAction)
-                            ((IHasCheckerAction)action).RemoveAction(actionType);
+                    foreach (var action in Uni.ScenariosPool.Scenarios.ToArray())
+                    {
+                        if (action.Action is IHasCheckerAction)
+                        {
+                            if (((IHasCheckerAction)action.Action).RemoveAction(actionType))
+                                scenariosWasEdited.Add(action);
+                        }
+                        else if (action.Action.GetType().Equals(actionType))
+                        {
+                            Uni.ScenariosPool.RemoveScenario(action);
+                        }
+                    }
                 }
             }
             catch (Exception e)
             {
                 result.AddException(e);
             }
+            result.Value = scenariosWasEdited;
             return result;
         }
 
         public static ICustomAction Clone(ICustomAction action)
         {
-            return (ICustomAction)HierarchicalData.HierarchicalObjectCrutch.CloneObject(action);
+            return (ICustomAction)HierarchicalObjectCrutch.CloneObject(action);
         }
 
         public static ICustomChecker Clone(ICustomChecker action)
         {
-            return (ICustomChecker)HierarchicalData.HierarchicalObjectCrutch.CloneObject(action);
+            return (ICustomChecker)HierarchicalObjectCrutch.CloneObject(action);
         }
     }
 }

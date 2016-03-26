@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logging;
+using System;
 using System.Threading;
 using System.Windows.Threading;
 using System.Xml.Serialization;
@@ -7,7 +8,7 @@ using UniActionsClientIntefaces;
 namespace UniActionsCore.ScenarioCreation
 {
     [Serializable]
-    public class Scenario : IDisposable
+    public class Scenario : IDisposable, IHasCheckerAction
     {
         private static class Defaults
         {
@@ -52,7 +53,10 @@ namespace UniActionsCore.ScenarioCreation
         {
             this.IsBusyNow = false;
             if (_thread != null)
+            {
                 _thread.Abort();
+                _thread = null;
+            }
         }
 
         public void Refresh()
@@ -193,27 +197,35 @@ namespace UniActionsCore.ScenarioCreation
         {
             lock (_locker)
             {
-                if (this.Action is DoubleComplexAction)
+                try
                 {
-                    var state = DoubleComplexAction.BeginState;
-                    if (((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Ended)
-                        state = DoubleComplexAction.EndState;
-
-                    this.Dispatcher.InvokeAsync(new Action(() =>
+                    if (this.Action is DoubleComplexAction)
                     {
-                        this.IsBusyNow = true;
-                        this.Action.Do(state);
-                        this.IsBusyNow = false;
-                        RaiseAfterEvent(withoutServerEvent);
-                    }));
+                        var state = DoubleComplexAction.BeginState;
+                        if (((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Ended)
+                            state = DoubleComplexAction.EndState;
 
-                    return state == DoubleComplexAction.BeginState ?
-                        OffState_DCAction :
-                        OnState_DCAction;
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            this.IsBusyNow = true;
+                            this.Action.Do(state);
+                            this.IsBusyNow = false;
+                            RaiseAfterEvent(withoutServerEvent);
+                        }));
+
+                        return ((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Began ?
+                            OffState_DCAction :
+                            OnState_DCAction;
+                    }
+                    else
+                        return this.Action.Do(inputState);
                 }
-                else
-                    return this.Action.Do(inputState);
+                catch (Exception e)
+                {
+                    Log.Write(e);
+                }
             }
+            return string.Empty;
         }
 
         public string Execute(string inputState, bool withoutServerEvent)
@@ -278,7 +290,27 @@ namespace UniActionsCore.ScenarioCreation
 
         public void Dispose()
         {
-            this._thread.Abort();
+            KillDispatcher();
+        }
+
+        public bool RemoveChecker(Type checkerType)
+        {
+            if (this.Action is IHasCheckerAction)
+                if (((IHasCheckerAction)this.Action).RemoveChecker(checkerType))
+                {
+                    return true;
+                }
+            return false;
+        }
+
+        public bool RemoveAction(Type actionType)
+        {
+            if (this.Action is IHasCheckerAction)
+                if (((IHasCheckerAction)this.Action).RemoveAction(actionType))
+                {
+                    return true;
+                }
+            return false;
         }
 
         private Dispatcher Dispatcher;

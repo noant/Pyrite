@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsUI
@@ -13,7 +10,7 @@ namespace UniActionsUI
         {
             get
             {
-                return App.Uni.TasksPool.Scenarios.Select(x => new ScenarioViewItem() { Scenario = x });
+                return App.Uni.ScenariosPool.Scenarios.Select(x => new ScenarioViewItem() { Scenario = x });
             }
         }
 

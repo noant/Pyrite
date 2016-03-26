@@ -4,7 +4,7 @@ namespace UniActionsCore.ScenarioCreation
 {
     public interface IHasCheckerAction
     {
-        void RemoveChecker(Type checkerType);
-        void RemoveAction(Type actionType);
+        bool RemoveChecker(Type checkerType);
+        bool RemoveAction(Type actionType);
     }
 }

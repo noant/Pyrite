@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using System.Linq;
-using System.Windows.Controls;
-using UniActionsCore.ScenarioCreation;
-using System;
-using UniStandartActions.Actions;
-using System.Windows.Data;
+﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using UniActionsCore.ScenarioCreation;
 
 namespace UniActionsUI
 {
@@ -41,7 +40,7 @@ namespace UniActionsUI
 
                 scenario.ServerCommand = Guid.NewGuid().ToString();
                 scenario.Name = "Новый сценарий " + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss");
-                App.Uni.TasksPool.Add(scenario);
+                App.Uni.ScenariosPool.Add(scenario);
                 RefreshListView();
                 lvItems.SelectedItem = new ScenariosViewContext.ScenarioViewItem() { Scenario = scenario };
                 App.Uni.CommitChanges();
@@ -81,10 +80,13 @@ namespace UniActionsUI
         public void Refresh()
         {
             RefreshListView();
-            if (App.Uni.TasksPool.Scenarios.Any())
+            if (App.Uni.ScenariosPool.Scenarios.Any())
+            {
                 this.lvItems.SelectedIndex = 0;
+            }
             else this.lvItems.SelectedIndex = -1;
             scenarioView.DisableButtons();
+            this.scenarioView.Refresh();
         }
 
         private void RemoveCurrentScenario()
@@ -93,7 +95,7 @@ namespace UniActionsUI
             {
                 if (MessageBox.Show("Удалить выбранный сценарий?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    App.Uni.TasksPool.RemoveScenario(((ScenariosViewContext.ScenarioViewItem)this.lvItems.SelectedItem).Scenario);
+                    App.Uni.ScenariosPool.RemoveScenario(((ScenariosViewContext.ScenarioViewItem)this.lvItems.SelectedItem).Scenario);
                     App.Uni.CommitChanges();
                     Refresh();
                 }

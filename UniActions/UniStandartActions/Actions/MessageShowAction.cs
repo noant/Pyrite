@@ -1,7 +1,7 @@
-﻿using HierarchicalData;
-using System;
+﻿using System;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
+using UniStandartActions.Actions.Utils;
 
 namespace UniStandartActions.Actions
 {
@@ -46,17 +46,19 @@ namespace UniStandartActions.Actions
 
         public bool BeginUserSettings()
         {
-            var form = new MessageShowActionView();
-            form.Message = Message;
+            var form = new EnterStringForm();
+            form.Value = Message;
+            form.Text = "Введите сообщение для отображения";
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                this.Message = form.Message;
+                this.Message = form.Value;
                 return true;
             }
             else return false;
         }
 
-        public void Refresh() {
+        public void Refresh()
+        {
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HierarchicalData;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,12 +12,17 @@ namespace UniActionsCore
     {
         public static class Defaults
         {
+            static Defaults()
+            {
+                FileName = Path.Combine(Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).FullName, FileName);
+                PluginsFileName = Path.Combine(Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).FullName, PluginsFileName);
+            }
             public static readonly string FileName = "coreSettings.xml";
             public static readonly string PluginsFileName = "plugins.xml";
         }
 
-        private string _fileName = Defaults.FileName;
-        private string _pluginsFileName = Defaults.PluginsFileName;
+        private string _fileName;
+        private string _pluginsFileName;
 
         public SaveAndLoad(string fileName, string pluginsFileName)
         {
@@ -39,18 +45,19 @@ namespace UniActionsCore
                 PluginsSavior.Clear();
                 PluginsSavior[VAC.AppSettingsNames.CheckerModule] = Uni.ModulesControl.CustomCheckers.Where(x => !Uni.ModulesControl.IsStandart(x)).Select(x => x.Assembly.Location).ToHierarchicalObject();
                 PluginsSavior[VAC.AppSettingsNames.ActionModule] = Uni.ModulesControl.CustomActions.Where(x => !Uni.ModulesControl.IsStandart(x)).Select(x => x.Assembly.Location).ToHierarchicalObject();
+                PluginsSavior.SaveToFile();
 
                 Savior.Clear();
                 Savior[VAC.AppSettingsNames.DistributionPort] = Uni.ServerThreading.Settings.DistributionPort;
                 Savior[VAC.AppSettingsNames.ResolveAll] = Uni.ServerThreading.Settings.ResolveAllIp;
                 Savior[VAC.AppSettingsNames.ActionsPorts] = Uni.ServerThreading.Settings.ActionsPorts.ToHierarchicalObject();
-                Savior[VAC.AppSettingsNames.ResolvedIp] = Uni.ServerThreading.Settings.ResolvedIp.ToHierarchicalObject();
+                Savior[VAC.AppSettingsNames.ResolvedIp] = Uni.ServerThreading.Settings.ResolvedIp.Select(x => x.ToString()).ToHierarchicalObject();
 
-                for (int i = 0; i < Uni.TasksPool.Scenarios.Count(); i++)
+                for (int i = 0; i < Uni.ScenariosPool.Scenarios.Count(); i++)
                 {
                     try
                     {
-                        var item = Uni.TasksPool.Scenarios.ElementAt(i);
+                        var item = Uni.ScenariosPool.Scenarios.ElementAt(i);
 
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedActionCustomSettings] = new SerializedObject(item.ActionBag);
 
@@ -89,10 +96,8 @@ namespace UniActionsCore
         public VoidResult Load()
         {
             var result = new VoidResult();
-            //#if !DEBUG
             try
             {
-                //#endif
                 //plugins load
                 if (!File.Exists(_pluginsFileName))
                 {
@@ -106,12 +111,34 @@ namespace UniActionsCore
                 if (PluginsSavior.ContainsKey(VAC.AppSettingsNames.ActionModule))
                     foreach (var item in PluginsSavior[VAC.AppSettingsNames.ActionModule].Values)
                     {
+#if !DEBUG
+                        try
+                        {
+#endif
                         Uni.ModulesControl.RegisterAction(item);
+#if !DEBUG
+                        }
+                        catch (Exception e)
+                        {
+                            result.AddException(e);
+                        }
+#endif
                     }
                 if (PluginsSavior.ContainsKey(VAC.AppSettingsNames.CheckerModule))
                     foreach (var item in PluginsSavior[VAC.AppSettingsNames.CheckerModule].Values)
                     {
+#if !DEBUG
+                        try
+                        {
+#endif
                         Uni.ModulesControl.RegisterChecker(item);
+#if !DEBUG
+                        }
+                        catch (Exception e)
+                        {
+                            result.AddException(e);
+                        }
+#endif
                     }
 
                 //other settings load
@@ -129,9 +156,9 @@ namespace UniActionsCore
                     Uni.ServerThreading.Settings.ActionsPorts = SkeddedList<ushort>.Create(Savior[VAC.AppSettingsNames.ActionsPorts].ToList<ushort>());
 
                 if (Savior.ContainsKey(VAC.AppSettingsNames.ResolvedIp))
-                    Uni.ServerThreading.Settings.ResolvedIp = SkeddedList<IPAddress>.Create(Savior[VAC.AppSettingsNames.ResolvedIp].ToList<IPAddress>());
+                    Uni.ServerThreading.Settings.ResolvedIp = SkeddedList<IPAddress>.Create(((List<string>)Savior[VAC.AppSettingsNames.ResolvedIp].ToList<string>()).Select(x => IPAddress.Parse(x)));
 
-                Uni.TasksPool.Clear();
+                Uni.ScenariosPool.Clear();
                 if (Savior.ContainsKey(VAC.AppSettingsNames.Action))
                     foreach (var hobject in Savior[VAC.AppSettingsNames.Action].Values)
                     {
@@ -140,23 +167,27 @@ namespace UniActionsCore
                         try
                         {
 #endif
-                        actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
-                        actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
-                        actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
-                        actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
-                        actionItem.Index = hobject[VAC.AppSettingsNames.UsedIndex];
-                        actionItem.UseOnOffState = hobject[VAC.AppSettingsNames.UsedOffOnState];
-
                         var actionTypeName = hobject[VAC.AppSettingsNames.UsedCustomAction];
-                        var actionType = Uni.ModulesControl.GetActionTypeByName(actionTypeName);
-                        if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
-                            actionItem.ActionBag = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
 
-                        actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
+                        if (Uni.ModulesControl.CustomActions.Any(x => x.FullName.Equals(actionTypeName)) ||
+                            actionTypeName.Equals(typeof(DoubleComplexAction).FullName))
+                        {
+                            actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
+                            actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
+                            actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
+                            actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
+                            actionItem.Index = hobject[VAC.AppSettingsNames.UsedIndex];
+                            actionItem.UseOnOffState = hobject[VAC.AppSettingsNames.UsedOffOnState];
 
-                        actionItem.Action.Refresh();
+                            if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
+                                actionItem.ActionBag = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
 
-                        Uni.TasksPool.Add(actionItem);
+                            actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
+
+                            actionItem.Action.Refresh();
+
+                            Uni.ScenariosPool.Add(actionItem);
+                        }
 #if !DEBUG
                         }
                         catch (Exception e)
@@ -165,7 +196,6 @@ namespace UniActionsCore
                         }
 #endif
                     }
-                //#if !DEBUG
             }
             catch (Exception e)
             {
@@ -178,12 +208,9 @@ namespace UniActionsCore
             }
             finally
             {
-                //#endif
                 Savior.ThrowsExceptionIfParameterNotExist = false;
                 PluginsSavior.ThrowsExceptionIfParameterNotExist = false;
-                //#if !DEBUG
             }
-            //#endif
             return result;
         }
     }

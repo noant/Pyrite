@@ -1,5 +1,4 @@
-﻿using HierarchicalData;
-using System;
+﻿using System;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
@@ -15,13 +14,15 @@ namespace UniStandartActions.Checkers
             Day = DateTime.Now.Day;
             Hour = DateTime.Now.Hour;
             Minute = DateTime.Now.Minute;
+
+            D_friday =
+                D_monday =
+                D_saturday =
+                D_sunday =
+                D_thursday =
+                D_tuesday =
+                D_wednesday = true;
         }
-
-        private bool _fWasStarted;
-        //private DateTime _lastUpdate;
-
-        [HumanFriendlyName("Только при старте компьютера")]
-        public bool OnlyOnComputerStart { get; set; }
 
         [HumanFriendlyName("Год")]
         public int Year { get; set; }
@@ -79,12 +80,6 @@ namespace UniStandartActions.Checkers
         {
             get
             {
-                if (_fWasStarted && OnlyOnComputerStart)
-                    return false;
-                //if ((DateTime.Now - _lastUpdate).TotalSeconds < 59)
-                //    return false;
-                //else _lastUpdate = DateTime.Now;
-
                 var dayOfWeekFlag =
                     (DateTime.Now.DayOfWeek == DayOfWeek.Monday && D_monday) ||
                     (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday && D_tuesday) ||
@@ -104,13 +99,7 @@ namespace UniStandartActions.Checkers
                     (DateTime.Now.Hour == Hour || EveryHour) &&
                     (DateTime.Now.Minute == Minute || EveryMinute);
 
-                if (dateFlag)
-                {
-                    _fWasStarted = true;
-                    return true;
-                }
-
-                return false;
+                return dateFlag;
             }
         }
 
@@ -146,8 +135,6 @@ namespace UniStandartActions.Checkers
             form.nudHour.Value = this.Hour;
             form.nudMinute.Value = this.Minute;
 
-            form.cbOnlyWhenCompStart.Checked = this.OnlyOnComputerStart;
-
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 this.D_friday = form.cbFriday.Checked;
@@ -169,8 +156,6 @@ namespace UniStandartActions.Checkers
                 this.Day = form.dtPicker.Value.Day;
                 this.Hour = (int)form.nudHour.Value;
                 this.Minute = (int)form.nudMinute.Value;
-
-                this.OnlyOnComputerStart = form.cbOnlyWhenCompStart.Checked;
 
                 return true;
             }

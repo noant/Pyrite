@@ -1,5 +1,4 @@
-﻿using HierarchicalData;
-using System;
+﻿using System;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
@@ -12,7 +11,7 @@ namespace UniStandartActions.Actions
         public bool AllowUserSettings { get { return true; } }
 
         [HumanFriendlyName("Таймаут(секунд)")]
-        public int Timeout { get;set; }
+        public int Timeout { get; set; }
         [HumanFriendlyName("Возможность отменить")]
         public bool CanCancel { get; set; }
         [HumanFriendlyName("Перезапуск")]
@@ -26,10 +25,11 @@ namespace UniStandartActions.Actions
         public string Do(string inputState)
         {
             IsBusyNow = true;
-            var form = new PowerOffForm() { 
-                Timer = Timeout, 
-                CanCancel = CanCancel, 
-                Restart = Restart 
+            var form = new PowerOffForm()
+            {
+                Timer = Timeout,
+                CanCancel = CanCancel,
+                Restart = Restart
             };
 
             form.Show();
@@ -70,7 +70,7 @@ namespace UniStandartActions.Actions
             return false;
         }
 
-        [XmlIgnore]        
+        [XmlIgnore]
         public bool IsBusyNow
         {
             get;

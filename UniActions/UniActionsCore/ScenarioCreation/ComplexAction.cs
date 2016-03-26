@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
@@ -69,24 +69,39 @@ namespace UniActionsCore.ScenarioCreation
         {
         }
 
-        public void RemoveChecker(Type checkerType)
+        public bool RemoveChecker(Type checkerType)
         {
+            bool result = false;
             if (ActionBags != null)
                 foreach (var bag in ActionBags)
                 {
                     if (bag.Action is IHasCheckerAction)
-                        ((IHasCheckerAction)bag.Action).RemoveChecker(checkerType);
+                    {
+                        if (((IHasCheckerAction)bag.Action).RemoveChecker(checkerType))
+                            result = true;
+                    }
                 }
+            return result;
         }
 
-        public void RemoveAction(Type actionType)
+        public bool RemoveAction(Type actionType)
         {
+            bool result = false;
             if (ActionBags != null)
-                foreach (var bag in ActionBags)
+                foreach (var bag in ActionBags.ToArray())
                 {
                     if (bag.Action is IHasCheckerAction)
-                        ((IHasCheckerAction)bag.Action).RemoveAction(actionType);
+                    {
+                        if (((IHasCheckerAction)bag.Action).RemoveAction(actionType))
+                            result = true;
+                    }
+                    else if (bag.Action.GetType().Equals(actionType))
+                    {
+                        ActionBags.Remove(bag);
+                        result = true;
+                    }
                 }
+            return result;
         }
 
         public List<ActionBag> ActionBags { get; set; }

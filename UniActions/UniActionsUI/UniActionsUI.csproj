@@ -36,6 +36,15 @@
   <PropertyGroup>
     <ApplicationIcon>logo_32.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HotKeysLibrary">
       <HintPath>..\LibrariesToAdd\HotKeysLibrary.dll</HintPath>
@@ -61,6 +70,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ModulesControlView.xaml.cs">
+      <DependentUpon>ModulesControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScenarioCreation\Utils.cs" />
     <Compile Include="ScenariosView.xaml.cs">
       <DependentUpon>ScenariosView.xaml</DependentUpon>
@@ -68,14 +80,14 @@
     <Compile Include="BooleanSelector.xaml.cs">
       <DependentUpon>BooleanSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CRunScenariosItems.xaml.cs">
-      <DependentUpon>CRunScenariosItems.xaml</DependentUpon>
+    <Compile Include="RunScenariosItemsView.xaml.cs">
+      <DependentUpon>RunScenariosItemsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CPorts.xaml.cs">
-      <DependentUpon>CPorts.xaml</DependentUpon>
+    <Compile Include="PortsListView.xaml.cs">
+      <DependentUpon>PortsListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CRunScenario.xaml.cs">
-      <DependentUpon>CRunScenario.xaml</DependentUpon>
+    <Compile Include="RunScenarioView.xaml.cs">
+      <DependentUpon>RunScenarioView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditScenarioViewContext.cs" />
     <Compile Include="ScenarioCreation\ActionViewExtended.xaml.cs">
@@ -117,6 +129,8 @@
     <Compile Include="ScenarioCreation\IfViewContext.cs" />
     <Compile Include="ScenariosViewContext.cs" />
     <Compile Include="Starter.cs" />
+    <Compile Include="StartupHelper.cs" />
+    <Compile Include="Styles\TabControlStyles.cs" />
     <Compile Include="TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
@@ -126,6 +140,10 @@
     <Compile Include="WFast.xaml.cs">
       <DependentUpon>WFast.xaml</DependentUpon>
     </Compile>
+    <Page Include="ModulesControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScenariosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -134,35 +152,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CCheckerModules.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="CActionModules.xaml">
+    <Page Include="IpListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CIpList.xaml">
+    <Page Include="RunScenariosItemsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CRunScenariosItems.xaml">
+    <Page Include="PortsListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CPorts.xaml">
+    <Page Include="RunScenarioView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CRunScenario.xaml">
+    <Page Include="ConfirmView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CSavior.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CSettings.xaml">
+    <Page Include="SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,21 +188,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CCheckerModules.xaml.cs">
-      <DependentUpon>CCheckerModules.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CActionModules.xaml.cs">
-      <DependentUpon>CActionModules.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CIpList.xaml.cs">
-      <DependentUpon>CIpList.xaml</DependentUpon>
+    <Compile Include="IpListView.xaml.cs">
+      <DependentUpon>IpListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlsHepler.cs" />
-    <Compile Include="CSavior.xaml.cs">
-      <DependentUpon>CSavior.xaml</DependentUpon>
+    <Compile Include="ConfirmView.xaml.cs">
+      <DependentUpon>ConfirmView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CSettings.xaml.cs">
-      <DependentUpon>CSettings.xaml</DependentUpon>
+    <Compile Include="SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="FSHelper.cs" />
     <Compile Include="IpBox.xaml.cs">
@@ -258,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\TabControlStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\TextBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -293,6 +301,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -338,7 +349,17 @@
       <Name>UniStandartActions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

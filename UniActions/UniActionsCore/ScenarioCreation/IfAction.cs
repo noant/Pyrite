@@ -14,7 +14,7 @@ namespace UniActionsCore.ScenarioCreation
                 if (Checker.IsCanDoNow)
                     if (ActionIf != null)
                         ActionIf.Do(ActionIf.State);
-                else
+                    else
                     if (ActionElse != null)
                         ActionElse.Do(ActionElse.State);
             }
@@ -60,27 +60,39 @@ namespace UniActionsCore.ScenarioCreation
 
         }
 
-        public void RemoveChecker(Type checkerType)
+        public bool RemoveChecker(Type checkerType)
         {
+            var result = false;
             if (Checker.GetType().Equals(checkerType))
                 Checker = null;
             else if (Checker != null && Checker is IHasCheckerAction)
-                ((IHasCheckerAction)Checker).RemoveChecker(checkerType);
+                if (((IHasCheckerAction)Checker).RemoveChecker(checkerType))
+                    result = true;
 
             if (ActionIf != null && ActionIf is IHasCheckerAction)
-                ((IHasCheckerAction)ActionIf).RemoveChecker(checkerType);
+                if (((IHasCheckerAction)ActionIf).RemoveChecker(checkerType))
+                    result = true;
 
             if (ActionElse != null && ActionElse is IHasCheckerAction)
-                ((IHasCheckerAction)ActionElse).RemoveChecker(checkerType);
+                if (((IHasCheckerAction)ActionElse).RemoveChecker(checkerType))
+                    result = true;
+
+            return result;
         }
 
-        public void RemoveAction(Type actionType)
+        public bool RemoveAction(Type actionType)
         {
+            var result = false;
+
             if (ActionIf != null && ActionIf is IHasCheckerAction)
-                ((IHasCheckerAction)ActionIf).RemoveAction(actionType);
+                if (((IHasCheckerAction)ActionIf).RemoveAction(actionType))
+                    result = true;
 
             if (ActionElse != null && ActionElse is IHasCheckerAction)
-                ((IHasCheckerAction)ActionElse).RemoveAction(actionType);
+                if (((IHasCheckerAction)ActionElse).RemoveAction(actionType))
+                    result = true;
+
+            return result;
         }
     }
 }

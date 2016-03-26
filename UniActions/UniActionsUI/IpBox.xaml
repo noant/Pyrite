@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             Height="25"
+             mc:Ignorable="d"
              Width="150"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -14,9 +13,9 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" Name="tbNum1">0</TextBox>
-        <TextBox Grid.Column="1" Name="tbNum2">0</TextBox>
-        <TextBox Grid.Column="2" Name="tbNum3">0</TextBox>
-        <TextBox Grid.Column="3" Name="tbNum4">0</TextBox>
+        <TextBox Style="{StaticResource TextBoxSimpleStyle}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Name="tbNum1">0</TextBox>
+        <TextBox Style="{StaticResource TextBoxSimpleStyle}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" Name="tbNum2">0</TextBox>
+        <TextBox Style="{StaticResource TextBoxSimpleStyle}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="2" Name="tbNum3">0</TextBox>
+        <TextBox Style="{StaticResource TextBoxSimpleStyle}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="3" Name="tbNum4">0</TextBox>
     </Grid>
 </UserControl>

@@ -52,5 +52,19 @@ namespace UniActionsCore.ScenarioCreation
 
             return value.ToString();
         }
+
+        public static Result<string> SafeExecute(ICustomAction action)
+        {
+            var result = new Result<string>();
+            try
+            {
+                result.Value = action.Do(action.State);
+            }
+            catch (Exception e)
+            {
+                result.AddException(e);
+            }
+            return result;
+        }
     }
 }

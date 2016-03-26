@@ -37,6 +37,7 @@
             // 
             // nudMinutes
             // 
+            this.nudMinutes.DecimalPlaces = 4;
             this.nudMinutes.Location = new System.Drawing.Point(78, 7);
             this.nudMinutes.Maximum = new decimal(new int[] {
             1410065407,
@@ -65,7 +66,7 @@
             // btOk
             // 
             this.btOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btOk.Location = new System.Drawing.Point(34, 43);
+            this.btOk.Location = new System.Drawing.Point(34, 45);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
             this.btOk.TabIndex = 2;
@@ -75,7 +76,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(115, 43);
+            this.btCancel.Location = new System.Drawing.Point(115, 45);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 3;

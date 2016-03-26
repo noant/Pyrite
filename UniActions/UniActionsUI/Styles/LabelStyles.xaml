@@ -21,9 +21,30 @@
 							   VerticalContentAlignment="Center"
 							   HorizontalAlignment="Left" 
 							   Background="{TemplateBinding Background}">
-                            <ContentPresenter 
-								Content="{TemplateBinding Content}">
-                            </ContentPresenter>
+                            <!--<Label.Effect>-->
+                            <!--<DropShadowEffect x:Name="shadow" BlurRadius="4" Direction="180" Opacity="0.2"></DropShadowEffect>
+                            </Label.Effect>-->
+                            <!--<VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <DoubleAnimation SpeedRatio="4" To="0.5" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation SpeedRatio="4" To="0.7" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>-->
+                            <Grid>
+                                <ContentPresenter 
+								    Content="{TemplateBinding Content}">
+                                </ContentPresenter>
+                                <!--<Border Opacity="0.2" BorderBrush="Black" BorderThickness="1,0,0,0"></Border>-->
+                            </Grid>
                         </Label>
                     </ControlTemplate>
                 </Setter.Value>

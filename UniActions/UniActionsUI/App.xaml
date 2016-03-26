@@ -10,10 +10,8 @@
                 <ResourceDictionary Source="/UniActionsUI;component/Styles/LabelStyles.xaml"/>
                 <ResourceDictionary Source="/UniActionsUI;component/Styles/TextBoxStyles.xaml"/>
                 <ResourceDictionary Source="/UniActionsUI;component/Styles/ListViewStyles.xaml"/>
+                <ResourceDictionary Source="/UniActionsUI;component/Styles/TabControlStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="{x:Type TabControl}">
-                <EventSetter Event="SelectionChanged" Handler="SelectedTabChanged"></EventSetter>
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

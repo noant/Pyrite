@@ -21,8 +21,12 @@
                             <Style.Triggers>
                                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                                     <BeginStoryboard>
-                                        <Storyboard SpeedRatio="2">
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="0.5" Duration="00:00:1"></DoubleAnimation>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                RenderOptions.BitmapScalingMode="LowQuality"
+                                                RenderOptions.EdgeMode="Unspecified"
+                                                RenderOptions.ClearTypeHint="Auto"
+                                                Duration="00:00:1" Storyboard.TargetProperty="Opacity" From="0" To="0.5"></DoubleAnimation>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
@@ -30,22 +34,41 @@
                         </Style>
                     </Grid.Style>
                 </Grid>
-                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Content="{TemplateBinding Content}">
+                <ContentPresenter 
+                            RenderOptions.BitmapScalingMode="LowQuality" 
+                            RenderOptions.EdgeMode="Unspecified"
+                            VerticalAlignment="Center" 
+                            HorizontalAlignment="Center" 
+                            Content="{TemplateBinding Content}">
                     <ContentPresenter.Effect>
-                        <BlurEffect RenderingBias="Performance" Radius="30" x:Name="ContentBlurEffect">
+                        <BlurEffect 
+                            RenderingBias="Performance" 
+                            KernelType="Box" 
+                            Radius="15"
+                            x:Name="ContentBlurEffect">
                         </BlurEffect>
                     </ContentPresenter.Effect>
                     <ContentPresenter.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                             <BeginStoryboard>
-                                <Storyboard SpeedRatio="2">
+                                <Storyboard>
                                     <ParallelTimeline>
-                                        <ThicknessAnimation Storyboard.TargetProperty="Margin" From="90,0,0,0" To="0,0,0,0" Duration="00:00:1"></ThicknessAnimation>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="00:00:1"></DoubleAnimation>
+                                        <!--<ThicknessAnimation 
+                                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                            RenderOptions.EdgeMode="Unspecified"
+                                            RenderOptions.ClearTypeHint="Auto"                                            
+                                            Storyboard.TargetProperty="Margin" 
+                                            From="90,0,0,0" 
+                                            To="0,0,0,0" 
+                                            Duration="00:00:0.5"></ThicknessAnimation>-->
                                         <DoubleAnimation 
-                                                Storyboard.TargetName="ContentBlurEffect"
-                                                Storyboard.TargetProperty="Radius"
-                                                To="0" SpeedRatio="1" Duration="00:00:1"></DoubleAnimation>
+                                            Storyboard.TargetName="ContentBlurEffect"
+                                            Storyboard.TargetProperty="Radius"
+                                            RenderOptions.BitmapScalingMode="LowQuality"
+                                            RenderOptions.EdgeMode="Unspecified"
+                                            RenderOptions.ClearTypeHint="Auto"
+                                            To="0"
+                                            Duration="00:00:0.5"></DoubleAnimation>
                                     </ParallelTimeline>
                                 </Storyboard>
                             </BeginStoryboard>
@@ -55,5 +78,11 @@
             </Grid>
         </ControlTemplate>
     </Window.Template>
-    <local:CRunScenariosItems x:Name="cItems" VerticalAlignment="Center" Width="800"></local:CRunScenariosItems>
+    <local:RunScenariosItemsView 
+        RenderOptions.BitmapScalingMode="LowQuality" 
+        RenderOptions.ClearTypeHint="Auto"
+        RenderOptions.EdgeMode="Unspecified"
+        x:Name="cItems" 
+        VerticalAlignment="Center" 
+        Width="800"></local:RunScenariosItemsView>
 </Window>

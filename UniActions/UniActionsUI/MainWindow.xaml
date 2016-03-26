@@ -5,39 +5,24 @@
         WindowState="Maximized"
         Title="UniActions" Height="400" Width="700">
     <Grid>
-        <TabControl>
-            <TabItem Name="tabTasks" Header="Сценарии">
-                <local:CRunScenariosItems></local:CRunScenariosItems>
+        <TabControl Style="{StaticResource TabControlFlatStyle}">
+            <TabItem Name="tabScenarios" Header="ЗАПУСК" Style="{StaticResource TabItemFlatStyle}">
+                <local:RunScenariosItemsView Background="Gray"></local:RunScenariosItemsView>
             </TabItem>
-            <TabItem Name="tabTasksSettings" Header="Настройки сценариев">
+            <TabItem Name="tabScenariosSettings" Header="СЦЕНАРИИ" Style="{StaticResource TabItemFlatStyle}">
                 <local:ScenariosView></local:ScenariosView>
             </TabItem>
-            <TabItem Name="tabSettings" Header="Настройки">
+            <TabItem Name="tabModules" Header="МОДУЛИ" Style="{StaticResource TabItemFlatStyle}">
+                <local:ModulesControlView></local:ModulesControlView>
+            </TabItem>
+            <TabItem Header="НАСТРОЙКИ" Style="{StaticResource TabItemFlatStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
-                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="45"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TabControl>
-                        <TabItem Header="Модули проверки">
-                            <local:CCheckerModules></local:CCheckerModules>
-                        </TabItem>
-                        <TabItem Header="Модули действия">
-                            <local:CActionModules></local:CActionModules>
-                        </TabItem>
-                        <TabItem Header="IP фильтр">
-                            <local:CIpList></local:CIpList>
-                        </TabItem>
-                        <TabItem Header="Порты">
-                            <local:CPorts></local:CPorts>
-                        </TabItem>
-                        <TabItem Header="Настройки">
-                            <local:CSettings></local:CSettings>
-                        </TabItem>
-                    </TabControl>
-                    <Grid Grid.Row="1">
-                        <local:CSavior x:Name="cSavior"></local:CSavior>
-                    </Grid>
+                    <local:SettingsView x:Name="cSettings"></local:SettingsView>
+                    <local:ConfirmView x:Name="cSavior" Grid.Row="1"></local:ConfirmView>
                 </Grid>
             </TabItem>
         </TabControl>

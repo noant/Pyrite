@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using UniActionsClientIntefaces;
 
 namespace UniActionsCore.ScenarioCreation
 {
     [Serializable]
-    public class DoubleComplexAction : ICustomAction
+    public class DoubleComplexAction : ICustomAction, IHasCheckerAction
     {
         public static readonly string BeginState = "begin";
         public static readonly string EndState = "end";
@@ -120,6 +116,20 @@ namespace UniActionsCore.ScenarioCreation
 
         public void Refresh()
         {
+        }
+
+        public bool RemoveChecker(Type checkerType)
+        {
+            return
+                (ActionBegin != null ? ActionBegin.RemoveChecker(checkerType) : false) ||
+                (ActionEnd != null ? ActionEnd.RemoveChecker(checkerType) : false);
+        }
+
+        public bool RemoveAction(Type actionType)
+        {
+            return
+                (ActionBegin != null ? ActionBegin.RemoveAction(actionType) : false) ||
+                (ActionEnd != null ? ActionEnd.RemoveAction(actionType) : false);
         }
 
         public enum CurrentDCActionState

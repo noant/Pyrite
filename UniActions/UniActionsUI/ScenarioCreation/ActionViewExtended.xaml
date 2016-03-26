@@ -19,10 +19,12 @@
             <TextBlock
                 Padding="7"
                 Background="LightCyan"
+                Foreground="Black"
                 Text="{Binding Path=ActionString}"
                 TextWrapping="Wrap"                
                 Name="tbParams"
                 Height="Auto"
+                Visibility="{Binding ParamsVisibility}"
                 Cursor="Hand">
             </TextBlock>
             <Button Style="{StaticResource FlatButtonStyle}"

@@ -10,7 +10,8 @@ namespace UniStandartActions.Checkers
         [XmlIgnore]
         public bool IsCanDoNow
         {
-            get{
+            get
+            {
                 return true;
             }
         }

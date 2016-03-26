@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using UniActionsClientIntefaces;
 using UniActionsCore.ScenarioCreation;
-using UniStandartActions.Checkers;
 
 namespace UniActionsUI.ScenarioCreation
 {
@@ -16,9 +13,11 @@ namespace UniActionsUI.ScenarioCreation
         public static readonly DependencyProperty CheckerStringProperty;
         public static readonly DependencyProperty IsFirstProperty;
         public static readonly DependencyProperty AllOperatorViewsProperty;
+        public static readonly DependencyProperty ParamsVisibilityProperty;
 
         static CheckerViewContext()
         {
+            ParamsVisibilityProperty = DependencyProperty.Register("ParamsVisibility", typeof(Visibility), typeof(CheckerViewContext));
             CheckerStringProperty = DependencyProperty.Register("CheckerString", typeof(string), typeof(CheckerViewContext));
             IsFirstProperty = DependencyProperty.Register("IsFirst", typeof(bool), typeof(CheckerViewContext),
                     new FrameworkPropertyMetadata()
@@ -50,6 +49,18 @@ namespace UniActionsUI.ScenarioCreation
                                    select new OperatorPairView(@operator, not, false)
                 }
             );
+        }
+
+        public Visibility ParamsVisibility
+        {
+            get
+            {
+                return (Visibility)GetValue(ParamsVisibilityProperty);
+            }
+            set
+            {
+                SetValue(ParamsVisibilityProperty, value);
+            }
         }
 
         public string CheckerString
@@ -93,22 +104,18 @@ namespace UniActionsUI.ScenarioCreation
         {
             _operatorCheckerPair = operatorCheckerPair;
 
-            var checkerString = Helper.CreateParamsViewString(Checker);
+            var checkerString = Helper.CreateParamsViewString(this._operatorCheckerPair.Checker);
             if (!string.IsNullOrWhiteSpace(checkerString))
-            {
-                this.CheckerString = " (" + checkerString + ")";
-            }
-            else
-            {
-                this.CheckerString = string.Empty;
-            }
+                this.CheckerString = "(" + checkerString + ")";
+
+            this.ParamsVisibility = this._operatorCheckerPair.Checker.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public IEnumerable<CustomCheckerView> AllCustomCheckers
         {
             get
             {
-                return App.Uni.ModulesControl.CustomCheckers.Select(x => new CustomCheckerView(x));
+                return App.Uni.ModulesControl.CustomCheckers.Select(x => new CustomCheckerView(x)).OrderBy(x => x.ToString());
             }
         }
 
@@ -123,23 +130,23 @@ namespace UniActionsUI.ScenarioCreation
                        .Invoke(new object[0]);
 
             BeginCheckerUserSettings();
+            this.ParamsVisibility = this._operatorCheckerPair.Checker.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void BeginCheckerUserSettings()
         {
             if (_operatorCheckerPair.Checker.AllowUserSettings)
-                _operatorCheckerPair.Checker.BeginUserSettings();
-
-            var checkerString = Helper.CreateParamsViewString(Checker);
-            if (!string.IsNullOrWhiteSpace(checkerString))
             {
-                this.CheckerString = " (" + checkerString + ") ";
+                if (_operatorCheckerPair.Checker.BeginUserSettings())
+                {
+                    RaiseChanged();
+                }
+                var checkerString = Helper.CreateParamsViewString(Checker);
+                if (!string.IsNullOrWhiteSpace(checkerString))
+                {
+                    this.CheckerString = "(" + checkerString + ")";
+                }
             }
-            else
-            {
-                this.CheckerString = string.Empty;
-            }
-            RaiseChanged();
         }
 
         public OperatorPairView OperatorPairView
@@ -156,6 +163,7 @@ namespace UniActionsUI.ScenarioCreation
             {
                 _operatorCheckerPair.Not = value.Not;
                 _operatorCheckerPair.Operator = value.Operator;
+                this.ParamsVisibility = this._operatorCheckerPair.Checker.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
                 RaiseChanged();
             }
         }
@@ -175,6 +183,7 @@ namespace UniActionsUI.ScenarioCreation
                 if (_operatorCheckerPair == null)
                     _operatorCheckerPair = new OperatorCheckerPair();
                 _operatorCheckerPair.Checker = value;
+                this.ParamsVisibility = this._operatorCheckerPair.Checker.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
                 RaiseChanged();
             }
         }

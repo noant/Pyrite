@@ -1,4 +1,5 @@
 ﻿using HierarchicalData;
+using Logging;
 using System;
 
 namespace UniActionsCore
@@ -31,7 +32,7 @@ namespace UniActionsCore
 
         public ServerThreading ServerThreading { get; private set; }
 
-        public ScenariosPool TasksPool { get; private set; }
+        public ScenariosPool ScenariosPool { get; private set; }
 
         public ModulesControl ModulesControl { get; private set; }
 
@@ -46,16 +47,21 @@ namespace UniActionsCore
 
             var result = new VoidResult();
 
-            TasksPool = new ScenariosPool();
-            TasksPool.Uni = this;
-            TasksPool.Initialize();
+            ScenariosPool = new ScenariosPool();
+            ScenariosPool.Uni = this;
+            ScenariosPool.Initialize();
+            Log.Write("ScenariosPool initialized");
+
             ModulesControl = new ModulesControl();
             ModulesControl.Uni = this;
             result.AddExceptions(ModulesControl.Initialize().Exceptions);
+            Log.Write("ModulesControl initialized");
             ServerThreading = new UniActionsCore.ServerThreading();
             ServerThreading.Uni = this;
-            ServerThreading.ServerStarted += () => TasksPool.StartActiveScenarios();
+            ServerThreading.ServerStarted += () => ScenariosPool.StartActiveScenarios();
+            Log.Write("ScenariosPool items started");
             ServerThreading.Initialize();
+            Log.Write("ServerThreading started");
 
             result.AddExceptions(SaveAndLoad.Load().Exceptions);
             result.AddExceptions(ServerThreading.BeginStart().Exceptions);
@@ -67,15 +73,18 @@ namespace UniActionsCore
         {
             var result = new VoidResult();
             ModulesControl.Clear();
-            TasksPool.Clear();
+            ScenariosPool.Clear();
 
             result.AddExceptions(SaveAndLoad.Load().Exceptions);
 
-            ServerThreading.BeginStop(() =>
+            Stop(() =>
             {
                 try
                 {
                     ServerThreading.BeginStart();
+                    Log.Write("ServerThreading started");
+                    ServerThreading.ServerStarted += () => ScenariosPool.StartActiveScenarios();
+                    Log.Write("ScenariosPool items started");
                     callback(result);
                 }
                 catch (Exception e)
@@ -89,7 +98,7 @@ namespace UniActionsCore
 
         public void Stop(Action callback)
         {
-            foreach (var scenario in TasksPool.Scenarios)
+            foreach (var scenario in ScenariosPool.Scenarios)
                 scenario.KillDispatcher();
 
             ServerThreading.BeginStop(() =>

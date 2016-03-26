@@ -47,6 +47,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ExecuteCommandActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ExecuteCommandActionView.Designer.cs">
+      <DependentUpon>ExecuteCommandActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\ExecuteCommandAction.cs" />
+    <Compile Include="Actions\KillProcessAction.cs" />
+    <Compile Include="Actions\SystemSoundAction.cs" />
+    <Compile Include="Actions\Utils\EnterStringForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\Utils\EnterStringForm.Designer.cs">
+      <DependentUpon>EnterStringForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\_Debug_ChangeTestStatus.cs" />
     <Compile Include="Actions\MessageShow.cs">
       <SubType>Form</SubType>
@@ -55,12 +70,6 @@
       <DependentUpon>MessageShow.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\MessageShowAction.cs" />
-    <Compile Include="Actions\MessageShowActionView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Actions\MessageShowActionView.Designer.cs">
-      <DependentUpon>MessageShowActionView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Actions\PowerOffAction.cs" />
     <Compile Include="Actions\PowerOffActionView.cs">
       <SubType>Form</SubType>
@@ -88,7 +97,13 @@
     <Compile Include="Actions\WaitActionView.Designer.cs">
       <DependentUpon>WaitActionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Checkers\ComputerStartChecker.cs" />
+    <Compile Include="Checkers\DateBetweenChecker.cs" />
+    <Compile Include="Checkers\DateBetweenCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\DateBetweenCheckerView.designer.cs">
+      <DependentUpon>DateBetweenCheckerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Checkers\DateTimeChecker.cs" />
     <Compile Include="Checkers\DateTimeCheckerView.cs">
       <SubType>Form</SubType>
@@ -96,14 +111,40 @@
     <Compile Include="Checkers\DateTimeCheckerView.Designer.cs">
       <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Checkers\EveryIterationChecker.cs" />
-    <Compile Include="Checkers\MinuteTimerChecker.cs" />
-    <Compile Include="Checkers\MinuteTimerCheckerView.cs">
+    <Compile Include="Checkers\DayBetweenChecker.cs" />
+    <Compile Include="Checkers\DayEqualityChecker.cs" />
+    <Compile Include="Checkers\DayOfWeekCheckerView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Checkers\MinuteTimerCheckerView.Designer.cs">
-      <DependentUpon>MinuteTimerCheckerView.cs</DependentUpon>
+    <Compile Include="Checkers\DayOfWeekCheckerView.Designer.cs">
+      <DependentUpon>DayOfWeekCheckerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Checkers\EveryIterationChecker.cs" />
+    <Compile Include="Checkers\HourBetweenChecker.cs" />
+    <Compile Include="Checkers\HourEqualityChecker.cs" />
+    <Compile Include="Checkers\MinuteBetweenChecker.cs" />
+    <Compile Include="Checkers\MinuteEqualityChecker.cs" />
+    <Compile Include="Checkers\MonthBetweenChecker.cs" />
+    <Compile Include="Checkers\MonthEqualityChecker.cs" />
+    <Compile Include="Checkers\SecondBetweenChecker.cs" />
+    <Compile Include="Checkers\DayOfWeekChecker.cs" />
+    <Compile Include="Checkers\YearEqualityChecker.cs" />
+    <Compile Include="Checkers\SecondEqualityChecker.cs" />
+    <Compile Include="Checkers\Utils\BetweenValuePartialImplementation.cs" />
+    <Compile Include="Checkers\Utils\BetweenValueView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\Utils\BetweenValueView.Designer.cs">
+      <DependentUpon>BetweenValueView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\Utils\ValueEqualityPartialImplementation.cs" />
+    <Compile Include="Checkers\Utils\ValueEqualityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\Utils\ValueEqualityView.Designer.cs">
+      <DependentUpon>ValueEqualityView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\YearBetweenChecker.cs" />
     <Compile Include="DoNotDeleteThisClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -118,11 +159,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Actions\ExecuteCommandActionView.resx">
+      <DependentUpon>ExecuteCommandActionView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\MessageShow.resx">
       <DependentUpon>MessageShow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Actions\MessageShowActionView.resx">
-      <DependentUpon>MessageShowActionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\PowerOffActionView.resx">
       <DependentUpon>PowerOffActionView.cs</DependentUpon>
@@ -133,16 +174,29 @@
     <EmbeddedResource Include="Actions\ProcessActionView.resx">
       <DependentUpon>ProcessActionView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Utils\EnterStringFOrm.resx">
+      <DependentUpon>EnterStringForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\WaitActionView.resx">
       <DependentUpon>WaitActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\DateBetweenCheckerView.resx">
+      <DependentUpon>DateBetweenCheckerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Checkers\DateTimeCheckerView.resx">
       <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Checkers\MinuteTimerCheckerView.resx">
-      <DependentUpon>MinuteTimerCheckerView.cs</DependentUpon>
+    <EmbeddedResource Include="Checkers\DayOfWeekCheckerView.resx">
+      <DependentUpon>DayOfWeekCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\Utils\BetweenValueView.resx">
+      <DependentUpon>BetweenValueView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\Utils\ValueEqualityView.resx">
+      <DependentUpon>ValueEqualityView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

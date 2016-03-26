@@ -14,18 +14,28 @@ namespace UniActionsUI
 
             this.Background = App.WindowBackground;
 
-            this.cSavior.WhenAllBeginsToEnd += () => {
+            this.cSavior.Refresh();
+
+            this.cSavior.NeedConfirm += () => this.cSettings.Confirm();
+
+            this.cSavior.NeedCancel += () => this.cSettings.Refresh();
+
+            this.cSavior.WhenAllBeginsToEnd += () =>
+            {
                 this.IsEnabled = false;
                 this.Closing += MainWindow_Closing;
             };
 
-            this.cSavior.BeforeRestart += () => {
+            this.cSavior.BeforeRestart += () =>
+            {
                 this.IsEnabled = false;
                 this.Closing += MainWindow_Closing;
             };
 
-            this.cSavior.AfterRestart += () => {
-                this.Dispatcher.BeginInvoke(new Action(() => { 
+            this.cSavior.AfterRestart += () =>
+            {
+                this.Dispatcher.BeginInvoke(new Action(() =>
+                {
                     this.IsEnabled = true;
                     this.Closing -= MainWindow_Closing;
                 }));

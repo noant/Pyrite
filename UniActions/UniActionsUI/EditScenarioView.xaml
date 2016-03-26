@@ -14,8 +14,8 @@
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="1" VerticalAlignment="Stretch" Margin="10" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button TabIndex="9" Style="{StaticResource FlatButtonSimpleStyle}" Width="100" Name="btCreate">Применить</Button>
-            <Button TabIndex="9" Style="{StaticResource FlatButtonSimpleStyle}" Width="100" Margin="10,0,0,0" Name="btCancel">Сброс</Button>
+            <Button Visibility="Collapsed" TabIndex="9" Style="{StaticResource FlatButtonSimpleStyle}" Width="100" Name="btCreate">Применить</Button>
+            <Button Visibility="Collapsed" TabIndex="9" Style="{StaticResource FlatButtonSimpleStyle}" Width="100" Margin="10,0,0,0" Name="btCancel">Сброс</Button>
         </StackPanel>
         <Grid>
             <Grid.RowDefinitions>
@@ -58,7 +58,7 @@
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBox TabIndex="4" Margin="0,1,1,1" Style="{StaticResource TextBoxSimpleStyle}" Text="{Binding Path=ScenarioCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Name="tbCategory" Grid.Column="1"></TextBox>
-                            <ComboBox TabIndex="3" Margin="1,1,0,1" ItemsSource="{Binding AllCategories}" Style="{StaticResource ComboBoxOnlySelectStyle}" Name="cbSelectCategory"></ComboBox>
+                            <ComboBox Background="LightSkyBlue" TabIndex="3" Margin="1,1,0,1" ItemsSource="{Binding AllCategories}" Style="{StaticResource ComboBoxOnlySelectStyle}" Name="cbSelectCategory"></ComboBox>
                         </Grid>
                         <TextBlock TextWrapping="Wrap" Grid.Column="4" Grid.RowSpan="3" Foreground="Red" Name="tbStatus" VerticalAlignment="Center" HorizontalAlignment="Center">
                         </TextBlock>

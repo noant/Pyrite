@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:local="clr-namespace:UniActionsUI">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:UniActionsUI">
     <ControlTemplate x:Key="FlatButtonTemplate" TargetType="Button">
         <Grid x:Name="Border"
-						TextBlock.Foreground="{TemplateBinding Foreground}"
-						Background="{TemplateBinding Background}">
+                    TextBlock.Foreground="{TemplateBinding Foreground}"
+                    Background="{TemplateBinding Background}">
+            <!--<Grid.Effect>
+                <DropShadowEffect x:Name="shadow" BlurRadius="4" Direction="180" Opacity="0.2"></DropShadowEffect>
+            </Grid.Effect>-->
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal" />
@@ -12,22 +15,23 @@
                         <Storyboard>
                             <ColorAnimation To="Gray" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1">
                             </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.5" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <Storyboard>
                             <ColorAnimation To="SteelBlue" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1" AutoReverse="True">
                             </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.7" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
             <ContentPresenter
-							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Margin="0,0,1,1"
-							RecognizesAccessKey="True" />
-            <Border Opacity="0.2" BorderBrush="Black" BorderThickness="0,0,1,1"></Border>
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True" />
+            <Border Opacity="0.2" BorderBrush="Black" BorderThickness="1,0,0,0"></Border>
         </Grid>
     </ControlTemplate>
     <Style TargetType="{x:Type Button}" x:Key="FlatButtonStyle">
@@ -151,7 +155,7 @@
         </Setter>
     </Style>
     <Style x:Key="FlatButtonSimpleStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonStyle}">
-        <Setter Property="Background" Value="LightGray"></Setter>
-        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="Background" Value="SteelBlue"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
     </Style>
 </ResourceDictionary>

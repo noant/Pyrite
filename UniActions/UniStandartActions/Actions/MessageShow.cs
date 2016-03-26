@@ -17,28 +17,37 @@ namespace UniStandartActions.Actions
             get { return true; }
         }
 
+        private static object _locker = new object();
+        private static bool isInitialized = false;
+
         public static void SetMessage(string message)
         {
-            if (_messageShow == null)
+            lock (_locker)
             {
-                new Thread(() =>
+                if (!isInitialized)
                 {
-                    _messageShow = new MessageShow();
-                    _messageShow.Show();
-                    _messageShow.AddMessage(message);
-                    _dispatcher = Dispatcher.CurrentDispatcher;
-                    Dispatcher.Run();
-                })
-                {
-                    IsBackground = true,
-                    ApartmentState = ApartmentState.STA
-                }.Start();
-            }
-            else {
-                _dispatcher.Invoke(new Action(() =>
-                {
-                    _messageShow.AddMessage(message);
-                }), DispatcherPriority.Send);
+                    isInitialized = true;
+                    new Thread(() =>
+                    {
+                        _messageShow = new MessageShow();
+                        _messageShow.Show();
+                        _messageShow.AddMessage(message);
+                        _dispatcher = Dispatcher.CurrentDispatcher;
+                        Dispatcher.Run();
+                    })
+                    {
+                        IsBackground = true,
+                        ApartmentState = ApartmentState.STA
+                    }.Start();
+                    while (_dispatcher == null)
+                        Thread.Sleep(1);
+                }
+                else {
+                    _dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        _messageShow.AddMessage(message);
+                    }), DispatcherPriority.Send);
+                }
             }
         }
 

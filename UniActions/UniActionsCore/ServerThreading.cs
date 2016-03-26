@@ -25,7 +25,6 @@ namespace UniActionsCore
                     6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
 
-                public static readonly uint SharingTryCount = 4;
                 public static readonly ushort SharingPort = 6000;
                 public static readonly Encoding ServerEncoding = Encoding.UTF8;
             }
@@ -40,8 +39,17 @@ namespace UniActionsCore
                 set
                 {
                     if (value != _sharingPort)
-                        if (ActionsPorts == null || !ActionsPorts.Contains(value))
+                    {
+                        if (ActionsPorts != null)
+                        {
+                            if (!ActionsPorts.Contains(value))
+                                _distributionPort = value;
+                        }
+                        else
+                        {
                             _distributionPort = value;
+                        }
+                    }
                 }
             }
 
@@ -71,8 +79,6 @@ namespace UniActionsCore
                 }
             }
 
-            public uint SharingTryCount { get; set; }
-
             public ushort _sharingPort;
             public ushort SharingPort
             {
@@ -82,9 +88,18 @@ namespace UniActionsCore
                 }
                 set
                 {
-                    if (value != DistributionPort)
-                        if (ActionsPorts == null || !ActionsPorts.Contains(value))
+                    if (value != _distributionPort)
+                    {
+                        if (ActionsPorts != null)
+                        {
+                            if (!ActionsPorts.Contains(value))
+                                _sharingPort = value;
+                        }
+                        else
+                        {
                             _sharingPort = value;
+                        }
+                    }
                 }
             }
         }
@@ -127,10 +142,7 @@ namespace UniActionsCore
 
                 _threadPortOccupations.ToList().ForEach(x =>
                 {
-                    if (!x.IsOccupiedByClient)
-                    {
-                        x.Listener.Stop();
-                    }
+                    x.Listener.Stop();
                 });
             }
             catch (Exception e)
@@ -181,7 +193,6 @@ namespace UniActionsCore
             this.Settings.ResolvedIp = new SkeddedList<IPAddress>();
             this.Settings.ActionsPorts = SkeddedList<ushort>.Create(ServerThreadingSettings.Defaults.ActionPorts);
             this.Settings.SharingPort = ServerThreadingSettings.Defaults.SharingPort;
-            this.Settings.SharingTryCount = ServerThreadingSettings.Defaults.SharingTryCount;
             IsStopped = true;
         }
 
@@ -267,6 +278,7 @@ namespace UniActionsCore
                                 {
                                     portOccupation.IsOccupiedByClient = true;
 
+                                    bool resolved = true;
                                     if (Settings.ResolvedIp != null && Settings.ResolvedIp.Any() && !Settings.ResolveAllIp)
                                     {
                                         lock (Settings.ResolvedIp)
@@ -275,15 +287,18 @@ namespace UniActionsCore
                                             if (!Settings.ResolvedIp.Where(x => x.Equals(ip)).Any())
                                             {
                                                 client.Close();
-                                                throw new Exception("Not resolved ip: " + ip);
+                                                resolved = false;
                                             }
                                         }
                                     }
 
-                                    var stream = client.GetStream();
-                                    var command = GetNextString(stream);
+                                    if (resolved)
+                                    {
+                                        var stream = client.GetStream();
+                                        var command = GetNextString(stream);
 
-                                    CommandHandling(client, stream, command);
+                                        CommandHandling(client, stream, command);
+                                    }
                                 }
                             }
                             catch (Exception e)
@@ -333,11 +348,11 @@ namespace UniActionsCore
         {
             if (command == VAC.ServerCommands.Command_GetStartCommands)
             {
-                var fastActions = Uni.TasksPool.Scenarios
+                var fastActions = Uni.ScenariosPool.Scenarios
                     .Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
                     .OrderBy(x => x.Index)
                     .OrderBy(x => x.Name);
-                var categories = Uni.TasksPool.Scenarios
+                var categories = Uni.ScenariosPool.Scenarios
                     .Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category)
                     .Distinct()
                     .OrderBy(x => x);
@@ -359,7 +374,7 @@ namespace UniActionsCore
             {
                 var category = GetNextString(stream);
 
-                var actions = Uni.TasksPool.Scenarios
+                var actions = Uni.ScenariosPool.Scenarios
                     .Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
                     .OrderBy(x => x.Index)
                     .OrderBy(x => x.Name);
@@ -374,10 +389,10 @@ namespace UniActionsCore
             }
             else if (command == VAC.ServerCommands.Command_GetStatus)
             {
-                var actions = Uni.TasksPool.Scenarios
+                var actions = Uni.ScenariosPool.Scenarios
                     .Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
                 SendString(stream, actions.Count().ToString());
-                foreach (var action in Uni.TasksPool.Scenarios)
+                foreach (var action in Uni.ScenariosPool.Scenarios)
                 {
                     SendString(stream, action.ServerCommand);
                     SendString(stream, action.CheckState());
@@ -385,7 +400,7 @@ namespace UniActionsCore
             }
             else
             {
-                var remoteAction = Uni.TasksPool.Scenarios.Where(x => x.ServerCommand == command).FirstOrDefault();
+                var remoteAction = Uni.ScenariosPool.Scenarios.Where(x => x.ServerCommand == command).FirstOrDefault();
                 if (remoteAction != null)
                 {
                     var state = GetNextString(stream);

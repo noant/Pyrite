@@ -26,7 +26,9 @@
                 Style="{StaticResource ComboBoxFlatActionStyle}"></ComboBox>
             <Label Style="{StaticResource LabelParams}"
                 IsEnabled="{Binding IsInEditMode,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}"
-                Content="{Binding Path=ActionString}" 
+                Content="{Binding Path=ActionString}"
+                Padding="5"
+                Visibility="{Binding ParamsVisibility}"
                 Name="tbParams"
                 Cursor="Hand">
             </Label>

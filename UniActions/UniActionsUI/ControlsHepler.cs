@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace UniActionsUI
 {
@@ -11,6 +8,11 @@ namespace UniActionsUI
         public interface IRefreshable
         {
             void Refresh();
+        }
+
+        public interface IConfirm
+        {
+            void Confirm();
         }
 
         public static void AppendOnlyInteger(TextBox tb, int min, int max)
@@ -41,7 +43,7 @@ namespace UniActionsUI
 
             int res;
             if (!int.TryParse(tb.Text, out res))
-                throw new Exception("Not an int");
+                throw new Exception("Not int");
             else return res;
         }
 
@@ -52,24 +54,8 @@ namespace UniActionsUI
 
             ushort res;
             if (!ushort.TryParse(tb.Text, out res))
-                throw new Exception("Not an short");
+                throw new Exception("Not short");
             else return res;
-        }
-    }
-
-    [ValueConversion(typeof(bool), typeof(string))]
-    public class YesNoBoolConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var boolValue = value is bool && (bool)value;
-
-            return boolValue ? "Да" : "Нет";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value != null && value.ToString() == "Да";
         }
     }
 }
