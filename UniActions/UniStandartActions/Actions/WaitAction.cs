@@ -5,7 +5,6 @@ using UniActionsClientIntefaces;
 
 namespace UniStandartActions.Actions
 {
-#if DEBUG
     [Serializable]
     public class WaitAction : ICustomAction
     {
@@ -66,5 +65,4 @@ namespace UniStandartActions.Actions
         public void Refresh()
         { }
     }
-#endif
 }
