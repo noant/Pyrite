@@ -86,7 +86,7 @@ namespace UniActionsUI
 
                 foreach (var item in App.Uni.ScenariosPool.Scenarios.Where(x =>
                     (x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)) || !this.ShowOnlyServerActions)
-                    .Where(x => x.Category == category).OrderBy(x => x.Index))
+                    .Where(x => x.Category == category).OrderBy(x=>x.Name).OrderBy(x => x.Index))
                 {
                     var cRunScenario = new RunScenarioView();
                     cRunScenario.Number = num++;

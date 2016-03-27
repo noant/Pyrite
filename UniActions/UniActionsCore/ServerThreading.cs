@@ -350,8 +350,8 @@ namespace UniActionsCore
             {
                 var fastActions = Uni.ScenariosPool.Scenarios
                     .Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
-                    .OrderBy(x => x.Index)
-                    .OrderBy(x => x.Name);
+                    .OrderBy(x => x.Name)
+                    .OrderBy(x => x.Index);
                 var categories = Uni.ScenariosPool.Scenarios
                     .Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category)
                     .Distinct()
@@ -376,8 +376,8 @@ namespace UniActionsCore
 
                 var actions = Uni.ScenariosPool.Scenarios
                     .Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
-                    .OrderBy(x => x.Index)
-                    .OrderBy(x => x.Name);
+                    .OrderBy(x => x.Name)
+                    .OrderBy(x => x.Index);
 
                 SendString(stream, actions.Count().ToString());
 
