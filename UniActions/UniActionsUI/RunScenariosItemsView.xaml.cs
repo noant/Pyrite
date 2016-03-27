@@ -76,7 +76,7 @@ namespace UniActionsUI
                 (x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)) || !this.ShowOnlyServerActions)
                 .Select(x => x.Category).Distinct().OrderBy(x => x))
             {
-                if (!string.IsNullOrEmpty(category) && category.Length > 0)
+                if (!string.IsNullOrEmpty(category))
                 {
                     var lbl = new Label();
                     lbl.Foreground = Brushes.Gray;

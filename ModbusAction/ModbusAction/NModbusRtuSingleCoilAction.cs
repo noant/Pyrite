@@ -22,8 +22,8 @@ namespace ModbusAction
             ModbusReadTimeout = 2000;
             ModbusWriteTimeout = 2000;
 
-            StateOn = "Включить";
-            StateOff = "Выключить";
+            StateOff = "Включить";
+            StateOn = "Выключить";
         }
 
         public string StateOn { get; set; }
