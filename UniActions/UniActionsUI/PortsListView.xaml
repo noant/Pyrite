@@ -18,7 +18,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Width="140" HorizontalContentAlignment="Center">Порт раздачи статусов</Label>
-                <TextBox Name="tbSharingPort" Style="{StaticResource TextBoxSimpleStyle}" Width="100"></TextBox>
+                <TextBox IsEnabled="False" Name="tbSharingPort" Style="{StaticResource TextBoxSimpleStyle}" Width="100"></TextBox>
             </StackPanel>
         </StackPanel>
         <ListView Grid.Row="1" Style="{StaticResource FlatSimpleListView}" x:Name="listPort"/>

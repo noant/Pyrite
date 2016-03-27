@@ -59,7 +59,7 @@ namespace UniActionsUI
                 if (res.Value)
                 {
                     var wasBusy = _tempItem.IsBusyNow;
-                    _tempItem.KillDispatcher();
+                    _tempItem.ClearDispatcher();
                     _tempItem.ActionBag = Scenario.ActionBag;
                     _tempItem.Category = Scenario.Category;
                     _tempItem.IsActive = Scenario.IsActive;
@@ -70,6 +70,7 @@ namespace UniActionsUI
                     _tempItem.Index = Scenario.Index;
                     if (wasBusy)
                         _tempItem.ExecuteAsync(null);
+
                     DisableButtons();
                     App.Uni.CommitChanges();
                     if (Applying != null)

@@ -77,7 +77,5 @@ namespace UniActionsCore
             _scenarios.ForEach(x => x.Dispose());
             _scenarios.Clear();
         }
-
-
     }
 }

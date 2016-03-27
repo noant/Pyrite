@@ -17,13 +17,14 @@ namespace UniActionsCore.ScenarioCreation
 
         public Scenario()
         {
-            this.IsActive = true;
+            this.IsActive = false;
+            this.UseServerThreading = true;
             this.UseOnOffState = true;
             Guid = Guid.NewGuid();
             StartDispatcher();
         }
 
-        private void StartDispatcher()
+        public void StartDispatcher()
         {
             this.Dispatcher = null;
             _thread = new Thread(() =>
@@ -43,7 +44,7 @@ namespace UniActionsCore.ScenarioCreation
             ClearDispatcher();
         }
 
-        private void ClearDispatcher()
+        public void ClearDispatcher()
         {
             KillDispatcher();
             StartDispatcher();
@@ -195,35 +196,41 @@ namespace UniActionsCore.ScenarioCreation
 
         private string ExecuteWithoutDispatcherInvoking(string inputState, bool withoutServerEvent)
         {
-            lock (_locker)
+            try
             {
-                try
+                if (this.Action is DoubleComplexAction)
                 {
-                    if (this.Action is DoubleComplexAction)
-                    {
-                        var state = DoubleComplexAction.BeginState;
-                        if (((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Ended)
-                            state = DoubleComplexAction.EndState;
+                    var state = DoubleComplexAction.BeginState;
+                    if (((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Ended)
+                        state = DoubleComplexAction.EndState;
 
-                        this.Dispatcher.BeginInvoke(new Action(() =>
+                    this.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        lock (_locker)
                         {
                             this.IsBusyNow = true;
                             this.Action.Do(state);
                             this.IsBusyNow = false;
-                            RaiseAfterEvent(withoutServerEvent);
-                        }));
+                        }
+                        RaiseAfterEvent(withoutServerEvent);
+                    }));
 
-                        return ((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Began ?
-                            OffState_DCAction :
-                            OnState_DCAction;
+                    return ((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Began ?
+                        OffState_DCAction :
+                        OnState_DCAction;
+                }
+                else
+                    lock (_locker)
+                    {
+                        this.IsBusyNow = true;
+                        var result = this.Action.Do(inputState);
+                        this.IsBusyNow = false;
+                        return result;
                     }
-                    else
-                        return this.Action.Do(inputState);
-                }
-                catch (Exception e)
-                {
-                    Log.Write(e);
-                }
+            }
+            catch (Exception e)
+            {
+                Log.Write(e);
             }
             return string.Empty;
         }
