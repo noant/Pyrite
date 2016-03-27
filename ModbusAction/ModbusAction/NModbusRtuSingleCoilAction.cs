@@ -10,6 +10,22 @@ namespace ModbusAction
     [Serializable]
     public class NModbusRtuSingleCoilAction : ICustomAction
     {
+        public NModbusRtuSingleCoilAction()
+        {
+            PortName = "COM1";
+            PortBaudRate = 9600;
+            PortDataBits = 8;
+            PortParity = Parity.None;
+            PortStopBits = StopBits.One;
+            ModbusSlaveId = 1;
+            ModbusCoilAddress = 0;
+            ModbusReadTimeout = 2000;
+            ModbusWriteTimeout = 2000;
+
+            StateOn = "Включить";
+            StateOff = "Выключить";
+        }
+
         public string StateOn { get; set; }
 
         public string StateOff { get; set; }
@@ -118,16 +134,6 @@ namespace ModbusAction
 
         public virtual bool BeginUserSettings()
         {
-            PortName = "COM1";
-            PortBaudRate = 9600;
-            PortDataBits = 8;
-            PortParity = Parity.None;
-            PortStopBits = StopBits.One;
-            ModbusSlaveId = 1;
-            ModbusCoilAddress = 0;
-            ModbusReadTimeout = 2000;
-            ModbusWriteTimeout = 2000;
-
             var form = new CreateNModbusSingleCoilActionForm();
             form.tbPortName.Text = this.PortName;
             form.tbStateOff.Text = this.StateOff;

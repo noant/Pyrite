@@ -51,8 +51,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UniActionsClientIntefaces">
-      <HintPath>..\..\UniActions\UniActionsClientIntefaces\bin\Release\UniActionsClientIntefaces.dll</HintPath>
+    <Reference Include="UniActionsClientIntefaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\UniActions\UniActionsClientIntefaces\bin\Debug\UniActionsClientIntefaces.dll</HintPath>
     </Reference>
     <Reference Include="Unme.Common">
       <HintPath>..\LibrariesToAdd\Unme.Common.dll</HintPath>

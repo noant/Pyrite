@@ -26,7 +26,7 @@
                                                 RenderOptions.BitmapScalingMode="LowQuality"
                                                 RenderOptions.EdgeMode="Unspecified"
                                                 RenderOptions.ClearTypeHint="Auto"
-                                                Duration="00:00:1" Storyboard.TargetProperty="Opacity" From="0" To="0.5"></DoubleAnimation>
+                                                Duration="00:00:0.5" Storyboard.TargetProperty="Opacity" From="0" To="0.5"></DoubleAnimation>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
@@ -68,7 +68,7 @@
                                             RenderOptions.EdgeMode="Unspecified"
                                             RenderOptions.ClearTypeHint="Auto"
                                             To="0"
-                                            Duration="00:00:0.5"></DoubleAnimation>
+                                            Duration="00:00:0.3"></DoubleAnimation>
                                     </ParallelTimeline>
                                 </Storyboard>
                             </BeginStoryboard>

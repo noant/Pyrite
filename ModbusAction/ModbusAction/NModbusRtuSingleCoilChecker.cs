@@ -9,6 +9,19 @@ namespace ModbusAction
     [Serializable]
     public class NModbusRtuSingleCoilChecker : ICustomChecker
     {
+        public NModbusRtuSingleCoilChecker()
+        {
+            PortName = "COM1";
+            PortBaudRate = 9600;
+            PortDataBits = 8;
+            PortParity = Parity.None;
+            PortStopBits = StopBits.One;
+            ModbusSlaveId = 1;
+            ModbusCoilAddress = 0;
+            ModbusReadTimeout = 2000;
+            ModbusWriteTimeout = 2000;
+        }
+
         [HumanFriendlyName("Порт")]
         public string PortName { get; set; }
 
@@ -88,16 +101,6 @@ namespace ModbusAction
 
         public bool BeginUserSettings()
         {
-            PortName = "COM1";
-            PortBaudRate = 9600;
-            PortDataBits = 8;
-            PortParity = Parity.None;
-            PortStopBits = StopBits.One;
-            ModbusSlaveId = 1;
-            ModbusCoilAddress = 0;
-            ModbusReadTimeout = 2000;
-            ModbusWriteTimeout = 2000;
-
             var form = new CreateNModbusSingleCoilCheckerForm();
             form.tbPortName.Text = this.PortName;
             form.nudBaudRate.Value = this.PortBaudRate;
