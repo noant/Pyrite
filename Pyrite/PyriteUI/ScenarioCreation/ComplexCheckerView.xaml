@@ -1,0 +1,48 @@
+﻿<local:EditableUserControl x:Class="PyriteUI.ScenarioCreation.ComplexCheckerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PyriteUI.ScenarioCreation"
+             mc:Ignorable="d" 
+            Height="Auto"
+            Width="Auto"
+             IsInEditMode="True"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <StackPanel 
+            Orientation="Horizontal"
+            Visibility="{Binding RootControlsVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" >
+            <Button Style="{StaticResource FlatButtonCloseOrDeleteStyle}" 
+                    Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+                    ToolTip="Удалить" 
+                    x:Name="btDelete"></Button>
+            <ComboBox 
+                    Height="27" Width="Auto"
+                    IsEnabled="{Binding IsInEditMode,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+                    Style="{StaticResource ComboBoxFlatCheckerStyle}"
+                    ItemsSource="{Binding Path=AllOperatorViews}"
+                    SelectedValue="{Binding Path=OperatorPairView}"
+                    Foreground="DarkBlue"
+                    HorizontalAlignment="Left"
+                    x:Name="cbOperator"></ComboBox>
+        </StackPanel>
+        <StackPanel Height="Auto" x:Name="stackCheckers">
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button
+                x:Name="btAdd"
+                Style="{StaticResource FlatButtonAddStyle}"  
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+                HorizontalAlignment="Left">
+            </Button>
+            <Button
+                x:Name="btAddGroup"
+                ToolTip="Добавить группу"
+                Style="{StaticResource FlatButtonAddGroupStyle}"  
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+                HorizontalAlignment="Left">
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</local:EditableUserControl>

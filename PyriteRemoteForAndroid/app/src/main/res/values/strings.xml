@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PyriteRemote</string>
+    <string name="action_settings">__</string>
+    <string name="title_activity_change_address">Изменить ip-адрес и порт</string>
+    <string name="address_parse_error">Неверный адрес</string>
+    <string name="address_parse_ok">Данные успешно изменены</string>
+    <string name="ok">Ввод</string>
+    <string name="settings">Настройки</string>
+    <string name="executing">Выполняется...</string>
+    <string name="tcpPort">Tcp порт</string>
+    <string name="tcpSharingPort">Tcp порт раздачи значений</string>
+    <string name="IPAddress">IP Адрес</string>
+</resources>

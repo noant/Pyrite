@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4BFE95B0-D94F-4022-A120-FDE11392229C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PyriteStandartActions</RootNamespace>
+    <AssemblyName>PyriteStandartActions</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\ExecuteCommandActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ExecuteCommandActionView.Designer.cs">
+      <DependentUpon>ExecuteCommandActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\ExecuteCommandAction.cs" />
+    <Compile Include="Actions\KillProcessAction.cs" />
+    <Compile Include="Actions\SystemSoundAction.cs" />
+    <Compile Include="Actions\Utils\EnterStringForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\Utils\EnterStringForm.Designer.cs">
+      <DependentUpon>EnterStringForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\_Debug_ChangeTestStatus.cs" />
+    <Compile Include="Actions\MessageShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\MessageShow.Designer.cs">
+      <DependentUpon>MessageShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\MessageShowAction.cs" />
+    <Compile Include="Actions\PowerOffAction.cs" />
+    <Compile Include="Actions\PowerOffActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\PowerOffActionView.Designer.cs">
+      <DependentUpon>PowerOffActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\PowerOffForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\PowerOffForm.Designer.cs">
+      <DependentUpon>PowerOffForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\ProcessAction.cs" />
+    <Compile Include="Actions\ProcessActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ProcessActionView.Designer.cs">
+      <DependentUpon>ProcessActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\WaitAction.cs" />
+    <Compile Include="Actions\WaitActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\WaitActionView.Designer.cs">
+      <DependentUpon>WaitActionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\DateBetweenChecker.cs" />
+    <Compile Include="Checkers\DateBetweenCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\DateBetweenCheckerView.designer.cs">
+      <DependentUpon>DateBetweenCheckerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\DateTimeChecker.cs" />
+    <Compile Include="Checkers\DateTimeCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\DateTimeCheckerView.Designer.cs">
+      <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\DayBetweenChecker.cs" />
+    <Compile Include="Checkers\DayEqualityChecker.cs" />
+    <Compile Include="Checkers\DayOfWeekCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\DayOfWeekCheckerView.Designer.cs">
+      <DependentUpon>DayOfWeekCheckerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\EveryIterationChecker.cs" />
+    <Compile Include="Checkers\HourBetweenChecker.cs" />
+    <Compile Include="Checkers\HourEqualityChecker.cs" />
+    <Compile Include="Checkers\MinuteBetweenChecker.cs" />
+    <Compile Include="Checkers\MinuteEqualityChecker.cs" />
+    <Compile Include="Checkers\MonthBetweenChecker.cs" />
+    <Compile Include="Checkers\MonthEqualityChecker.cs" />
+    <Compile Include="Checkers\SecondBetweenChecker.cs" />
+    <Compile Include="Checkers\DayOfWeekChecker.cs" />
+    <Compile Include="Checkers\YearEqualityChecker.cs" />
+    <Compile Include="Checkers\SecondEqualityChecker.cs" />
+    <Compile Include="Checkers\Utils\BetweenValuePartialImplementation.cs" />
+    <Compile Include="Checkers\Utils\BetweenValueView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\Utils\BetweenValueView.Designer.cs">
+      <DependentUpon>BetweenValueView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\Utils\ValueEqualityPartialImplementation.cs" />
+    <Compile Include="Checkers\Utils\ValueEqualityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\Utils\ValueEqualityView.Designer.cs">
+      <DependentUpon>ValueEqualityView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Checkers\YearBetweenChecker.cs" />
+    <Compile Include="DoNotDeleteThisClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HierarchicalData\HierarchicalData.csproj">
+      <Project>{ca8b1b75-6b8a-4216-af3d-27b5d1cdf3e4}</Project>
+      <Name>HierarchicalData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PyriteClientIntefaces\PyriteClientIntefaces.csproj">
+      <Project>{683527b0-3d6e-4fd3-b549-588bfdd43119}</Project>
+      <Name>PyriteClientIntefaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\ExecuteCommandActionView.resx">
+      <DependentUpon>ExecuteCommandActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\MessageShow.resx">
+      <DependentUpon>MessageShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\PowerOffActionView.resx">
+      <DependentUpon>PowerOffActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\PowerOffForm.resx">
+      <DependentUpon>PowerOffForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\ProcessActionView.resx">
+      <DependentUpon>ProcessActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Utils\EnterStringFOrm.resx">
+      <DependentUpon>EnterStringForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\WaitActionView.resx">
+      <DependentUpon>WaitActionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\DateBetweenCheckerView.resx">
+      <DependentUpon>DateBetweenCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\DateTimeCheckerView.resx">
+      <DependentUpon>DateTimeCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\DayOfWeekCheckerView.resx">
+      <DependentUpon>DayOfWeekCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\Utils\BetweenValueView.resx">
+      <DependentUpon>BetweenValueView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\Utils\ValueEqualityView.resx">
+      <DependentUpon>ValueEqualityView.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

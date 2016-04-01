@@ -1,0 +1,39 @@
+﻿<local:EditableUserControl x:Class="PyriteUI.ScenarioCreation.ComplexActionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PyriteUI.ScenarioCreation"
+             mc:Ignorable="d" 
+             IsInEditMode="True"
+             Height="Auto"
+             Width="Auto"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <Grid
+            Visibility="{Binding RootControlsVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}">
+            <Button 
+                HorizontalAlignment="Left"
+                Style="{StaticResource FlatButtonCloseOrDeleteStyle}" 
+                Name="btRemove"
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}">
+            </Button>
+        </Grid>
+        <StackPanel Name="spActions">
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button 
+                Name="btAdd"
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}"
+                Style="{StaticResource FlatButtonAddStyle}"></Button>
+            <Button 
+                Name="btAddIf"
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}"
+                Style="{StaticResource FlatButtonAddIfStyle}"></Button>
+            <Button 
+                Name="btAddWhile"
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}"
+                Style="{StaticResource FlatButtonAddWhileStyle}"></Button>
+        </StackPanel>
+    </StackPanel>
+</local:EditableUserControl>

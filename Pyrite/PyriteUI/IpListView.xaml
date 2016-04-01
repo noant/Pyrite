@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="PyriteUI.IpListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:local="clr-namespace:PyriteUI"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label>Разрешить все IP</Label>
+            <local:BooleanSelector x:Name="bsResolveAllIp" Width="100"></local:BooleanSelector>
+        </StackPanel>
+        <ListView IsEnabled="{Binding ElementName=bsResolveAllIp, Path=Value}" Style="{StaticResource FlatSimpleListView}" x:Name="listIp" Grid.Row="1"/>
+        <Grid Grid.Row="2">
+            <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Right">
+                <Button Style="{StaticResource FlatButtonSimpleStyle}" Name="btDelete" Width="100">Удалить</Button>
+                <local:IpBox Width="140" Margin="10,0,1,0" VerticalAlignment="Stretch" x:Name="tbIp"></local:IpBox>
+                <Button  Style="{StaticResource FlatButtonSimpleStyle}" VerticalAlignment="Stretch" Name="btAdd" Width="100">Добавить</Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

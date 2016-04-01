@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{69F1B8AD-4722-40D0-B61E-55371DC5E987}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PyriteCore</RootNamespace>
+    <AssemblyName>PyriteCore</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ScenarioCreation\DoNothingAction.cs" />
+    <Compile Include="ScenarioCreation\DoubleComplexAction.cs" />
+    <Compile Include="ScenarioCreation\NeverChecker.cs" />
+    <Compile Include="ScenarioCreation\Scenario.cs" />
+    <Compile Include="ScenarioCreation\ComplexAction.cs" />
+    <Compile Include="ScenarioCreation\ComplexChecker.cs" />
+    <Compile Include="ScenarioCreation\Helper.cs" />
+    <Compile Include="ScenarioCreation\IfAction.cs" />
+    <Compile Include="ScenarioCreation\IHasCheckerAction.cs" />
+    <Compile Include="Utils\ThreadHelper.cs" />
+    <Compile Include="ModulesControl.cs" />
+    <Compile Include="Utils\ExceptionsHandling.cs" />
+    <Compile Include="ScenarioCreation\WhileAction.cs" />
+    <Compile Include="Utils\SkeddedList.cs" />
+    <Compile Include="ScenariosPool.cs" />
+    <Compile Include="SaveAndLoad.cs" />
+    <Compile Include="Utils\TcpListenerEx.cs" />
+    <Compile Include="Uni.cs" />
+    <Compile Include="ServerThreading.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VAC.cs" />
+    <Compile Include="Сrutches.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HierarchicalData\HierarchicalData.csproj">
+      <Project>{ca8b1b75-6b8a-4216-af3d-27b5d1cdf3e4}</Project>
+      <Name>HierarchicalData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Log\Log.csproj">
+      <Project>{a73a1166-fc36-4800-bd02-465fa7e9b833}</Project>
+      <Name>Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PyriteClientIntefaces\PyriteClientIntefaces.csproj">
+      <Project>{683527b0-3d6e-4fd3-b549-588bfdd43119}</Project>
+      <Name>PyriteClientIntefaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PyriteStandartActions\PyriteStandartActions.csproj">
+      <Project>{4bfe95b0-d94f-4022-a120-fde11392229c}</Project>
+      <Name>PyriteStandartActions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

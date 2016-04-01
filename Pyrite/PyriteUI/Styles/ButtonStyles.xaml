@@ -1,0 +1,161 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:PyriteUI">
+    <ControlTemplate x:Key="FlatButtonTemplate" TargetType="Button">
+        <Grid x:Name="Border"
+                    TextBlock.Foreground="{TemplateBinding Foreground}"
+                    Background="{TemplateBinding Background}">
+            <!--<Grid.Effect>
+                <DropShadowEffect x:Name="shadow" BlurRadius="4" Direction="180" Opacity="0.2"></DropShadowEffect>
+            </Grid.Effect>-->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <ColorAnimation To="Gray" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1">
+                            </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.5" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ColorAnimation To="SteelBlue" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)" Duration="0:0:0.1" AutoReverse="True">
+                            </ColorAnimation>
+                            <!--<DoubleAnimation SpeedRatio="4" To="0.7" Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity"></DoubleAnimation>-->
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True" />
+            <Border Opacity="0.2" BorderBrush="Black" BorderThickness="1,0,0,0"></Border>
+        </Grid>
+    </ControlTemplate>
+    <Style TargetType="{x:Type Button}" x:Key="FlatButtonStyle">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template" Value="{DynamicResource FlatButtonTemplate}">
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonStyle}" x:Key="FlatButtonScenarioOperationStyle">
+        <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+        <Setter Property="Background" Value="SteelBlue"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="Height" Value="27"></Setter>
+        <Setter Property="Width" Value="27"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        <Setter Property="UseLayoutRounding" Value="True"></Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonScenarioOperationStyle}" x:Key="FlatButtonCloseOrDeleteStyle">
+        <Setter Property="ToolTip" Value="Удалить"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button Background="Tomato" Template="{DynamicResource FlatButtonTemplate}" Focusable="False">
+                        <Grid>
+                            <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="0" Y1="0" X2="15" Y2="15"></Line>
+                            <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="0" Y1="15" X2="15" Y2="0"></Line>
+                        </Grid>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonScenarioOperationStyle}" x:Key="FlatButtonAddStyle">
+        <Setter Property="ToolTip" Value="Добавить"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button Background="RoyalBlue" Template="{DynamicResource FlatButtonTemplate}" Focusable="False">
+                        <Grid Margin="0">
+                            <Line Width="20" Height="20" Stroke="White" VerticalAlignment="Center" HorizontalAlignment="Center" X1="10" Y1="0" X2="10" Y2="20"></Line>
+                            <Line Width="20" Height="20" Stroke="White" VerticalAlignment="Center" HorizontalAlignment="Center" X1="0" Y1="10" X2="20" Y2="10"></Line>
+                        </Grid>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonScenarioOperationStyle}" x:Key="FlatButtonCheckStyle">
+        <Setter Property="ToolTip" Value="Проверить"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button Background="MediumSeaGreen" Template="{DynamicResource FlatButtonTemplate}" Focusable="False">
+                        <Grid>
+                            <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="2" Y1="2" X2="4" Y2="9"></Line>
+                            <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="4" Y1="9" X2="14" Y2="0"></Line>
+                        </Grid>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonScenarioOperationStyle}" x:Key="FlatButtonAddGroupStyle">
+        <Setter Property="Width" Value="70"></Setter>
+        <Setter Property="ToolTip" Value="Добавить группу"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button Background="CornflowerBlue" Template="{DynamicResource FlatButtonTemplate}" Focusable="False">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="0" Y1="8" X2="16" Y2="8"></Line>
+                                <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="8" Y1="0" X2="8" Y2="16"></Line>
+                            </Grid>
+                            <TextBlock Foreground="White">ГРУППА</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonScenarioOperationStyle}" x:Key="FlatButtonAddIfStyle">
+        <Setter Property="Width" Value="58"></Setter>
+        <Setter Property="ToolTip" Value="Добавить условие"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button Background="DodgerBlue" Template="{DynamicResource FlatButtonTemplate}" Focusable="False">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="0" Y1="8" X2="16" Y2="8"></Line>
+                                <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="8" Y1="0" X2="8" Y2="16"></Line>
+                            </Grid>
+                            <TextBlock Foreground="White">ЕСЛИ</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonScenarioOperationStyle}" x:Key="FlatButtonAddWhileStyle">
+        <Setter Property="Width" Value="58"></Setter>
+        <Setter Property="ToolTip" Value="Добавить цикл"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Button Background="SteelBlue" Template="{DynamicResource FlatButtonTemplate}" Focusable="False">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="0" Y1="8" X2="16" Y2="8"></Line>
+                                <Line Stroke="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" X1="8" Y1="0" X2="8" Y2="16"></Line>
+                            </Grid>
+                            <TextBlock Foreground="White">ПОКА</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="FlatButtonSimpleStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource FlatButtonStyle}">
+        <Setter Property="Background" Value="SteelBlue"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+    </Style>
+</ResourceDictionary>

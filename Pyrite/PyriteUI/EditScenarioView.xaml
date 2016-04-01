@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="PyriteUI.EditScenarioView"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:local="clr-namespace:PyriteUI"
+            xmlns:scenCreation="clr-namespace:PyriteUI.ScenarioCreation"
+            Height="Auto"
+            KeyboardNavigation.TabNavigation="Local">
+    <Grid>
+        <Grid.Resources>
+            <local:StringToIntConverter x:Key="StringToIntConverter"></local:StringToIntConverter>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" VerticalAlignment="Stretch" Margin="10" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Visibility="Collapsed" TabIndex="9" Style="{StaticResource FlatButtonSimpleStyle}" Width="100" Name="btCreate">Применить</Button>
+            <Button Visibility="Collapsed" TabIndex="9" Style="{StaticResource FlatButtonSimpleStyle}" Width="100" Margin="10,0,0,0" Name="btCancel">Сброс</Button>
+        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="130"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border Background="LightSteelBlue" Grid.Row="1" Margin="3" BorderBrush="Gray" BorderThickness="1" >
+                <StackPanel>
+                    <Border Background="SteelBlue">
+                        <Label HorizontalContentAlignment="Center" Foreground="White">ПАРАМЕТРЫ СЦЕНАРИЯ</Label>
+                    </Border>
+                    <Grid VerticalAlignment="Top" Margin="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="200"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Наименование</Label>
+                        <TextBox TabIndex="2" Margin="1" Style="{StaticResource TextBoxSimpleStyle}" Name="tbName" Text="{Binding Path=ScenarioName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="0" Grid.Column="1"></TextBox>
+                        <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">Индекс</Label>
+                        <TextBox TabIndex="5" Margin="1" Style="{StaticResource TextBoxSimpleStyle}" Name="tbIndex" Text="{Binding Path=ScenarioIndex, Mode=TwoWay, Converter={StaticResource StringToIntConverter}, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="2" Grid.Column="1"></TextBox>
+                        <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Использовать в потоке сервера</Label>
+                        <local:BooleanSelector HorizontalAlignment="Left" Width="100" Grid.Row="0"  Grid.Column="3" TabIndex="6" Value="{Binding Path=IsScenarioUsedInServerThreading, Mode=TwoWay}" x:Name="bUseInServer"></local:BooleanSelector>
+                        <Label  Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Использовать в потоке задач</Label>
+                        <local:BooleanSelector HorizontalAlignment="Left" Width="100" Grid.Row="1" Grid.Column="3" TabIndex="7" Value="{Binding Path=IsScenarioActive, Mode=TwoWay}" x:Name="bUseInPool"></local:BooleanSelector>
+                        <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Использовать вкл/выкл статус</Label>
+                        <local:BooleanSelector  HorizontalAlignment="Left" Width="100" Grid.Row="2" Grid.Column="3" TabIndex="8" Value="{Binding Path=IsScenarioUseOnOffState, Mode=TwoWay}" x:Name="bUseOnOffState"></local:BooleanSelector>
+                        <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Категория</Label>
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBox TabIndex="4" Margin="0,1,1,1" Style="{StaticResource TextBoxSimpleStyle}" Text="{Binding Path=ScenarioCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Name="tbCategory" Grid.Column="1"></TextBox>
+                            <ComboBox Background="LightSkyBlue" TabIndex="3" Margin="1,1,0,1" ItemsSource="{Binding AllCategories}" Style="{StaticResource ComboBoxOnlySelectStyle}" Name="cbSelectCategory"></ComboBox>
+                        </Grid>
+                        <TextBlock TextWrapping="Wrap" Grid.Column="4" Grid.RowSpan="3" Foreground="Red" Name="tbStatus" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <Border KeyboardNavigation.TabIndex="0" Grid.Row="0" Margin="3" Name="borderScenarioHolder">
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

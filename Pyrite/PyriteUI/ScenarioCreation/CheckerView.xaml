@@ -1,0 +1,40 @@
+﻿<local:EditableUserControl x:Class="PyriteUI.ScenarioCreation.CheckerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PyriteUI.ScenarioCreation"
+             mc:Ignorable="d" Height="27"
+             IsInEditMode="True"
+             Width="Auto">
+    <StackPanel Orientation="Horizontal">
+        <Button Style="{StaticResource FlatButtonCloseOrDeleteStyle}" 
+                Visibility="{Binding EditModeVisibility,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+                ToolTip="Удалить" 
+                x:Name="btDelete"></Button>
+        <ComboBox 
+            IsEnabled="{Binding IsInEditMode,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+            Style="{StaticResource ComboBoxFlatCheckerStyle}"
+            ItemsSource="{Binding Path=AllOperatorViews}"
+            SelectedValue="{Binding Path=OperatorPairView}"
+            Foreground="DarkBlue"
+            Width="Auto" 
+            Margin="0,0,0,0"
+            x:Name="cbOperator"></ComboBox>
+        <ComboBox 
+            IsEnabled="{Binding IsInEditMode,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}" 
+            x:Name="cbCheckers"
+            ItemsSource="{Binding Path=AllCustomCheckers}"
+            Width="Auto"
+            SelectedValue="{Binding Path=CheckerType}"
+            Style="{StaticResource ComboBoxFlatCheckerStyle}"></ComboBox>
+        <Label Style="{StaticResource LabelParams}"
+                IsEnabled="{Binding IsInEditMode,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EditableUserControl}}}"
+                Padding="5"
+                Content="{Binding Path=CheckerString}" 
+                Name="tbParams"
+                Visibility="{Binding ParamsVisibility}"
+                Cursor="Hand">
+        </Label>
+    </StackPanel>
+</local:EditableUserControl>

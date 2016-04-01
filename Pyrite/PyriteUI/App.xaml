@@ -1,0 +1,17 @@
+﻿<Application x:Class="PyriteUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PyriteUI">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PyriteUI;component/Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="/PyriteUI;component/Styles/ComboBoxStyles.xaml"/>
+                <ResourceDictionary Source="/PyriteUI;component/Styles/LabelStyles.xaml"/>
+                <ResourceDictionary Source="/PyriteUI;component/Styles/TextBoxStyles.xaml"/>
+                <ResourceDictionary Source="/PyriteUI;component/Styles/ListViewStyles.xaml"/>
+                <ResourceDictionary Source="/PyriteUI;component/Styles/TabControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
