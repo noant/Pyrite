@@ -51,12 +51,47 @@ namespace PyriteUI
                 RemoveCurrentScenario();
             };
 
+            bool lockSelectionChangedEvent = false;
             this.lvItems.SelectionChanged += (o, e) =>
             {
-                if (this.lvItems.SelectedItem != null)
-                    scenarioView.SetScenario(((ScenariosViewContext.ScenarioViewItem)this.lvItems.SelectedItem).Scenario);
-                else if (this.lvItems.HasItems)
-                    lvItems.SelectedIndex = 0;
+                if (lockSelectionChangedEvent)
+                    return;
+
+                var targetAction = new Action(() =>
+                {
+                    if (this.lvItems.SelectedItem != null)
+                        scenarioView.SetScenario(((ScenariosViewContext.ScenarioViewItem)this.lvItems.SelectedItem).Scenario);
+                    else if (this.lvItems.HasItems)
+                        lvItems.SelectedIndex = 0;
+                });
+
+                if (lvItems.SelectedValue != null && scenarioView.WasChanged)
+                {
+                    switch (MessageBox.Show("Выбранный сценарий был изменен. Применить изменения?", "Применить изменения", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
+                    {
+                        case (MessageBoxResult.Yes):
+                            {
+                                scenarioView.Confirm();
+                                targetAction();
+                                break;
+                            }
+                        case (MessageBoxResult.No):
+                            {
+                                targetAction();
+                                break;
+                            }
+                        case (MessageBoxResult.Cancel):
+                            {
+                                e.Handled = false;
+                                lockSelectionChangedEvent = true;
+                                lvItems.SelectedItem = e.RemovedItems[0];
+                                lockSelectionChangedEvent = false;
+                                break;
+                            }
+                    }
+                }
+                else
+                    targetAction();
             };
 
             this.KeyDown += (o, e) =>

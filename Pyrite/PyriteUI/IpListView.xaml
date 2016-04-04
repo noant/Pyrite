@@ -7,6 +7,9 @@
              xmlns:local="clr-namespace:PyriteUI"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.Resources>
+            <local:BooleanInvertValueConverter x:Key="booleanInvertValueConverter"></local:BooleanInvertValueConverter>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -16,12 +19,12 @@
             <Label>Разрешить все IP</Label>
             <local:BooleanSelector x:Name="bsResolveAllIp" Width="100"></local:BooleanSelector>
         </StackPanel>
-        <ListView IsEnabled="{Binding ElementName=bsResolveAllIp, Path=Value}" Style="{StaticResource FlatSimpleListView}" x:Name="listIp" Grid.Row="1"/>
+        <ListView IsEnabled="{Binding ElementName=bsResolveAllIp, Path=Value, Converter={StaticResource booleanInvertValueConverter}}" Style="{StaticResource FlatSimpleListView}" x:Name="listIp" Grid.Row="1"/>
         <Grid Grid.Row="2">
-            <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Right">
+            <StackPanel IsEnabled="{Binding ElementName=bsResolveAllIp, Path=Value, Converter={StaticResource booleanInvertValueConverter}}" Margin="10" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Right">
                 <Button Style="{StaticResource FlatButtonSimpleStyle}" Name="btDelete" Width="100">Удалить</Button>
                 <local:IpBox Width="140" Margin="10,0,1,0" VerticalAlignment="Stretch" x:Name="tbIp"></local:IpBox>
-                <Button  Style="{StaticResource FlatButtonSimpleStyle}" VerticalAlignment="Stretch" Name="btAdd" Width="100">Добавить</Button>
+                <Button Style="{StaticResource FlatButtonSimpleStyle}" VerticalAlignment="Stretch" Name="btAdd" Width="100">Добавить</Button>
             </StackPanel>
         </Grid>
     </Grid>

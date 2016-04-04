@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace PyriteUI
 {
@@ -37,13 +39,13 @@ namespace PyriteUI
             rbNo.Checked += (o, e) =>
             {
                 if (BoolChanged != null)
-                    BoolChanged(this);
+                    BoolChanged(this, new EventArgs());
                 Value = false;
             };
             rbYes.Checked += (o, e) =>
             {
                 if (BoolChanged != null)
-                    BoolChanged(this);
+                    BoolChanged(this, new EventArgs());
                 Value = true;
             };
         }
@@ -61,5 +63,19 @@ namespace PyriteUI
         }
     }
 
-    public delegate void BoolChanged(BooleanSelector c);
+    public delegate void BoolChanged(object sender, EventArgs e);
+
+
+    public class BooleanInvertValueConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool)value;
+        }
+    }
 }

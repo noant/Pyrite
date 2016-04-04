@@ -37,49 +37,51 @@ namespace PyriteUI
             this.tbCategory.TextChanged += (o, e) =>
                 ProcessOkEnable();
 
-            this.bUseInPool.BoolChanged += (o) =>
+            this.bUseInPool.BoolChanged += (o, e) =>
                 ProcessOkEnable();
 
-            this.bUseInServer.BoolChanged += (o) =>
+            this.bUseInServer.BoolChanged += (o, e) =>
                 ProcessOkEnable();
 
             this.tbIndex.TextChanged += (o, e) =>
                 ProcessOkEnable();
 
-            this.bUseOnOffState.BoolChanged += (o) =>
+            this.bUseOnOffState.BoolChanged += (o, e) =>
                 ProcessOkEnable();
 
             this.btCancel.Click += (o, e) =>
                 SetScenario(_tempItem);
 
             this.btCreate.Click += (o, e) =>
-            {
-                var res = App.Pyrite.ScenariosPool.CheckScenario(Scenario);
-
-                if (res.Value)
-                {
-                    var wasBusy = _tempItem.IsBusyNow;
-                    _tempItem.ClearDispatcher();
-                    _tempItem.ActionBag = Scenario.ActionBag;
-                    _tempItem.Category = Scenario.Category;
-                    _tempItem.IsActive = Scenario.IsActive;
-                    _tempItem.UseOnOffState = Scenario.UseOnOffState;
-                    _tempItem.Name = Scenario.Name;
-                    _tempItem.ServerCommand = Scenario.ServerCommand;
-                    _tempItem.UseServerThreading = Scenario.UseServerThreading;
-                    _tempItem.Index = Scenario.Index;
-                    if (wasBusy)
-                        _tempItem.ExecuteAsync(null);
-
-                    DisableButtons();
-                    App.Pyrite.CommitChanges();
-                    if (Applying != null)
-                        Applying(this, new EventArgs());
-                    SetScenario(_tempItem);
-                }
-            };
+                Confirm();
 
             this.Loaded += (o, e) => DisableButtons();
+        }
+
+        public void Confirm()
+        {
+            var res = App.Pyrite.ScenariosPool.CheckScenario(Scenario);
+            if (res.Value)
+            {
+                var wasBusy = _tempItem.IsBusyNow;
+                _tempItem.ClearDispatcher();
+                _tempItem.ActionBag = Scenario.ActionBag;
+                _tempItem.Category = Scenario.Category;
+                _tempItem.IsActive = Scenario.IsActive;
+                _tempItem.UseOnOffState = Scenario.UseOnOffState;
+                _tempItem.Name = Scenario.Name;
+                _tempItem.ServerCommand = Scenario.ServerCommand;
+                _tempItem.UseServerThreading = Scenario.UseServerThreading;
+                _tempItem.Index = Scenario.Index;
+                if (wasBusy)
+                    _tempItem.ExecuteAsync(null);
+
+                DisableButtons();
+                App.Pyrite.CommitChanges();
+                if (Applying != null)
+                    Applying(this, new EventArgs());
+                SetScenario(_tempItem);
+            }
         }
 
         public void Refresh()
@@ -146,19 +148,24 @@ namespace PyriteUI
             }
         }
 
+        public bool WasChanged { get; private set; }
+
         private void EnableButtons()
         {
             this.btCreate.Visibility = btCancel.Visibility = Visibility.Visible;
+            WasChanged = true;
         }
 
         public void DisableButtons()
         {
             this.btCreate.Visibility = btCancel.Visibility = Visibility.Collapsed;
+            WasChanged = false;
         }
 
         private void DisableOkButton()
         {
             btCreate.Visibility = Visibility.Collapsed;
+            WasChanged = false;
         }
 
         public event Action<object, EventArgs> Applying;
