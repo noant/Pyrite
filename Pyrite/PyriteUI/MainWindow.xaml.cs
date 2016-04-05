@@ -40,6 +40,23 @@ namespace PyriteUI
                     this.Closing -= MainWindow_Closing;
                 }));
             };
+
+            bool _lockSelectionChangedEvent = false;
+            this.tabControl.SelectionChanged += (o, e) =>
+            {
+                if (_lockSelectionChangedEvent)
+                    return;
+
+                if (e.RemovedItems.Count > 0 && e.RemovedItems[0].Equals(tabScenarios) && cScenariosView.WasChanged)
+                {
+                    if (cScenariosView.BeginConfirmationDialog() == MessageBoxResult.Cancel)
+                    {
+                        _lockSelectionChangedEvent = true;
+                        this.tabControl.SelectedItem = this.tabScenarios;
+                        _lockSelectionChangedEvent = false;
+                    }
+                }
+            };
         }
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

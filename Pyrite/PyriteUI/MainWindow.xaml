@@ -5,12 +5,12 @@
         WindowState="Maximized"
         Title="PYRITE" Height="400" Width="700">
     <Grid>
-        <TabControl Style="{StaticResource TabControlFlatStyle}">
-            <TabItem Name="tabScenarios" Header="ЗАПУСК" Style="{StaticResource TabItemFlatStyle}">
+        <TabControl Name="tabControl" Style="{StaticResource TabControlFlatStyle}">
+            <TabItem Name="tabRunScenarios" Header="ЗАПУСК" Style="{StaticResource TabItemFlatStyle}">
                 <local:RunScenariosItemsView Background="Gray"></local:RunScenariosItemsView>
             </TabItem>
-            <TabItem Name="tabScenariosSettings" Header="СЦЕНАРИИ" Style="{StaticResource TabItemFlatStyle}">
-                <local:ScenariosView></local:ScenariosView>
+            <TabItem Name="tabScenarios" Header="СЦЕНАРИИ" Style="{StaticResource TabItemFlatStyle}">
+                <local:ScenariosView x:Name="cScenariosView"></local:ScenariosView>
             </TabItem>
             <TabItem Name="tabModules" Header="МОДУЛИ" Style="{StaticResource TabItemFlatStyle}">
                 <local:ModulesControlView></local:ModulesControlView>

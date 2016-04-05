@@ -64,8 +64,7 @@ namespace PyriteUI
     }
 
     public delegate void BoolChanged(object sender, EventArgs e);
-
-
+    
     public class BooleanInvertValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

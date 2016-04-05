@@ -51,47 +51,22 @@ namespace PyriteUI
                 RemoveCurrentScenario();
             };
 
-            bool lockSelectionChangedEvent = false;
             this.lvItems.SelectionChanged += (o, e) =>
             {
-                if (lockSelectionChangedEvent)
+                if (_lockSelectionChangedEvent)
                     return;
-
-                var targetAction = new Action(() =>
-                {
-                    if (this.lvItems.SelectedItem != null)
-                        scenarioView.SetScenario(((ScenariosViewContext.ScenarioViewItem)this.lvItems.SelectedItem).Scenario);
-                    else if (this.lvItems.HasItems)
-                        lvItems.SelectedIndex = 0;
-                });
 
                 if (lvItems.SelectedValue != null && scenarioView.WasChanged)
                 {
-                    switch (MessageBox.Show("Выбранный сценарий был изменен. Применить изменения?", "Применить изменения", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
+                    if (BeginConfirmationDialog() == MessageBoxResult.Cancel)
                     {
-                        case (MessageBoxResult.Yes):
-                            {
-                                scenarioView.Confirm();
-                                targetAction();
-                                break;
-                            }
-                        case (MessageBoxResult.No):
-                            {
-                                targetAction();
-                                break;
-                            }
-                        case (MessageBoxResult.Cancel):
-                            {
-                                e.Handled = false;
-                                lockSelectionChangedEvent = true;
-                                lvItems.SelectedItem = e.RemovedItems[0];
-                                lockSelectionChangedEvent = false;
-                                break;
-                            }
+                        _lockSelectionChangedEvent = true;
+                        lvItems.SelectedItem = e.RemovedItems[0];
+                        _lockSelectionChangedEvent = false;
                     }
                 }
                 else
-                    targetAction();
+                    BeginEditSelectedScenario();
             };
 
             this.KeyDown += (o, e) =>
@@ -106,6 +81,8 @@ namespace PyriteUI
 
             Refresh();
         }
+
+        private bool _lockSelectionChangedEvent;
 
         private void RefreshListView()
         {
@@ -136,6 +113,47 @@ namespace PyriteUI
                 }
             }
             App.Pyrite.CommitChanges();
+        }
+
+        private void BeginEditSelectedScenario()
+        {
+            if (this.lvItems.SelectedItem != null)
+                scenarioView.SetScenario(((ScenariosViewContext.ScenarioViewItem)this.lvItems.SelectedItem).Scenario);
+            else if (this.lvItems.HasItems)
+                lvItems.SelectedIndex = 0;
+        }
+
+        private object _prevListBoxValue;
+
+        public MessageBoxResult BeginConfirmationDialog()
+        {
+            switch (MessageBox.Show("Выбранный сценарий был изменен. Применить изменения?", "Применить изменения", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
+            {
+                case (MessageBoxResult.Yes):
+                    {
+                        scenarioView.Confirm();
+                        BeginEditSelectedScenario();
+                        return MessageBoxResult.Yes;
+                    }
+                case (MessageBoxResult.No):
+                    {
+                        BeginEditSelectedScenario();
+                        return MessageBoxResult.No;
+                    }
+                case (MessageBoxResult.Cancel):
+                    {
+                        return MessageBoxResult.Cancel;
+                    }
+            }
+            throw new Exception();
+        }
+
+        public bool WasChanged
+        {
+            get
+            {
+                return scenarioView.WasChanged;
+            }
         }
     }
 
