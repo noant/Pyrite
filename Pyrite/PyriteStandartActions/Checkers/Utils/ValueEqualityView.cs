@@ -86,7 +86,7 @@ namespace PyriteStandartActions.Checkers.Utils
             }
             set
             {
-                labelValueName.Text = value;
+                this.Text = labelValueName.Text = value;
             }
         }
 
