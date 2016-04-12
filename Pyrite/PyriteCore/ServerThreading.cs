@@ -410,6 +410,10 @@ namespace PyriteCore
                     SendString(stream, action.CheckState());
                 else SendString(stream, VAC.ServerCommands.NotExist);
             }
+            else if (command == VAC.ServerCommands.Command_Ping)
+            {
+                SendString(stream, VAC.ServerCommands.Command_PingResponse);
+            }
             else
             {
                 var remoteAction = Pyrite

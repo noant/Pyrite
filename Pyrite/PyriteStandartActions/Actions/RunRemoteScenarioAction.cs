@@ -152,13 +152,17 @@ namespace PyriteStandartActions.Actions
 
         public static ushort GetNextPyritePort(string host, ushort port)
         {
-            using (var client = new TcpClient())
+            using (TcpClient client = new TcpClient())
             {
-                client.Connect(host, port);
-
+                IAsyncResult ar = client.BeginConnect(host, port, null, null);
+                System.Threading.WaitHandle wh = ar.AsyncWaitHandle;
+                if (!ar.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(0.5), false))
+                {
+                    client.Close();
+                    throw new TimeoutException();
+                }
                 var stream = client.GetStream();
                 var value = GetNextString(stream);
-
                 return ushort.Parse(value);
             }
         }

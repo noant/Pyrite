@@ -133,6 +133,13 @@
     <Compile Include="Checkers\MinuteEqualityChecker.cs" />
     <Compile Include="Checkers\MonthBetweenChecker.cs" />
     <Compile Include="Checkers\MonthEqualityChecker.cs" />
+    <Compile Include="Checkers\PyritePingChecker.cs" />
+    <Compile Include="Checkers\PyritePingCheckerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Checkers\PyritePingCheckerView.Designer.cs">
+      <DependentUpon>PyritePingCheckerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Checkers\SecondBetweenChecker.cs" />
     <Compile Include="Checkers\DayOfWeekChecker.cs" />
     <Compile Include="Checkers\YearEqualityChecker.cs" />
@@ -161,6 +168,7 @@
     <Compile Include="DoNotDeleteThisClass.cs" />
     <Compile Include="Implementations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VAC.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HierarchicalData\HierarchicalData.csproj">
@@ -205,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Checkers\DayOfWeekCheckerView.resx">
       <DependentUpon>DayOfWeekCheckerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Checkers\PyritePingCheckerView.resx">
+      <DependentUpon>PyritePingCheckerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Checkers\Utils\BetweenValueView.resx">
       <DependentUpon>BetweenValueView.cs</DependentUpon>

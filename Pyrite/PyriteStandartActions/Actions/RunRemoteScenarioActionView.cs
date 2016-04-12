@@ -20,7 +20,8 @@ namespace PyriteStandartActions.Actions
             nudPort.Minimum = 0;
             nudPort.Maximum = ushort.MaxValue;
 
-            this.listBox.SelectedIndexChanged += (o, e) => {
+            this.listBox.SelectedIndexChanged += (o, e) =>
+            {
                 if (listBox.SelectedItem != null)
                 {
                     btOk.Enabled = true;
@@ -61,8 +62,10 @@ namespace PyriteStandartActions.Actions
             }
         }
 
-        public string Host {
-            get {
+        public string Host
+        {
+            get
+            {
                 return tbHost.Text;
             }
             set
@@ -90,6 +93,8 @@ namespace PyriteStandartActions.Actions
             {
                 using (var client = new TcpClient())
                 {
+                    client.ReceiveTimeout = 1000;
+                    client.SendTimeout = 1000;
                     client.Connect(this.Host, RunRemoteScenarioAction.GetNextPyritePort(this.Host, this.Port));
 
                     var stream = client.GetStream();

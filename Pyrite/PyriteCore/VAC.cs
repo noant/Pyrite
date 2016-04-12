@@ -37,6 +37,9 @@ namespace PyriteCore
             public static readonly string Command_GetAllStatuses = "getstate";
             public static readonly string Command_GetCommandStatus = "getcommandstate";
 
+            public static readonly string Command_Ping = "isYouPyrite?";
+            public static readonly string Command_PingResponse = "yesIAm";
+
             public static readonly string NotExist = "[отсутствует]";
         }
     }
