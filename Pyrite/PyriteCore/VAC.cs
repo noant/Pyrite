@@ -21,6 +21,7 @@ namespace PyriteCore
             public static readonly string ResolvedIp = "resolvedip";
             public static readonly string ResolveAll = "resolveall";
             public static readonly string Action = "action";
+            public static readonly string ActionGuid = "action_guid";
         }
 
         public static class ServerCommands
@@ -33,7 +34,10 @@ namespace PyriteCore
             public static readonly string Command_Except = "except";
             public static readonly string Command_All = "all";
 
-            public static readonly string Command_GetStatus = "getstate";
+            public static readonly string Command_GetAllStatuses = "getstate";
+            public static readonly string Command_GetCommandStatus = "getcommandstate";
+
+            public static readonly string NotExist = "[отсутствует]";
         }
     }
 }

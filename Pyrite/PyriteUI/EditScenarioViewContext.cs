@@ -54,7 +54,11 @@ namespace PyriteUI
         public EditScenarioViewContext(Scenario scenario)
         {
             if (scenario == null)
+            {
                 scenario = new Scenario();
+                scenario.CurrentPyrite = App.Pyrite;
+                scenario.AfterAction += (scen) => App.RaiseItemExecutedEvent(scen);
+            }
 
             this._scenario = scenario;
 

@@ -73,6 +73,7 @@ namespace PyriteUI
                 _tempItem.ServerCommand = Scenario.ServerCommand;
                 _tempItem.UseServerThreading = Scenario.UseServerThreading;
                 _tempItem.Index = Scenario.Index;
+                _tempItem.Guid = Scenario.Guid;
                 if (wasBusy)
                     _tempItem.ExecuteAsync(null);
 

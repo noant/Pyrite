@@ -55,6 +55,13 @@
     </Compile>
     <Compile Include="Actions\ExecuteCommandAction.cs" />
     <Compile Include="Actions\KillProcessAction.cs" />
+    <Compile Include="Actions\RunRemoteScenarioAction.cs" />
+    <Compile Include="Actions\RunRemoteScenarioActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\RunRemoteScenarioActionView.designer.cs">
+      <DependentUpon>RunRemoteScenarioActionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\SystemSoundAction.cs" />
     <Compile Include="Actions\Utils\EnterStringForm.cs">
       <SubType>Form</SubType>
@@ -145,7 +152,14 @@
       <DependentUpon>ValueEqualityView.cs</DependentUpon>
     </Compile>
     <Compile Include="Checkers\YearBetweenChecker.cs" />
+    <Compile Include="CoreActionsUI\RunExistingScenarioActionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CoreActionsUI\RunExistingScenarioActionView.Designer.cs">
+      <DependentUpon>RunExistingScenarioActionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="DoNotDeleteThisClass.cs" />
+    <Compile Include="Implementations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +188,9 @@
     <EmbeddedResource Include="Actions\ProcessActionView.resx">
       <DependentUpon>ProcessActionView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\RunRemoteScenarioActionView.resx">
+      <DependentUpon>RunRemoteScenarioActionView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Utils\EnterStringFOrm.resx">
       <DependentUpon>EnterStringForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -194,6 +211,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Checkers\Utils\ValueEqualityView.resx">
       <DependentUpon>ValueEqualityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CoreActionsUI\RunExistingScenarioActionView.resx">
+      <DependentUpon>RunExistingScenarioActionView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -123,13 +123,9 @@ namespace PyriteUI.ScenarioCreation
 
         private void CreateChecker(Type @typeof)
         {
-            _operatorCheckerPair.Checker = (ICustomChecker)AllCustomCheckers
-                       .Single(x => x.CheckerType.Equals(@typeof))
-                       .CheckerType
-                       .GetConstructor(new Type[0])
-                       .Invoke(new object[0]);
-
+            _operatorCheckerPair.Checker = App.Pyrite.ModulesControl.CreateCheckerInstance(@typeof, false).Value;
             BeginCheckerUserSettings();
+            _operatorCheckerPair.Checker.Refresh();
             this.ParamsVisibility = this._operatorCheckerPair.Checker.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -139,6 +135,7 @@ namespace PyriteUI.ScenarioCreation
             {
                 if (_operatorCheckerPair.Checker.BeginUserSettings())
                 {
+                    _operatorCheckerPair.Checker.Refresh();
                     RaiseChanged();
                 }
                 var checkerString = Helper.CreateParamsViewString(Checker);

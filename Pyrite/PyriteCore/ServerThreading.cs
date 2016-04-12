@@ -176,12 +176,15 @@ namespace PyriteCore
         {
             var bytesToSend = ServerThreadingSettings.Defaults.ServerEncoding.GetBytes(str);
             stream.WriteByte((byte)bytesToSend.Length);
-            stream.Write(bytesToSend, 0, bytesToSend.Length);
+            if (!string.IsNullOrEmpty(str))
+                stream.Write(bytesToSend, 0, bytesToSend.Length);
         }
 
         private string GetNextString(NetworkStream stream)
         {
             var len = stream.ReadByte();
+            if (len == 0)
+                return string.Empty;
             var buff = new byte[len];
             stream.Read(buff, 0, buff.Length);
             return ServerThreadingSettings.Defaults.ServerEncoding.GetString(buff);
@@ -351,11 +354,11 @@ namespace PyriteCore
                 var fastActions = Pyrite.ScenariosPool.Scenarios
                     .Where(x => string.IsNullOrEmpty(x.Category) && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
                     .OrderBy(x => x.Name)
-                    .OrderBy(x => x.Index);
+                    .OrderBy(x => x.Index).ToList();
                 var categories = Pyrite.ScenariosPool.Scenarios
                     .Where(x => !string.IsNullOrEmpty(x.Category) && !string.IsNullOrEmpty(x.ServerCommand) && x.UseServerThreading).Select(x => x.Category)
                     .Distinct()
-                    .OrderBy(x => x);
+                    .OrderBy(x => x).ToList();
                 SendString(stream, (fastActions.Count() + categories.Count()).ToString());
                 foreach (var action in fastActions)
                 {
@@ -377,7 +380,7 @@ namespace PyriteCore
                 var actions = Pyrite.ScenariosPool.Scenarios
                     .Where(x => x.Category == category && x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand))
                     .OrderBy(x => x.Name)
-                    .OrderBy(x => x.Index);
+                    .OrderBy(x => x.Index).ToList();
 
                 SendString(stream, actions.Count().ToString());
 
@@ -387,10 +390,10 @@ namespace PyriteCore
                     SendString(stream, action.CheckState());
                 }
             }
-            else if (command == VAC.ServerCommands.Command_GetStatus)
+            else if (command == VAC.ServerCommands.Command_GetAllStatuses)
             {
                 var actions = Pyrite.ScenariosPool.Scenarios
-                    .Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand));
+                    .Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)).ToList();
                 SendString(stream, actions.Count().ToString());
                 foreach (var action in Pyrite.ScenariosPool.Scenarios)
                 {
@@ -398,12 +401,29 @@ namespace PyriteCore
                     SendString(stream, action.CheckState());
                 }
             }
+            else if (command == VAC.ServerCommands.Command_GetCommandStatus)
+            {
+                var serverCommand = GetNextString(stream);
+                var action = Pyrite.ScenariosPool.Scenarios
+                    .SingleOrDefault(x => x.UseServerThreading && x.ServerCommand.Equals(serverCommand));
+                if (action != null)
+                    SendString(stream, action.CheckState());
+                else SendString(stream, VAC.ServerCommands.NotExist);
+            }
             else
             {
-                var remoteAction = Pyrite.ScenariosPool.Scenarios.Where(x => x.ServerCommand == command).FirstOrDefault();
+                var remoteAction = Pyrite
+                    .ScenariosPool
+                    .Scenarios
+                    .Where(x => x.ServerCommand.Equals(command) && x.UseServerThreading)
+                    .FirstOrDefault();
+
+                var state = GetNextString(stream);
+
                 if (remoteAction != null)
                 {
-                    var state = GetNextString(stream);
+                    if (string.IsNullOrWhiteSpace(state))
+                        state = remoteAction.CheckState();
                     state = remoteAction.Execute(state, false);
                     SendString(stream, state);
                     ShareState(remoteAction, ((IPEndPoint)client.Client.RemoteEndPoint).Address);
@@ -437,7 +457,11 @@ namespace PyriteCore
                     }
                     catch
                     {
-                        _activeClients.Remove(address);
+                        lock (address)
+                        {
+                            if (_activeClients.Contains(address))
+                                _activeClients.Remove(address);
+                        }
                     }
                 })
                 {

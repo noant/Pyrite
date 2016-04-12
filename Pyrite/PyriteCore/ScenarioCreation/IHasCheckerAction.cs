@@ -6,5 +6,7 @@ namespace PyriteCore.ScenarioCreation
     {
         bool RemoveChecker(Type checkerType);
         bool RemoveAction(Type actionType);
+
+        void ForAllActionAndChecker(Action<object> action);
     }
 }

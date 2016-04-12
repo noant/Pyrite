@@ -50,12 +50,12 @@ namespace PyriteUI
                 btScenarioRun.Content = "Выполняется...";
                 _scenario.ExecuteAsync((state) =>
                 {
-                    btScenarioRun.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        btScenarioRun.Content = state;
-                        btScenarioRun.IsEnabled = true;
-                        btScenarioRun.Focus();
-                    }));
+                    //btScenarioRun.Dispatcher.BeginInvoke(new Action(() =>
+                    //{
+                    //    //btScenarioRun.Content = state.CheckState();
+                    //    btScenarioRun.IsEnabled = true;
+                    //    btScenarioRun.Focus();
+                    //}));
                 });
             }
         }
@@ -75,7 +75,12 @@ namespace PyriteUI
         public void Refresh()
         {
             _scenario.CheckStateAsync((state) => btScenarioRun.Dispatcher.BeginInvoke(
-                new Action(() => btScenarioRun.Content = state)));
+                new Action(() =>
+                {
+                    btScenarioRun.IsEnabled = true;
+                    btScenarioRun.Content = state;
+                }
+            )));
         }
 
         public event Action<object, EventArgs> NeedClose;

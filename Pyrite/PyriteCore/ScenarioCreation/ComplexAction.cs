@@ -69,6 +69,20 @@ namespace PyriteCore.ScenarioCreation
         {
         }
 
+        public void ForAllActionAndChecker(Action<object> action)
+        {
+            if (ActionBags != null)
+                foreach (var bag in ActionBags)
+                {
+                    if (bag.Action is IHasCheckerAction)
+                    {
+                        ((IHasCheckerAction)bag.Action).ForAllActionAndChecker(action);
+                    }
+                    else
+                        action(bag.Action);
+                }
+        }
+
         public bool RemoveChecker(Type checkerType)
         {
             bool result = false;

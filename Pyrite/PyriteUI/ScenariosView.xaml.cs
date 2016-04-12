@@ -28,18 +28,22 @@ namespace PyriteUI
             this.btCreate.Click += (o, e) =>
             {
                 var scenario = new Scenario();
+                scenario.CurrentPyrite = App.Pyrite;
+                scenario.AfterAction += (scen) => App.RaiseItemExecutedEvent(scen);
 
                 if (cbMode.SelectedIndex == 0)
                 {
-                    scenario.ActionBag = new ActionBag() { Action = App.Pyrite.ModulesControl.CreateActionInstance(typeof(DoubleComplexAction)).Value };
+                    scenario.ActionBag = new ActionBag() { Action = App.Pyrite.ModulesControl.CreateActionInstance(typeof(DoubleComplexAction), true).Value };
                 }
                 else
                 {
-                    scenario.ActionBag = new ActionBag() { Action = App.Pyrite.ModulesControl.CreateActionInstance(typeof(DoNothingAction)).Value };
+                    scenario.ActionBag = new ActionBag() { Action = App.Pyrite.ModulesControl.CreateActionInstance(typeof(DoNothingAction), true).Value };
                 }
 
+                scenario.ActionBag.Action.Refresh();
+
                 scenario.ServerCommand = Guid.NewGuid().ToString();
-                scenario.Name = "Новый сценарий " + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss");
+                scenario.Name = "Новый сценарий " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToLongTimeString();
                 App.Pyrite.ScenariosPool.Add(scenario);
                 RefreshListView();
                 lvItems.SelectedItem = new ScenariosViewContext.ScenarioViewItem() { Scenario = scenario };
@@ -122,8 +126,6 @@ namespace PyriteUI
             else if (this.lvItems.HasItems)
                 lvItems.SelectedIndex = 0;
         }
-
-        private object _prevListBoxValue;
 
         public MessageBoxResult BeginConfirmationDialog()
         {

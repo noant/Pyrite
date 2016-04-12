@@ -50,8 +50,7 @@ namespace PyriteUI
             foreach (var item in Pyrite.ScenariosPool.Scenarios)
                 item.AfterAction += (x) =>
                 {
-                    if (ItemExecuted != null)
-                        ItemExecuted(item);
+                    RaiseItemExecutedEvent(item);
                 };
 
             Starter.Initialize();
@@ -64,6 +63,11 @@ namespace PyriteUI
 
         public static event ActionItemExecuted ItemExecuted;
 
+        public static void RaiseItemExecutedEvent(Scenario scenario)
+        {
+            if (ItemExecuted != null)
+                ItemExecuted(scenario);
+        }
     }
 
     public delegate void ActionItemExecuted(Scenario item);

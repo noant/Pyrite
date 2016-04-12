@@ -8,7 +8,7 @@ namespace PyriteCore
     {
         static Pyrite()
         {
-            Сrutches.Execute();
+            Crutches.Execute();
         }
 
         public static Result<Pyrite> Create(SaveAndLoad sal)
@@ -27,6 +27,7 @@ namespace PyriteCore
 
         public VoidResult CommitChanges()
         {
+            ScenariosPool.RefreshScenarios();
             return SaveAndLoad.Save();
         }
 

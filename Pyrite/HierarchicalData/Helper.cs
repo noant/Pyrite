@@ -37,7 +37,7 @@ namespace HierarchicalData
         public static object CloneObject(object obj)
         {
             var serializedObject = new SerializedObject(obj);
-            var serializer = GetSerializer(serializedObject.GetType());
+            var serializer = GetSerializer(typeof(SerializedObject));
             var memoryStream = new MemoryStream();
             serializer.Serialize(memoryStream, serializedObject);
             memoryStream.Position = 0;
@@ -46,7 +46,6 @@ namespace HierarchicalData
 
         internal static XmlSerializer GetSerializer(Type type)
         {
-            var serializer = new XmlSerializer(type, _registered.ToArray());
             return new XmlSerializer(type, _registered.ToArray());
         }
     }

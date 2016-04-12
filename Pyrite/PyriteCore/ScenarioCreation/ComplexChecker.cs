@@ -96,6 +96,22 @@ namespace PyriteCore.ScenarioCreation
         {
             return false;
         }
+        
+        public void ForAllActionAndChecker(Action<object> action)
+        {
+            if (OperatorCheckers != null)
+                foreach (var operatorPair in this.OperatorCheckers.ToList())
+                {
+                    if (operatorPair.Checker is IHasCheckerAction)
+                    {
+                        ((IHasCheckerAction)operatorPair).ForAllActionAndChecker(action);
+                    }
+                    else
+                    {
+                        action(operatorPair.Checker);
+                    }
+                }
+        }
 
         public void Refresh()
         {

@@ -64,7 +64,11 @@ namespace PyriteStandartActions.Actions
         {
             IsBusyNow = true;
             foreach (Process proc in Process.GetProcessesByName(ProcessName))
-                proc.Kill();
+                try
+                {
+                    proc.Kill();
+                }
+                catch { }
             IsBusyNow = false;
             return State;
         }

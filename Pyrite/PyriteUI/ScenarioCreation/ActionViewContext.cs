@@ -70,9 +70,10 @@ namespace PyriteUI.ScenarioCreation
             }
             set
             {
-                _actionBag.Action = (ICustomAction)value.ActionType.GetConstructor(new Type[0]).Invoke(new object[0]);
+                _actionBag.Action = App.Pyrite.ModulesControl.CreateActionInstance(value.ActionType, false).Value;
                 this.ParamsVisibility = this._actionBag.Action.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
                 BeginActionUserSettings();
+                _actionBag.Action.Refresh();
                 RaiseChanged();
             }
         }
@@ -126,6 +127,7 @@ namespace PyriteUI.ScenarioCreation
             ProcessActionBag();
             if (_actionBag.Action.AllowUserSettings && _actionBag.Action.BeginUserSettings())
             {
+                _actionBag.Action.Refresh();
                 ProcessActionString();
                 RaiseChanged();
             }

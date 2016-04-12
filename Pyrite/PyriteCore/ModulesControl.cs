@@ -6,6 +6,7 @@ using System.Reflection;
 using PyriteClientIntefaces;
 using PyriteCore.ScenarioCreation;
 using PyriteStandartActions;
+using PyriteCore.CoreStandartActions;
 
 namespace PyriteCore
 {
@@ -25,7 +26,10 @@ namespace PyriteCore
         {
             get
             {
-                return _customActions.Union(new[] { typeof(DoNothingAction) });
+                return _customActions.Union(new[] {
+                    typeof(DoNothingAction),
+                    typeof(RunExistingScenarioAction)
+                });
             }
         }
 
@@ -59,14 +63,24 @@ namespace PyriteCore
             return this.CustomActions.Single(x => x.FullName == name);
         }
 
-        public Result<ICustomAction> CreateActionInstance(Type type)
+        public Result<ICustomAction> CreateActionInstance(Type type, bool beginSettings)
         {
             var result = new Result<ICustomAction>();
             try
             {
                 var action = (ICustomAction)type.GetConstructor(new Type[0]).Invoke(new object[0]);
-                if (action.BeginUserSettings())
-                    result.Value = action;
+                if (action is ICoreElement)
+                    ((ICoreElement)action).CurrentPyrite = Pyrite;
+
+                if (beginSettings)
+                {
+                    if (action.BeginUserSettings())
+                    {
+                        result.Value = action;
+                        result.Value.Refresh();
+                    }
+                }
+                else result.Value = action;
             }
             catch (Exception e)
             {
@@ -75,14 +89,27 @@ namespace PyriteCore
 
             return result;
         }
-        public Result<ICustomChecker> CreateCheckerInstance(Type type)
+        public Result<ICustomChecker> CreateCheckerInstance(Type type, bool beginSettings)
         {
             var result = new Result<ICustomChecker>();
             try
             {
                 var checker = (ICustomChecker)type.GetConstructor(new Type[0]).Invoke(new object[0]);
-                if (checker.BeginUserSettings())
+                if (checker is ICoreElement)
+                    ((ICoreElement)checker).CurrentPyrite = Pyrite;
+
+                if (beginSettings)
+                {
+                    if (checker.BeginUserSettings())
+                    {
+                        result.Value = checker;
+                        result.Value.Refresh();
+                    }
+                }
+                else
+                {
                     result.Value = checker;
+                }
             }
             catch (Exception e)
             {

@@ -4,16 +4,19 @@ using System.Threading;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using PyriteClientIntefaces;
+using PyriteCore.CoreStandartActions;
 
 namespace PyriteCore.ScenarioCreation
 {
     [Serializable]
-    public class Scenario : IDisposable, IHasCheckerAction
+    public class Scenario : IDisposable, IHasCheckerAction, ICoreElement
     {
         private static class Defaults
         {
             public static readonly DispatcherPriority DispatcherPriority = System.Windows.Threading.DispatcherPriority.Background;
         }
+
+        public Pyrite CurrentPyrite { get; set; }
 
         public Scenario()
         {
@@ -149,9 +152,26 @@ namespace PyriteCore.ScenarioCreation
             RaiseAfterAction();
         }
 
-        internal Guid Guid { get; set; }
+        public Guid Guid { get; set; }
 
         private object _locker = new object();
+
+        public string CheckStateFlat()
+        {
+            if (this.Action is DoubleComplexAction)
+            {
+                return Action.State == DoubleComplexAction.BeginState ?
+                        OffState_DCAction :
+                        OnState_DCAction;
+            }
+            else
+            {
+                lock (_locker)
+                {
+                    return Action.State;
+                }
+            }
+        }
 
         public string CheckState()
         {
@@ -194,7 +214,47 @@ namespace PyriteCore.ScenarioCreation
             }
         }
 
-        private string ExecuteWithoutDispatcherInvoking(string inputState, bool withoutServerEvent)
+        public string ExecuteFlat(string inputState)
+        {
+            try
+            {
+                if (this.Action is DoubleComplexAction)
+                {
+                    var state = DoubleComplexAction.BeginState;
+                    if (((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Ended)
+                        state = DoubleComplexAction.EndState;
+
+                    lock (_locker)
+                    {
+                        this.IsBusyNow = true;
+                        state = this.Action.Do(state);
+                        this.IsBusyNow = false;
+                    }
+
+                    return state;
+                }
+                else
+                    lock (_locker)
+                    {
+                        this.IsBusyNow = true;
+                        var result = this.Action.Do(inputState);
+                        this.IsBusyNow = false;
+                        return result;
+                    }
+            }
+            catch (Exception e)
+            {
+                if (e is ThreadAbortException)
+                {
+                    //do nothing
+                }
+                else
+                    Log.Write(e);
+            }
+            return string.Empty;
+        }
+
+        private string ExecuteBase(string inputState, bool withoutServerEvent)
         {
             try
             {
@@ -206,13 +266,25 @@ namespace PyriteCore.ScenarioCreation
 
                     this.Dispatcher.BeginInvoke(new Action(() =>
                     {
+                        object _lockerToRaiseEvent = new object(); //crutch
                         lock (_locker)
                         {
                             this.IsBusyNow = true;
+                            ThreadHelper.AlterThread(
+                                    () =>
+                                    {
+                                        Thread.Sleep(1); //crutch
+                                        lock (_lockerToRaiseEvent)
+                                            RaiseAfterEvent(withoutServerEvent);
+                                    },
+                                    true,
+                                    ApartmentState.Unknown
+                                );
                             this.Action.Do(state);
                             this.IsBusyNow = false;
+                            lock (_lockerToRaiseEvent)
+                                RaiseAfterEvent(withoutServerEvent);
                         }
-                        RaiseAfterEvent(withoutServerEvent);
                     }));
 
                     return ((DoubleComplexAction)Action).CurrentState == DoubleComplexAction.CurrentDCActionState.Began ?
@@ -225,6 +297,7 @@ namespace PyriteCore.ScenarioCreation
                         this.IsBusyNow = true;
                         var result = this.Action.Do(inputState);
                         this.IsBusyNow = false;
+                        RaiseAfterEvent(withoutServerEvent);
                         return result;
                     }
             }
@@ -243,7 +316,7 @@ namespace PyriteCore.ScenarioCreation
                     ClearDispatcher();
                 var result = this.Dispatcher.Invoke(new Func<string>(() =>
                 {
-                    return ExecuteWithoutDispatcherInvoking(inputState, withoutServerEvent);
+                    return ExecuteBase(inputState, withoutServerEvent);
                 }), Defaults.DispatcherPriority, null);
                 return result.ToString();
             }
@@ -251,25 +324,18 @@ namespace PyriteCore.ScenarioCreation
             {
                 throw e;
             }
-            finally
-            {
-                RaiseAfterEvent(withoutServerEvent);
-            }
         }
 
-        public void ExecuteAsync(Action<string> callback)
+        public void ExecuteAsync(Action<Scenario> callback)
         {
             if (this.Action is DoubleComplexAction)
                 ClearDispatcher();
             this.Dispatcher.BeginInvoke(new Action(() =>
             {
-                var res = ExecuteWithoutDispatcherInvoking(CheckState(), false);
+                var res = ExecuteBase(CheckState(), false);
                 if (callback != null)
-                    callback(res);
-                RaiseAfterEvent(false);
+                    callback(this);
             }), Defaults.DispatcherPriority);
-            if (this.Action is DoubleComplexAction)
-                RaiseAfterEvent(false);
         }
 
         public bool IsBusyNow
@@ -289,8 +355,15 @@ namespace PyriteCore.ScenarioCreation
                 Index = this.Index,
                 Name = this.Name,
                 ServerCommand = this.ServerCommand,
-                UseServerThreading = this.UseServerThreading
+                UseServerThreading = this.UseServerThreading,
+                CurrentPyrite = this.CurrentPyrite
             };
+
+            item.ForAllActionAndChecker(x =>
+            {
+                if (x is ICoreElement)
+                    ((ICoreElement)x).CurrentPyrite = this.CurrentPyrite;
+            });
 
             return item;
         }
@@ -313,11 +386,26 @@ namespace PyriteCore.ScenarioCreation
         public bool RemoveAction(Type actionType)
         {
             if (this.Action is IHasCheckerAction)
+            {
                 if (((IHasCheckerAction)this.Action).RemoveAction(actionType))
                 {
                     return true;
                 }
+            }
+            else
+                this.ActionBag.Action = new DoNothingAction();
             return false;
+        }
+
+        public void ForAllActionAndChecker(Action<object> action)
+        {
+            if (this.Action is IHasCheckerAction)
+                ((IHasCheckerAction)this.Action).ForAllActionAndChecker(action);
+            else
+            {
+                if (this.Action != null)
+                    action(this.Action);
+            }
         }
 
         private Dispatcher Dispatcher;

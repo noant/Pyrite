@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PyriteCore.ScenarioCreation;
+using PyriteCore.CoreStandartActions;
 
 namespace PyriteCore
 {
-    public static class Сrutches
+    public static class Crutches
     {
         public static void Execute()
         {
@@ -20,6 +21,7 @@ namespace PyriteCore
             HierarchicalObjectCrutch.Register(typeof(DoNothingAction));
             HierarchicalObjectCrutch.Register(typeof(NeverChecker));
             HierarchicalObjectCrutch.Register(typeof(DoubleComplexAction));
+            HierarchicalObjectCrutch.Register(typeof(RunExistingScenarioAction));
         }
     }
 }

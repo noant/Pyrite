@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PyriteCore.ScenarioCreation;
 
@@ -38,6 +39,14 @@ namespace PyriteCore
 
             result.Value = result.Warnings.Count() == 0;
             return result;
+        }
+
+        public void RefreshScenarios()
+        {
+            foreach (var scenario in this.Scenarios.OrderBy(x => x.Guid))
+            {
+                scenario.ForAllActionAndChecker(x => ((dynamic)x).Refresh());
+            }
         }
 
         public Result<bool> Add(Scenario item)

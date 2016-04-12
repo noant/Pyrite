@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using PyriteCore.ScenarioCreation;
+using PyriteClientIntefaces;
+using PyriteCore.CoreStandartActions;
 
 namespace PyriteCore
 {
@@ -71,6 +73,7 @@ namespace PyriteCore
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedIsActive] = item.IsActive;
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedIndex] = item.Index;
                         Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.UsedOffOnState] = item.UseOnOffState;
+                        Savior[VAC.AppSettingsNames.Action][i][VAC.AppSettingsNames.ActionGuid] = item.Guid;
                     }
                     catch (Exception e)
                     {
@@ -160,6 +163,7 @@ namespace PyriteCore
 
                 Pyrite.ScenariosPool.Clear();
                 if (Savior.ContainsKey(VAC.AppSettingsNames.Action))
+                {
                     foreach (var hobject in Savior[VAC.AppSettingsNames.Action].Values)
                     {
                         var actionItem = new Scenario();
@@ -178,15 +182,24 @@ namespace PyriteCore
                             actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
                             actionItem.Index = hobject[VAC.AppSettingsNames.UsedIndex];
                             actionItem.UseOnOffState = hobject[VAC.AppSettingsNames.UsedOffOnState];
+                            actionItem.Guid = hobject[VAC.AppSettingsNames.ActionGuid];
 
                             if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
+                            {
                                 actionItem.ActionBag = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
+                            }
 
                             actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
 
-                            actionItem.Action.Refresh();
-
                             Pyrite.ScenariosPool.Add(actionItem);
+
+                            actionItem.CurrentPyrite = this.Pyrite;
+
+                            actionItem.ForAllActionAndChecker(x =>
+                            {
+                                if (x is ICoreElement)
+                                    ((ICoreElement)x).CurrentPyrite = this.Pyrite;
+                            });
                         }
 #if !DEBUG
                         }
@@ -196,6 +209,11 @@ namespace PyriteCore
                         }
 #endif
                     }
+
+                    Pyrite.ScenariosPool.RefreshScenarios();
+                    foreach (var scenario in Pyrite.ScenariosPool.Scenarios.OrderBy(x => x.Guid))
+                        scenario.Refresh();
+                }
             }
             catch (Exception e)
             {

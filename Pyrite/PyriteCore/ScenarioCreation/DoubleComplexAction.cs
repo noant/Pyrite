@@ -113,6 +113,12 @@ namespace PyriteCore.ScenarioCreation
                 return (ComplexAction)ActionBagEnd.Action;
             }
         }
+        
+        public void ForAllActionAndChecker(Action<object> action)
+        {
+            ActionBegin.ForAllActionAndChecker(action);
+            ActionEnd.ForAllActionAndChecker(action);
+        }
 
         public void Refresh()
         {

@@ -89,5 +89,14 @@ namespace PyriteCore.ScenarioCreation
                     return true;
             return false;
         }
+
+        public void ForAllActionAndChecker(Action<object> action)
+        {
+            if (Checker != null && Checker is IHasCheckerAction)
+                ((IHasCheckerAction)Checker).ForAllActionAndChecker(action);
+
+            if (Action != null && Action is IHasCheckerAction)
+                ((IHasCheckerAction)Action).ForAllActionAndChecker(action);
+        }
     }
 }
