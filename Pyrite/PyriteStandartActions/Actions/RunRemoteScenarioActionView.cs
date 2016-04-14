@@ -99,7 +99,7 @@ namespace PyriteStandartActions.Actions
 
                     var stream = client.GetStream();
 
-                    RunRemoteScenarioAction.SendString(stream, RunRemoteScenarioAction.Strings.Command_GetStartCommands);
+                    RunRemoteScenarioAction.SendString(stream, RunRemoteScenarioAction.Constants.Command_GetStartCommands);
 
                     var count = int.Parse(RunRemoteScenarioAction.GetNextString(stream));
 
@@ -110,7 +110,7 @@ namespace PyriteStandartActions.Actions
                     for (int i = 0; i <= count; i++)
                     {
                         var value = RunRemoteScenarioAction.GetNextString(stream);
-                        if (value == RunRemoteScenarioAction.Strings.Command_EndFastActions)
+                        if (value == RunRemoteScenarioAction.Constants.Command_EndFastActions)
                         {
                             fastActionsEnded = true;
                         }
@@ -140,7 +140,7 @@ namespace PyriteStandartActions.Actions
 
                             var streamToGetCategoryScens = clientToGetCategoryScens.GetStream();
 
-                            RunRemoteScenarioAction.SendString(streamToGetCategoryScens, RunRemoteScenarioAction.Strings.Command_GetCategoryCommands);
+                            RunRemoteScenarioAction.SendString(streamToGetCategoryScens, RunRemoteScenarioAction.Constants.Command_GetCategoryCommands);
                             RunRemoteScenarioAction.SendString(streamToGetCategoryScens, category);
 
                             var categoryCommandsCountcnt = RunRemoteScenarioAction.GetNextString(streamToGetCategoryScens);

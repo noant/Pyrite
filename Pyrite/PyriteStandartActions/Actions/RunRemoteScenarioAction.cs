@@ -12,13 +12,15 @@ namespace PyriteStandartActions.Actions
     [Serializable]
     public class RunRemoteScenarioAction : ICustomAction
     {
-        public static class Strings
+        public static class Constants
         {
             public static readonly string CannotConnect = "[нет соединения]";
             public static readonly string Command_EndFastActions = "endfastactions";
             public static readonly string Command_GetStartCommands = "getallcommands";
             public static readonly string Command_GetCategoryCommands = "getcategorycommands";
             public static readonly string Command_GetCommandStatus = "getcommandstate";
+
+            public static TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(0.5);
         }
 
         public RunRemoteScenarioAction()
@@ -43,21 +45,18 @@ namespace PyriteStandartActions.Actions
             IsBusyNow = true;
             try
             {
-                using (var client = new TcpClient())
+                var state = "";
+                Handling(this.Host, GetNextPyritePort(), (stream) =>
                 {
-                    client.Connect(this.Host, GetNextPyritePort());
-
-                    var stream = client.GetStream();
                     SendString(stream, ServerCommand);
                     SendString(stream, string.Empty);
-                    var state = GetNextString(stream);
-
-                    return state;
-                }
+                    state = GetNextString(stream);
+                });
+                return state;
             }
             catch
             {
-                return Strings.CannotConnect;
+                return Constants.CannotConnect;
             }
             finally
             {
@@ -74,22 +73,18 @@ namespace PyriteStandartActions.Actions
                 {
                     try
                     {
-                        using (var client = new TcpClient())
+                        var state = "";
+                        Handling(this.Host, GetNextPyritePort(), (stream) =>
                         {
-                            client.Connect(this.Host, GetNextPyritePort());
-
-                            var stream = client.GetStream();
-
-                            SendString(stream, Strings.Command_GetCommandStatus);
+                            SendString(stream, Constants.Command_GetCommandStatus);
                             SendString(stream, ServerCommand);
-                            var state = GetNextString(stream);
-
-                            return state;
-                        }
+                            state = GetNextString(stream);
+                        });
+                        return state;
                     }
                     catch
                     {
-                        return Strings.CannotConnect;
+                        return Constants.CannotConnect;
                     }
                 }
                 else
@@ -156,7 +151,7 @@ namespace PyriteStandartActions.Actions
             {
                 IAsyncResult ar = client.BeginConnect(host, port, null, null);
                 System.Threading.WaitHandle wh = ar.AsyncWaitHandle;
-                if (!ar.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(0.5), false))
+                if (!ar.AsyncWaitHandle.WaitOne(Constants.ConnectionTimeout, false))
                 {
                     client.Close();
                     throw new TimeoutException();
@@ -164,6 +159,22 @@ namespace PyriteStandartActions.Actions
                 var stream = client.GetStream();
                 var value = GetNextString(stream);
                 return ushort.Parse(value);
+            }
+        }
+
+        private static void Handling(string host, ushort port, Action<NetworkStream> execute)
+        {
+            using (TcpClient client = new TcpClient())
+            {
+                IAsyncResult ar = client.BeginConnect(host, port, null, null);
+                System.Threading.WaitHandle wh = ar.AsyncWaitHandle;
+                if (!ar.AsyncWaitHandle.WaitOne(Constants.ConnectionTimeout, false))
+                {
+                    client.Close();
+                    throw new TimeoutException();
+                }
+                var stream = client.GetStream();
+                execute(stream);
             }
         }
 
