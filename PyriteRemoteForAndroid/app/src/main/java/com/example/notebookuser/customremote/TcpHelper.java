@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ResponseCache;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -39,7 +40,8 @@ public class TcpHelper {
 
             InetAddress address = InetAddress.getByName(pars.getAddress());
 
-            Socket socketAction = new Socket(address, getNextActionPort());
+            Socket socketAction = new Socket();
+            socketAction.connect(new InetSocketAddress(address, getNextActionPort()), 500);
 
             InputStream in = socketAction.getInputStream();
             OutputStream out = socketAction.getOutputStream();
@@ -86,7 +88,7 @@ public class TcpHelper {
             //get action port
             InetAddress address = InetAddress.getByName(pars.getAddress());
             Socket socketGetActionPort = new Socket();
-            socketGetActionPort.connect(new InetSocketAddress(address, Integer.parseInt(pars.getPort())), 5000);
+            socketGetActionPort.connect(new InetSocketAddress(address, Integer.parseInt(pars.getPort())), 500);
             InputStream inGetActionPort = socketGetActionPort.getInputStream();
             int port = Integer.parseInt(getNextString(inGetActionPort));
             //
@@ -143,7 +145,7 @@ public class TcpHelper {
 
             Statics pars = new Statics();
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 5000);
+            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 500);
 
             OutputStream out = socket.getOutputStream();
 
@@ -200,7 +202,7 @@ public class TcpHelper {
         try {
             Statics pars = new Statics();
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 5000);
+            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 500);
 
             OutputStream out = socket.getOutputStream();
             InputStream in = socket.getInputStream();
