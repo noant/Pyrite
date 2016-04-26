@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4B45B9AB-125F-4839-834F-FD1E0BB4796A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZWaveActionsUI</RootNamespace>
+    <AssemblyName>ZWaveActionsUI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenZWaveDotNet, Version=1.0.5862.328, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\OpenZWave.1.4.1.1\lib\OpenZWaveDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="ControllerCommandDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControllerCommandDlg.designer.cs">
+      <DependentUpon>ControllerCommandDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControllerSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControllerSelectForm.Designer.cs">
+      <DependentUpon>ControllerSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NodeSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NodeSelectForm.Designer.cs">
+      <DependentUpon>NodeSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TargetNodeValueSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TargetNodeValueSelectForm.Designer.cs">
+      <DependentUpon>TargetNodeValueSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ControllerCommandDlg.resx">
+      <DependentUpon>ControllerCommandDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControllerSelectForm.resx">
+      <DependentUpon>ControllerSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NodeSelectForm.resx">
+      <DependentUpon>NodeSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TargetNodeValueSelectForm.resx">
+      <DependentUpon>TargetNodeValueSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZWaveActions\ZWaveActions.csproj">
+      <Project>{0c72d1fb-d20c-46b2-956d-76f43459a251}</Project>
+      <Name>ZWaveActions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\device_classes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="config\device_configuration.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="config\manufacturer_specific.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="config\options.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="config\zwcfg.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="config\zwscene.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\2gig\ct100.xml" />
+    <Content Include="config\2gig\ct101.xml" />
+    <Content Include="config\2gig\ct30.xml" />
+    <Content Include="config\act\lfm20.xml" />
+    <Content Include="config\act\zdm230.xml" />
+    <Content Include="config\act\zdw103.xml" />
+    <Content Include="config\act\zdw232.xml" />
+    <Content Include="config\act\zir010.xml" />
+    <Content Include="config\act\zrp110.xml" />
+    <Content Include="config\act\zrw103.xml" />
+    <Content Include="config\aeotec\alms.xml" />
+    <Content Include="config\aeotec\doorbell_gen5.xml" />
+    <Content Include="config\aeotec\doorwindow.xml" />
+    <Content Include="config\aeotec\drycontactsensor.xml" />
+    <Content Include="config\aeotec\dsd31.xml" />
+    <Content Include="config\aeotec\hdss_gen5.xml" />
+    <Content Include="config\aeotec\hem.xml" />
+    <Content Include="config\aeotec\hemg2.xml" />
+    <Content Include="config\aeotec\keyfob.xml" />
+    <Content Include="config\aeotec\keyfob2.xml" />
+    <Content Include="config\aeotec\ledbulb.xml" />
+    <Content Include="config\aeotec\minimote.xml" />
+    <Content Include="config\aeotec\msesv2.xml" />
+    <Content Include="config\aeotec\multisensor6.xml" />
+    <Content Include="config\aeotec\multisensor_gen5.xml" />
+    <Content Include="config\aeotec\panicbtn.xml" />
+    <Content Include="config\aeotec\recessed_doorsensor.xml" />
+    <Content Include="config\aeotec\recessed_doorsensor_gen5.xml" />
+    <Content Include="config\aeotec\sd6.xml" />
+    <Content Include="config\aeotec\ses.xml" />
+    <Content Include="config\aeotec\ses2.xml" />
+    <Content Include="config\aeotec\ss6.xml" />
+    <Content Include="config\aeotec\watersensor.xml" />
+    <Content Include="config\aeotec\zstickgen5.xml" />
+    <Content Include="config\assa_abloy\RealLivingCapTouch.xml" />
+    <Content Include="config\BeNext\1poleswitch.xml" />
+    <Content Include="config\BeNext\2poleswitch.xml" />
+    <Content Include="config\BeNext\AlarmSound.xml" />
+    <Content Include="config\BeNext\BuiltinDimmer.xml" />
+    <Content Include="config\BeNext\DoorSensor.xml" />
+    <Content Include="config\BeNext\EnergySwitch.xml" />
+    <Content Include="config\BeNext\HeatingControl.xml" />
+    <Content Include="config\BeNext\Molite.xml" />
+    <Content Include="config\BeNext\PluginDimmer.xml" />
+    <Content Include="config\BeNext\SceneController.xml" />
+    <Content Include="config\BeNext\TagReader.xml" />
+    <Content Include="config\cooper\RF9505-T.xml" />
+    <Content Include="config\cooper\RF9540-N.xml" />
+    <Content Include="config\danfoss\living.xml" />
+    <Content Include="config\danfoss\z.xml" />
+    <Content Include="config\device_classes.xml" />
+    <Content Include="config\dlink\dch-z110.xml" />
+    <Content Include="config\dragontech\wd-100.xml" />
+    <Content Include="config\duwi\ZWES1000.xml" />
+    <Content Include="config\duwi\ZWESJ300.xml" />
+    <Content Include="config\enerwave\zwn-sc7.xml" />
+    <Content Include="config\eurotronic\eur_cometz.xml" />
+    <Content Include="config\eurotronic\eur_stellaz.xml" />
+    <Content Include="config\everspringct\hsm02.xml" />
+    <Content Include="config\everspring\ad146.xml" />
+    <Content Include="config\everspring\ad147.xml" />
+    <Content Include="config\everspring\an145.xml" />
+    <Content Include="config\everspring\an158.xml" />
+    <Content Include="config\everspring\an179.xml" />
+    <Content Include="config\everspring\an180.xml" />
+    <Content Include="config\everspring\hsp02.xml" />
+    <Content Include="config\everspring\se812.xml" />
+    <Content Include="config\everspring\sf812.xml" />
+    <Content Include="config\everspring\sm103.xml" />
+    <Content Include="config\everspring\sp103.xml" />
+    <Content Include="config\everspring\sp814.xml" />
+    <Content Include="config\everspring\st812.xml" />
+    <Content Include="config\everspring\st814.xml" />
+    <Content Include="config\everspring\st815.xml" />
+    <Content Include="config\everspring\tse03.xml" />
+    <Content Include="config\evolve\lrm-as.xml" />
+    <Content Include="config\evolve\lsm-15.xml" />
+    <Content Include="config\evolve\ltm-5.xml" />
+    <Content Include="config\fibaro\fgbs001.xml" />
+    <Content Include="config\fibaro\fgd211.xml" />
+    <Content Include="config\fibaro\fgd212.xml" />
+    <Content Include="config\fibaro\fgfs101.xml" />
+    <Content Include="config\fibaro\fgk001.xml" />
+    <Content Include="config\fibaro\fgms.xml" />
+    <Content Include="config\fibaro\fgr221.xml" />
+    <Content Include="config\fibaro\fgrgbwm441.xml" />
+    <Content Include="config\fibaro\fgrm222.xml" />
+    <Content Include="config\fibaro\fgs211.xml" />
+    <Content Include="config\fibaro\fgs212.xml" />
+    <Content Include="config\fibaro\fgs221.xml" />
+    <Content Include="config\fibaro\fgs222.xml" />
+    <Content Include="config\fibaro\fgsd002.xml" />
+    <Content Include="config\fibaro\fgss101.xml" />
+    <Content Include="config\fibaro\fgwpe.xml" />
+    <Content Include="config\fortrezz\mimolite.xml" />
+    <Content Include="config\frostdale\fdn2nxx.xml" />
+    <Content Include="config\ge\dimmer.xml" />
+    <Content Include="config\ge\dimmer_module.xml" />
+    <Content Include="config\ge\relay.xml" />
+    <Content Include="config\greenwave\powernode1.xml" />
+    <Content Include="config\greenwave\powernode6.xml" />
+    <Content Include="config\homeseer\ezmotionplus.xml" />
+    <Content Include="config\homeseer\hsm100.xml" />
+    <Content Include="config\homeseer\hsm200.xml" />
+    <Content Include="config\homeseer\ztroller.xml" />
+    <Content Include="config\honeywell\th8320zw1000.xml" />
+    <Content Include="config\horstmann\hrt4zw.xml" />
+    <Content Include="config\intermatic\ca8900.xml" />
+    <Content Include="config\iris\rangeextender.xml" />
+    <Content Include="config\leviton\rzi10.xml" />
+    <Content Include="config\leviton\vrcpg.xml" />
+    <Content Include="config\leviton\vrf01.xml" />
+    <Content Include="config\leviton\vri06.xml" />
+    <Content Include="config\leviton\vri10.xml" />
+    <Content Include="config\linear\PD300Z-2.xml" />
+    <Content Include="config\linear\WD500Z-1.xml" />
+    <Content Include="config\manufacturer_specific.xml" />
+    <Content Include="config\mcohome\mhs311.xml" />
+    <Content Include="config\mcohome\mhs312.xml" />
+    <Content Include="config\mcohome\mhs314.xml" />
+    <Content Include="config\mcohome\mhs411.xml" />
+    <Content Include="config\mcohome\mhs412.xml" />
+    <Content Include="config\mcohome\mhs513.xml" />
+    <Content Include="config\merten\507801.xml" />
+    <Content Include="config\merten\50x5xx.xml" />
+    <Content Include="config\nodon\asp3100SmartPlug.xml" />
+    <Content Include="config\nodon\crc3100OctanRemote.xml" />
+    <Content Include="config\nodon\cws3101wallswitch.xml" />
+    <Content Include="config\northq\nq92021.xml" />
+    <Content Include="config\options.xml" />
+    <Content Include="config\philio\pan04.xml" />
+    <Content Include="config\philio\psm02.xml" />
+    <Content Include="config\philio\pst02-1c.xml" />
+    <Content Include="config\philio\pst02-b.xml" />
+    <Content Include="config\philio\pst02.xml" />
+    <Content Include="config\polycontrol\doorlock.xml" />
+    <Content Include="config\polycontrol\keypad.xml" />
+    <Content Include="config\polycontrol\polylock.xml" />
+    <Content Include="config\popp\123580.xml" />
+    <Content Include="config\popp\123601.xml" />
+    <Content Include="config\popp\123658.xml" />
+    <Content Include="config\popp\POP009303.xml" />
+    <Content Include="config\popp\POPE009105.xml" />
+    <Content Include="config\qees\reto-plugin-switch.xml" />
+    <Content Include="config\qubino\ZMNHAA2.xml" />
+    <Content Include="config\qubino\ZMNHAD1.xml" />
+    <Content Include="config\qubino\ZMNHBA2.xml" />
+    <Content Include="config\qubino\ZMNHBD2.xml" />
+    <Content Include="config\qubino\ZMNHCA2.xml" />
+    <Content Include="config\qubino\ZMNHCD.xml" />
+    <Content Include="config\qubino\ZMNHDA2.xml" />
+    <Content Include="config\qubino\ZMNHDD1.xml" />
+    <Content Include="config\qubino\ZMNHIA2.xml" />
+    <Content Include="config\qubino\ZMNHJA2.xml" />
+    <Content Include="config\qubino\ZMNHJD1.xml" />
+    <Content Include="config\qubino\ZMNHND1.xml" />
+    <Content Include="config\rcs\em52-zw.xml" />
+    <Content Include="config\rcs\pm12-zw.xml" />
+    <Content Include="config\rcs\therm0005.xml" />
+    <Content Include="config\rcs\therm0007.xml" />
+    <Content Include="config\rcs\therm0009.xml" />
+    <Content Include="config\remotec\zfm-80.xml" />
+    <Content Include="config\remotec\zurc.xml" />
+    <Content Include="config\remotec\zxt-120.xml" />
+    <Content Include="config\schlagelink\itemp.xml" />
+    <Content Include="config\schlagelink\minikeypad.xml" />
+    <Content Include="config\schlage\BE469NXCEN.xml" />
+    <Content Include="config\sensative\strips-mazw.xml" />
+    <Content Include="config\swiid\swiidinter.xml" />
+    <Content Include="config\swiid\swiidplug.xml" />
+    <Content Include="config\thermofloor\multireg.xml" />
+    <Content Include="config\trane\TZEMT400AB32MAA.xml" />
+    <Content Include="config\trane\TZEMT400BB32MAA.xml" />
+    <Content Include="config\vision\zd2102.xml" />
+    <Content Include="config\vision\zm1601eu.xml" />
+    <Content Include="config\vision\zm1602eu.xml" />
+    <Content Include="config\vision\zp3102.xml" />
+    <Content Include="config\vision\zs5101eu.xml" />
+    <Content Include="config\vitrum\vitrumBS.xml" />
+    <Content Include="config\waynedalton\WDTC-20.xml" />
+    <Content Include="config\wenzhou\sm103.xml" />
+    <Content Include="config\wenzhou\tsp01.xml" />
+    <Content Include="config\wenzhou\tz65d.xml" />
+    <Content Include="config\wenzhou\tz66d.xml" />
+    <Content Include="config\wenzhou\tz67.xml" />
+    <Content Include="config\wenzhou\tz68.xml" />
+    <Content Include="config\wenzhou\tz88.xml" />
+    <Content Include="config\widom\UBS104.xml" />
+    <Content Include="config\widom\UME304C_S.xml" />
+    <Content Include="config\zipato\MiniKeypad.xml" />
+    <Content Include="config\zipato\RGBBulb.xml" />
+    <Content Include="config\zwave.me\iTemp.xml" />
+    <Content Include="config\zwave.me\kfob.xml" />
+    <Content Include="config\zwave.me\ZME_05431.xml" />
+    <Content Include="config\zwave.me\ZME_06433.xml" />
+    <Content Include="config\zwave.me\ZME_06436.xml" />
+    <Content Include="config\zwave.me\ZME_064381.xml" />
+    <Content Include="config\zwave.me\ZME_064435.xml" />
+    <Content Include="config\zwave.me\ZME_KFOB-S.xml" />
+    <Content Include="config\zwave.me\ZME_WALLC-S.xml" />
+    <Content Include="config\zwave.me\ZME_WCD2.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
