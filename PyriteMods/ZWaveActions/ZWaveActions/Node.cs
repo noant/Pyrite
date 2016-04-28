@@ -77,6 +77,7 @@ namespace ZWaveActions
         }
 
         public bool Loaded { get; internal set; }
+        public bool Failed { get; internal set; }
 
         public void AddValue(ZWValueID valueID)
         {

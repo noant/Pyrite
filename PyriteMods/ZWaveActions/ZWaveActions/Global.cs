@@ -17,7 +17,7 @@ namespace ZWaveActions
         internal static class Constants
         {
             public static readonly ushort IterationWaitingInterval = 10;
-            public static readonly ushort MaxWaitingInterval = 20000;
+            public static readonly int MaxWaitingInterval = 200000;
         }
 
         static ZWGlobal()

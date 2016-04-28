@@ -36,6 +36,8 @@ namespace ZWaveActions
                             node = new Node();
                             node.ID = notification.GetNodeId();
                             node.HomeID = homeId;
+                            zWave.Manager.RequestAllConfigParams(homeId, node.ID);
+                            node.RequestingValuesBegan = true;
                             zWave.Nodes.Add(node);
                         }
                         break;
@@ -47,6 +49,8 @@ namespace ZWaveActions
                         node.ID = notification.GetNodeId();
                         node.HomeID = homeId;
                         zWave.Nodes.Add(node);
+                        zWave.Manager.RequestAllConfigParams(homeId, node.ID);
+                        node.RequestingValuesBegan = true;
                         break;
                     }
 
@@ -120,19 +124,19 @@ namespace ZWaveActions
 
                 case ZWNotification.Type.DriverReady:
                     {
-                        BeginRequestParams(zWave, homeId);
                         break;
                     }
 
                 case ZWNotification.Type.EssentialNodeQueriesComplete:
                     {
-                        BeginRequestParams(zWave, homeId);
                         break;
                     }
 
                 case ZWNotification.Type.AllNodesQueried:
                     {
-                        BeginRequestParams(zWave, homeId);
+                        zWave.NodesLoaded = true;
+                        if (!ZWGlobal.GetAllZWaveControllersNames().Where(x => !x.NodesLoaded).Any())
+                            ZWGlobal.ControllersLoaded = true;
                         break;
                     }
 
@@ -141,23 +145,17 @@ namespace ZWaveActions
                         zWave.NodesLoaded = true;
                         if (!ZWGlobal.GetAllZWaveControllersNames().Where(x => !x.NodesLoaded).Any())
                             ZWGlobal.ControllersLoaded = true;
-                        BeginRequestParams(zWave, homeId);
                         break;
                     }
 
                 case ZWNotification.Type.AwakeNodesQueried:
                     {
+                        zWave.NodesLoaded = true;
+                        zWave.Nodes.Where(x => !x.Loaded).Select(x => x.Failed = true);
+                        if (!ZWGlobal.GetAllZWaveControllersNames().Where(x => !x.NodesLoaded).Any())
+                            ZWGlobal.ControllersLoaded = true;
                         break;
                     }
-            }
-        }
-
-        private static void BeginRequestParams(ZWave zWave, uint homeId)
-        {
-            foreach (var curnode in zWave.Nodes.Where(x => !x.RequestingValuesBegan))
-            {
-                zWave.Manager.RequestAllConfigParams(homeId, curnode.ID);
-                curnode.RequestingValuesBegan = true;
             }
         }
     }

@@ -43,6 +43,8 @@
             this.btCreateNewPrimary = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btConnection = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -191,13 +193,32 @@
             // 
             // btConnection
             // 
-            this.btConnection.Location = new System.Drawing.Point(15, 66);
+            this.btConnection.Location = new System.Drawing.Point(12, 66);
             this.btConnection.Name = "btConnection";
-            this.btConnection.Size = new System.Drawing.Size(375, 23);
+            this.btConnection.Size = new System.Drawing.Size(378, 23);
             this.btConnection.TabIndex = 7;
             this.btConnection.Text = "Соединение";
             this.btConnection.UseVisualStyleBackColor = true;
             this.btConnection.Click += new System.EventHandler(this.btConnection_Click);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(12, 298);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(216, 23);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 9;
+            this.progressBar.Visible = false;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(17, 303);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(77, 13);
+            this.lblStatus.TabIndex = 10;
+            this.lblStatus.Text = "Соединение...";
+            this.lblStatus.Visible = false;
             // 
             // ControllerSelectForm
             // 
@@ -206,6 +227,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(402, 332);
+            this.Controls.Add(this.lblStatus);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btConnection);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
@@ -242,5 +265,7 @@
         private System.Windows.Forms.Button btUpdateNetwork;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btConnection;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label lblStatus;
     }
 }

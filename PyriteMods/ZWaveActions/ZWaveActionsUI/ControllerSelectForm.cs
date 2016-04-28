@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZWaveActions;
@@ -19,17 +20,14 @@ namespace ZWaveActionsUI
             Device = path;
             Interface = @interface;
             this.cbControllerPath.Items.AddRange(ZWGlobal.GetAllUsedControllers().ToArray());
-            PrepareConnection();
 
             cbControllerPath.TextChanged += (o, e) =>
-            {
                 ChangeButtonsEnabled(false);
-            };
 
             cbType.SelectedIndexChanged += (o, e) =>
-            {
                 ChangeButtonsEnabled(false);
-            };
+
+            this.Load += (o, e) => PrepareConnection();
         }
 
         private void ChangeButtonsEnabled(bool enabled)
@@ -77,26 +75,47 @@ namespace ZWaveActionsUI
 
         private void PrepareConnection()
         {
-            var buttonsEnable = false;
-            if (string.IsNullOrEmpty(Device))
+            var device = Device;
+            var @interface = Interface;
+            progressBar.Visible =
+                lblStatus.Visible = true;
+
+            this.Enabled = false;
+
+            new Thread(() =>
             {
-                // do nothing
-            }
-            else
-            {
-                var zwave = ZWGlobal.PrepareZWave(Device, Interface);
-                if (zwave.WaitForControllerLoaded())
+                var buttonsEnable = false;
+                if (string.IsNullOrEmpty(device))
                 {
-                    buttonsEnable = true;
+                    // do nothing
                 }
                 else
                 {
-                    buttonsEnable = false;
-                    MessageBox.Show("Время ожидания отклика от контроллера истекло.");
+                    _zwave = ZWGlobal.PrepareZWave(device, @interface);
+                    if (_zwave.WaitForControllerLoaded())
+                    {
+                        buttonsEnable = true;
+                    }
+                    else
+                    {
+                        buttonsEnable = false;
+                        BeginInvoke(new Action(() =>
+                        {
+                            MessageBox.Show("Время ожидания отклика от контроллера истекло.");
+                        }));
+                    }
                 }
-            }
-
-            ChangeButtonsEnabled(buttonsEnable);
+                BeginInvoke(new Action(() =>
+                {
+                    ChangeButtonsEnabled(buttonsEnable);
+                    progressBar.Visible =
+                        lblStatus.Visible = false;
+                    this.Enabled = true;
+                }));
+            })
+            {
+                IsBackground = true
+            }.Start();
         }
     }
 }
