@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZWaveAction;
+using ZWaveActionUI.ActionPanels;
+using static ZWaveAction.ZWGlobal.Simplified;
 
 namespace ZWaveActionUI
 {
@@ -21,6 +23,7 @@ namespace ZWaveActionUI
         private void btSelectValue_Click(object sender, EventArgs e)
         {
             var form = new TargetNodeValueSelectForm(Device, Interface, NodeId, ParameterId);
+            form.HomeId = this.HomeId;
             if (form.ShowDialog() == DialogResult.OK)
             {
                 Device = form.Device;
@@ -33,7 +36,7 @@ namespace ZWaveActionUI
 
         public string Device { get; set; }
         public ControllerInterface Interface { get; set; }
-        public uint? HomeId { get; private set; }
+        public uint? HomeId { get; set; }
         public byte? NodeId { get; set; }
 
         private ulong? _parameterId { get; set; }
@@ -53,7 +56,7 @@ namespace ZWaveActionUI
         public override void Refresh()
         {
             base.Refresh();
-            if (NodeId != null && ParameterId != null)
+            if (!string.IsNullOrEmpty(Device) && NodeId != null && ParameterId != null)
             {
                 var zwave = ZWGlobal.PrepareZWave(Device, Interface);
                 if (zwave.WaitForControllerLoaded())
@@ -67,6 +70,30 @@ namespace ZWaveActionUI
             }
             else
                 btOk.Enabled = false;
+        }
+
+        public bool InvertValueIfBool
+        {
+            get
+            {
+                return valueSetter.Setter.InvertOnRepeat;
+            }
+            set
+            {
+                valueSetter.Setter.InvertOnRepeat = value;
+            }
+        }
+
+        public AppendType Mode
+        {
+            get
+            {
+                return valueSetter.Setter.Mode;
+            }
+            set
+            {
+                valueSetter.Setter.Mode = value;
+            }
         }
 
         public object TargetValue

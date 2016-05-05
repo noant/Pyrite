@@ -58,22 +58,24 @@ namespace ZWaveAction
         {
             switch (v.GetType())
             {
+                case ZWValueID.ValueType.Button:
+                    return manager.PressButton(v);
                 case ZWValueID.ValueType.Bool:
                     return manager.SetValue(v, (bool)obj);
                 case ZWValueID.ValueType.Byte:
-                    return manager.SetValue(v, (byte)obj);
+                    return manager.SetValue(v, Convert.ToByte(obj));
                 case ZWValueID.ValueType.Decimal:
-                    return manager.SetValue(v, (float)(decimal)obj);
+                    return manager.SetValue(v, (float)Convert.ToDouble(obj));
                 case ZWValueID.ValueType.Int:
-                    return manager.SetValue(v, (int)obj);
+                    return manager.SetValue(v, Convert.ToInt32(obj));
                 case ZWValueID.ValueType.List:
-                    return manager.SetValueListSelection(v, ((ItemsSelection)obj).Values[((ItemsSelection)obj).SelectedItem]);
+                    return manager.SetValueListSelection(v, obj.ToString());
                 case ZWValueID.ValueType.Schedule:
                     return false;
                 case ZWValueID.ValueType.Short:
-                    return manager.SetValue(v, (ushort)obj);
+                    return manager.SetValue(v, Convert.ToUInt16(obj));
                 case ZWValueID.ValueType.String:
-                    return manager.SetValue(v, (string)obj);
+                    return manager.SetValue(v, Convert.ToString(obj));
                 default:
                     throw new Exception("Cannot find type");
             }

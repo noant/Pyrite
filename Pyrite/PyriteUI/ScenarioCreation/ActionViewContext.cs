@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using PyriteClientIntefaces;
 using PyriteCore.ScenarioCreation;
+using System.Threading;
 
 namespace PyriteUI.ScenarioCreation
 {

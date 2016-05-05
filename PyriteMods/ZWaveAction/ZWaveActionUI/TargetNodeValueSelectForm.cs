@@ -27,6 +27,7 @@ namespace ZWaveActionUI
             btControllerSelect.Click += (o, e) =>
             {
                 var form = new ControllerSelectForm(_device, _interface);
+                form.HomeId = HomeId;
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     Device = form.Device;
@@ -119,7 +120,7 @@ namespace ZWaveActionUI
 
         public uint? HomeId
         {
-            get; private set;
+            get; set;
         }
 
         public override void Refresh()
@@ -144,16 +145,22 @@ namespace ZWaveActionUI
             if (NodeId != null)
             {
                 var node = ZWGlobal.GetNodeById(NodeId.Value);
-                this.tbNodeName.Text = node.Label + "/" + node.Product + "/" + node.Manufacturer + "/" + node.Name;
-                if (_valueId != null)
+                if (node != null)
                 {
-                    var value = ZWGlobal.GetZWValueById(_valueId.Value);
-                    var zwave = ZWGlobal.GetZWaveByValueID(value);
-                    this.tbParameterName.Text = zwave.Manager.GetValueLabel(value) + "/" + zwave.Manager.GetValueUnits(value) + "/" + zwave.Manager.GetValueHelp(value);
-                    btOk.Enabled = true;
+                    this.tbNodeName.Text = node.Label + "/" + node.Product + "/" + node.Manufacturer + "/" + node.Name;
+                    if (_valueId != null)
+                    {
+                        var value = ZWGlobal.GetZWValueById(_valueId.Value);
+                        if (value != null)
+                        {
+                            var zwave = ZWGlobal.GetZWaveByValueID(value);
+                            this.tbParameterName.Text = zwave.Manager.GetValueLabel(value) + "/" + zwave.Manager.GetValueUnits(value) + "/" + zwave.Manager.GetValueHelp(value);
+                            btOk.Enabled = true;
+                        }
+                    }
+                    else
+                        tbParameterName.Text = string.Empty;
                 }
-                else
-                    tbParameterName.Text = string.Empty;
             }
             else
             {

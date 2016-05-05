@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ZWaveAction.ZWGlobal.Simplified;
 
 namespace ZWaveActionUI.ActionPanels
 {
@@ -16,7 +17,6 @@ namespace ZWaveActionUI.ActionPanels
         {
         }
 
-        public event Action ValueChanged;
 
         private object _value;
         public object Value
@@ -32,5 +32,25 @@ namespace ZWaveActionUI.ActionPanels
                     ValueChanged();
             }
         }
+
+        public bool InvertOnRepeat { get; set; }
+
+        private AppendType _mode;
+        public AppendType Mode
+        {
+            get
+            {
+                return _mode;
+            }
+            set
+            {
+                _mode = value;
+                if (ModeChanged != null)
+                    ModeChanged();
+            }
+        }
+
+        public event Action ModeChanged;
+        public event Action ValueChanged;
     }
 }

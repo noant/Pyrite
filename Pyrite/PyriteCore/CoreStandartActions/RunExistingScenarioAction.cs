@@ -123,7 +123,7 @@ namespace PyriteCore.CoreStandartActions
         {
             _scenario = GetTargetScenario();
             if (_scenario != null)
-                _scenario = _scenario.Clone();
+                _scenario = _scenario.Clone().Value;
         }
 
         public void Refresh()

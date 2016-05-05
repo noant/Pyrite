@@ -77,14 +77,14 @@ namespace PyriteCore
                     }
                     catch (Exception e)
                     {
-                        result.AddException(e);
+                        result.AddWarning(new Warning(e.Message), true);
                     }
                 }
                 Savior.SaveToFile();
             }
             catch (Exception e)
             {
-                result.AddException(e);
+                result.AddWarning(new Warning(e.Message), true);
             }
             return result;
         }
@@ -114,36 +114,40 @@ namespace PyriteCore
                 if (PluginsSavior.ContainsKey(VAC.AppSettingsNames.ActionModule))
                     foreach (var item in PluginsSavior[VAC.AppSettingsNames.ActionModule].Values)
                     {
-#if !DEBUG
                         try
                         {
-#endif
-                        Pyrite.ModulesControl.RegisterAction(item);
-#if !DEBUG
+                            Pyrite.ModulesControl.RegisterAction(item);
                         }
                         catch (Exception e)
                         {
-                            result.AddException(e);
+                            result.AddWarning(new Warning(e.Message), true);
                         }
-#endif
                     }
                 if (PluginsSavior.ContainsKey(VAC.AppSettingsNames.CheckerModule))
                     foreach (var item in PluginsSavior[VAC.AppSettingsNames.CheckerModule].Values)
                     {
-#if !DEBUG
                         try
                         {
-#endif
-                        Pyrite.ModulesControl.RegisterChecker(item);
-#if !DEBUG
+                            Pyrite.ModulesControl.RegisterChecker(item);
                         }
                         catch (Exception e)
                         {
-                            result.AddException(e);
+                            result.AddWarning(new Warning(e.Message), true);
                         }
-#endif
                     }
 
+            }
+            catch (Exception e)
+            {
+                result.AddWarning(new Warning(e.Message));
+            }
+            finally
+            {
+                if (PluginsSavior != null)
+                    PluginsSavior.ThrowsExceptionIfParameterNotExist = false;
+            }
+            try
+            {
                 //other settings load
                 if (!File.Exists(_fileName))
                 {
@@ -167,47 +171,43 @@ namespace PyriteCore
                     foreach (var hobject in Savior[VAC.AppSettingsNames.Action].Values)
                     {
                         var actionItem = new Scenario();
-#if !DEBUG
                         try
                         {
-#endif
-                        var actionTypeName = hobject[VAC.AppSettingsNames.UsedCustomAction];
+                            var actionTypeName = hobject[VAC.AppSettingsNames.UsedCustomAction];
 
-                        if (Pyrite.ModulesControl.CustomActions.Any(x => x.FullName.Equals(actionTypeName)) ||
-                            actionTypeName.Equals(typeof(DoubleComplexAction).FullName))
-                        {
-                            actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
-                            actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
-                            actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
-                            actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
-                            actionItem.Index = hobject[VAC.AppSettingsNames.UsedIndex];
-                            actionItem.UseOnOffState = hobject[VAC.AppSettingsNames.UsedOffOnState];
-                            actionItem.Guid = hobject[VAC.AppSettingsNames.ActionGuid];
-
-                            if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
+                            if (Pyrite.ModulesControl.CustomActions.Any(x => x.FullName.Equals(actionTypeName)) ||
+                                actionTypeName.Equals(typeof(DoubleComplexAction).FullName))
                             {
-                                actionItem.ActionBag = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
+                                actionItem.Category = hobject[VAC.AppSettingsNames.UsedCategory];
+                                actionItem.Name = hobject[VAC.AppSettingsNames.UsedActionName];
+                                actionItem.ServerCommand = hobject[VAC.AppSettingsNames.UsedActionServerCommand];
+                                actionItem.UseServerThreading = hobject[VAC.AppSettingsNames.UsedUseServerCommand];
+                                actionItem.Index = hobject[VAC.AppSettingsNames.UsedIndex];
+                                actionItem.UseOnOffState = hobject[VAC.AppSettingsNames.UsedOffOnState];
+                                actionItem.Guid = hobject[VAC.AppSettingsNames.ActionGuid];
+
+                                if (hobject.ContainsKey(VAC.AppSettingsNames.UsedActionCustomSettings))
+                                {
+                                    actionItem.ActionBag = hobject[VAC.AppSettingsNames.UsedActionCustomSettings].Value;
+                                }
+
+                                actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
+
+                                Pyrite.ScenariosPool.Add(actionItem);
+
+                                actionItem.CurrentPyrite = this.Pyrite;
+
+                                actionItem.ForAllActionAndChecker(x =>
+                                {
+                                    if (x is ICoreElement)
+                                        ((ICoreElement)x).CurrentPyrite = this.Pyrite;
+                                });
                             }
-
-                            actionItem.IsActive = hobject[VAC.AppSettingsNames.UsedIsActive];
-
-                            Pyrite.ScenariosPool.Add(actionItem);
-
-                            actionItem.CurrentPyrite = this.Pyrite;
-
-                            actionItem.ForAllActionAndChecker(x =>
-                            {
-                                if (x is ICoreElement)
-                                    ((ICoreElement)x).CurrentPyrite = this.Pyrite;
-                            });
-                        }
-#if !DEBUG
                         }
                         catch (Exception e)
                         {
-                            result.AddException(e);
+                            result.AddWarning(new Warning(e.Message), true);
                         }
-#endif
                     }
 
                     Pyrite.ScenariosPool.RefreshScenarios();
@@ -218,16 +218,19 @@ namespace PyriteCore
             catch (Exception e)
             {
                 if (e is ParameterNotExistException)
+                {
                     SetDefaults();
+                    result.AddWarning(new Warning("Создана новая база сценариев."), true);
+                }
                 else
                 {
-                    result.AddException(e);
+                    result.AddWarning(new Warning(e.Message), true);
                 }
             }
             finally
             {
-                Savior.ThrowsExceptionIfParameterNotExist = false;
-                PluginsSavior.ThrowsExceptionIfParameterNotExist = false;
+                if (Savior != null)
+                    Savior.ThrowsExceptionIfParameterNotExist = false;
             }
             return result;
         }

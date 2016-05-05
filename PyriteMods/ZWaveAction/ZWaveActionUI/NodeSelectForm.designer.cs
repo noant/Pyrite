@@ -67,7 +67,7 @@
             this.btRemoveNode.Location = new System.Drawing.Point(326, 2);
             this.btRemoveNode.Name = "btRemoveNode";
             this.btRemoveNode.Size = new System.Drawing.Size(94, 23);
-            this.btRemoveNode.TabIndex = 1;
+            this.btRemoveNode.TabIndex = 2;
             this.btRemoveNode.Text = "Удалить узел";
             this.btRemoveNode.UseVisualStyleBackColor = true;
             this.btRemoveNode.Click += new System.EventHandler(this.btRemoveNode_Click);
@@ -77,7 +77,7 @@
             this.btAddNewNodeSecure.Location = new System.Drawing.Point(138, 2);
             this.btAddNewNodeSecure.Name = "btAddNewNodeSecure";
             this.btAddNewNodeSecure.Size = new System.Drawing.Size(187, 23);
-            this.btAddNewNodeSecure.TabIndex = 2;
+            this.btAddNewNodeSecure.TabIndex = 1;
             this.btAddNewNodeSecure.Text = "Добавить новый узел безопасно";
             this.btAddNewNodeSecure.UseVisualStyleBackColor = true;
             this.btAddNewNodeSecure.Click += new System.EventHandler(this.btAddNewNodeSecure_Click);
@@ -197,7 +197,7 @@
             this.btCancel.Location = new System.Drawing.Point(599, 405);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(94, 23);
-            this.btCancel.TabIndex = 4;
+            this.btCancel.TabIndex = 5;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
@@ -209,7 +209,7 @@
             this.btOk.Location = new System.Drawing.Point(504, 405);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(94, 23);
-            this.btOk.TabIndex = 5;
+            this.btOk.TabIndex = 4;
             this.btOk.Text = "Выбрать";
             this.btOk.UseVisualStyleBackColor = true;
             // 

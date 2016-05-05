@@ -343,11 +343,14 @@ namespace PyriteCore.ScenarioCreation
             get; private set;
         }
 
-        public Scenario Clone()
+        public Result<Scenario> Clone()
         {
+            var res = new Result<Scenario>();
+            var clone = ModulesControl.CloneAction(this.Action).Value;
+
             var item = new Scenario()
             {
-                ActionBag = new ActionBag() { Action = ModulesControl.Clone(this.Action) },
+                ActionBag = new ActionBag() { Action = clone },
                 Category = this.Category,
                 Guid = this.Guid,
                 IsActive = this.IsActive,
@@ -365,7 +368,15 @@ namespace PyriteCore.ScenarioCreation
                     ((ICoreElement)x).CurrentPyrite = this.CurrentPyrite;
             });
 
-            return item;
+            if (item.Action == null)
+            {
+                if (this.Action is DoubleComplexAction)
+                    item.ActionBag.Action = new DoubleComplexAction();
+                else item.ActionBag.Action = new DoNothingAction();
+            }
+
+            res.Value = item;
+            return res;
         }
 
         public void Dispose()

@@ -100,7 +100,7 @@ namespace PyriteUI
             else
             {
                 _tempItem = scenario;
-                Scenario = scenario.Clone();
+                Scenario = scenario.Clone().Value;
 
                 this.DataContext = new EditScenarioViewContext(Scenario);
 

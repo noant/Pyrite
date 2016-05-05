@@ -15,10 +15,10 @@ namespace PyriteUI
         public static Pyrite Pyrite { get; private set; }
         public App()
         {
-//#if !DEBUG
-//            var splash = new SplashScreen("Images/PyriteMedium.png");
-//            splash.Show(false,true);
-//#endif
+            //#if !DEBUG
+            //            var splash = new SplashScreen("Images/PyriteMedium.png");
+            //            splash.Show(false,true);
+            //#endif
 
             this.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
 
@@ -34,6 +34,13 @@ namespace PyriteUI
                     }
                     catch { }
                 };
+
+            Resulting.WarningHandler += (warns) =>
+            {
+                foreach (var warn in warns)
+                    MessageBox.Show(warn.Message, "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            };
+
             Resulting.CriticalHandler += (exceptions) =>
             {
                 if (exceptions.Count() != 0)
@@ -54,9 +61,9 @@ namespace PyriteUI
                 };
 
             Starter.Initialize();
-//#if !DEBUG
-//            splash.Close(new TimeSpan(0,0,1));
-//#endif
+            //#if !DEBUG
+            //            splash.Close(new TimeSpan(0,0,1));
+            //#endif
         }
 
         public static readonly Brush WindowBackground = new SolidColorBrush(SystemColors.ControlColor);

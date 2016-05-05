@@ -1,6 +1,6 @@
 ﻿namespace ZWaveActionUI.ActionPanels
 {
-    partial class ValueSetter
+    partial class StringSetterControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,42 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel = new System.Windows.Forms.Panel();
+            this.tbValue = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // label1
+            // nudValue
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Значение = ";
+            this.tbValue.Location = new System.Drawing.Point(3, 3);
+            this.tbValue.Name = "tbValue";
+            this.tbValue.Size = new System.Drawing.Size(107, 20);
+            this.tbValue.TabIndex = 0;
             // 
-            // panel
-            // 
-            this.panel.Location = new System.Drawing.Point(70, 0);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(517, 24);
-            this.panel.TabIndex = 1;
-            // 
-            // ValueSetter
+            // StringSetterControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel);
-            this.Controls.Add(this.label1);
-            this.Name = "ValueSetter";
-            this.Size = new System.Drawing.Size(590, 24);
+            this.Controls.Add(this.tbValue);
+            this.Name = "StringSetterControl";
+            this.Size = new System.Drawing.Size(113, 26);
             this.ResumeLayout(false);
-            this.PerformLayout();
-
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel;
+        private System.Windows.Forms.TextBox tbValue;
     }
 }

@@ -69,7 +69,7 @@ namespace ZWaveActionUI
 
         public uint? HomeId
         {
-            get; private set;
+            get; set;
         }
 
         private ZWave _zwave;

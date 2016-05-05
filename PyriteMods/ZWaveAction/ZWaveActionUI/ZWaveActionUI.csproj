@@ -52,6 +52,30 @@
     <Compile Include="ActionForm.Designer.cs">
       <DependentUpon>ActionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ActionPanels\ListSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActionPanels\ListSetterControl.Designer.cs">
+      <DependentUpon>ListSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActionPanels\StringSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActionPanels\StringSetterControl.Designer.cs">
+      <DependentUpon>StringSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActionPanels\NumericSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActionPanels\NumericSetterControl.Designer.cs">
+      <DependentUpon>NumericSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActionPanels\ButtonSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActionPanels\ButtonSetterControl.Designer.cs">
+      <DependentUpon>ButtonSetterControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ActionPanels\BoolSetterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -66,6 +90,7 @@
       <DependentUpon>ValueSetter.cs</DependentUpon>
     </Compile>
     <Compile Include="ActionPanels\SetterImpl.cs" />
+    <Compile Include="CheckerPanels\CheckerImpl.cs" />
     <Compile Include="ControllerCommandDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +162,18 @@
   <ItemGroup>
     <EmbeddedResource Include="ActionForm.resx">
       <DependentUpon>ActionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ActionPanels\ListSetterControl.resx">
+      <DependentUpon>ListSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ActionPanels\StringSetterControl.resx">
+      <DependentUpon>StringSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ActionPanels\NumericSetterControl.resx">
+      <DependentUpon>NumericSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ActionPanels\ButtonSetterControl.resx">
+      <DependentUpon>ButtonSetterControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ActionPanels\BoolSetterControl.resx">
       <DependentUpon>BoolSetterControl.cs</DependentUpon>
@@ -420,6 +457,7 @@
       <Name>ZWaveAction</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

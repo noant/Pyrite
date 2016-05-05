@@ -84,7 +84,7 @@ namespace PyriteCore
             }
             catch (Exception e)
             {
-                result.AddException(e);
+                result.AddWarning(new Warning(e.Message));
             }
 
             return result;
@@ -113,7 +113,7 @@ namespace PyriteCore
             }
             catch (Exception e)
             {
-                result.AddException(e);
+                result.AddWarning(new Warning(e.Message));
             }
             return result;
         }
@@ -170,7 +170,7 @@ namespace PyriteCore
             }
             catch (Exception e)
             {
-                result.AddException(e);
+                result.AddWarning(new Warning(e.Message));
             }
 
             var addedTypes = types.Where(x => CanRegisterAction(x)).ToList();
@@ -212,7 +212,7 @@ namespace PyriteCore
             }
             catch (Exception e)
             {
-                result.AddException(e);
+                result.AddWarning(new Warning(e.Message));
             }
 
             var addedTypes = types.Where(x => CanRegisterChecker(x));
@@ -294,14 +294,32 @@ namespace PyriteCore
             return result;
         }
 
-        public static ICustomAction Clone(ICustomAction action)
+        public static Result<ICustomAction> CloneAction(ICustomAction action)
         {
-            return (ICustomAction)HierarchicalObjectCrutch.CloneObject(action);
+            var res = new Result<ICustomAction>();
+            try
+            {
+                res.Value = (ICustomAction)HierarchicalObjectCrutch.CloneObject(action);
+            }
+            catch (Exception e)
+            {
+                res.AddWarning(new Warning(e.Message), true);
+            }
+            return res;
         }
 
-        public static ICustomChecker Clone(ICustomChecker action)
+        public static Result<ICustomChecker> CloneChecker(ICustomChecker checker)
         {
-            return (ICustomChecker)HierarchicalObjectCrutch.CloneObject(action);
+            var res = new Result<ICustomChecker>();
+            try
+            {
+                res.Value = (ICustomChecker)HierarchicalObjectCrutch.CloneObject(checker);
+            }
+            catch (Exception e)
+            {
+                res.AddWarning(new Warning(e.Message), true);
+            }
+            return res;
         }
     }
 }

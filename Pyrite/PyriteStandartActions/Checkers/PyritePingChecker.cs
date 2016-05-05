@@ -53,7 +53,7 @@ namespace PyriteStandartActions.Checkers
                         return GetNextString(stream).Equals("yesIAm");
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                     return false;
                 }

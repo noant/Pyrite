@@ -23,12 +23,19 @@ namespace PyriteCore
         public static List<Type> NotCriticalExceptions { get; private set; }
 
         public static event CriticalHandler CriticalHandler;
+        public static event WarningHandler WarningHandler;
 
         internal static void RaiseCriticalHandler(IEnumerable<Exception> exceptions)
         {
             if (EnableExceptionHandling)
                 if (CriticalHandler != null)
                     CriticalHandler(exceptions);
+        }
+
+        internal static void RaiseWarningsHandler(IEnumerable<Warning> warnings)
+        {
+            if (WarningHandler != null)
+                WarningHandler(warnings);
         }
 
         public static bool EnableExceptionHandling { get; set; }
@@ -86,13 +93,22 @@ namespace PyriteCore
                 AddException(e);
         }
 
-        internal void AddWarning(Warning e)
+        internal void AddWarning(Warning w, bool raiseWarnHandler)
         {
             if (_warnings == null)
                 _warnings = new List<Warning>();
 
-            _warnings.Add(e);
+            _warnings.Add(w);
+
+            if (raiseWarnHandler)
+                Resulting.RaiseWarningsHandler(this.Warnings);
         }
+
+        internal void AddWarning(Warning w)
+        {
+            AddWarning(w, false);
+        }
+
         internal void AddWarnings(IEnumerable<Warning> ws)
         {
             foreach (var e in ws)
@@ -111,4 +127,5 @@ namespace PyriteCore
     }
 
     public delegate void CriticalHandler(IEnumerable<Exception> exceptions);
+    public delegate void WarningHandler(IEnumerable<Warning> warns);
 }

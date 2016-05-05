@@ -41,7 +41,6 @@
             this.btTransferConfiguration = new System.Windows.Forms.Button();
             this.btTransferPrimaryRole = new System.Windows.Forms.Button();
             this.btCreateNewPrimary = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.btConnection = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -64,7 +63,7 @@
             this.btOk.Location = new System.Drawing.Point(234, 298);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 1;
+            this.btOk.TabIndex = 4;
             this.btOk.Text = "OK";
             this.btOk.UseVisualStyleBackColor = true;
             // 
@@ -74,7 +73,7 @@
             this.btCancel.Location = new System.Drawing.Point(315, 298);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 2;
+            this.btCancel.TabIndex = 5;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
@@ -106,7 +105,7 @@
             this.cbType.Location = new System.Drawing.Point(53, 39);
             this.cbType.Name = "cbType";
             this.cbType.Size = new System.Drawing.Size(337, 21);
-            this.cbType.TabIndex = 4;
+            this.cbType.TabIndex = 1;
             // 
             // groupBox1
             // 
@@ -116,34 +115,35 @@
             this.groupBox1.Controls.Add(this.btTransferConfiguration);
             this.groupBox1.Controls.Add(this.btTransferPrimaryRole);
             this.groupBox1.Controls.Add(this.btCreateNewPrimary);
-            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(12, 93);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(378, 199);
-            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Другие функции контроллера";
             // 
             // btEraseAll
             // 
+            this.btEraseAll.BackColor = System.Drawing.Color.Tomato;
             this.btEraseAll.Enabled = false;
             this.btEraseAll.Location = new System.Drawing.Point(6, 168);
             this.btEraseAll.Name = "btEraseAll";
             this.btEraseAll.Size = new System.Drawing.Size(366, 23);
             this.btEraseAll.TabIndex = 6;
             this.btEraseAll.Text = "Сброс устройства";
-            this.btEraseAll.UseVisualStyleBackColor = true;
+            this.btEraseAll.UseVisualStyleBackColor = false;
             this.btEraseAll.Click += new System.EventHandler(this.btEraseAll_Click);
             // 
             // btSoftReset
             // 
+            this.btSoftReset.BackColor = System.Drawing.Color.Tomato;
             this.btSoftReset.Enabled = false;
             this.btSoftReset.Location = new System.Drawing.Point(6, 139);
             this.btSoftReset.Name = "btSoftReset";
             this.btSoftReset.Size = new System.Drawing.Size(366, 23);
             this.btSoftReset.TabIndex = 4;
             this.btSoftReset.Text = "Мягкий сброс устройства";
-            this.btSoftReset.UseVisualStyleBackColor = true;
+            this.btSoftReset.UseVisualStyleBackColor = false;
             this.btSoftReset.Click += new System.EventHandler(this.btSoftReset_Click);
             // 
             // btUpdateNetwork
@@ -190,20 +190,12 @@
             this.btCreateNewPrimary.UseVisualStyleBackColor = true;
             this.btCreateNewPrimary.Click += new System.EventHandler(this.btCreateNewPrimary_Click);
             // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(3, 121);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(375, 16);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "___________________________________________________________________\r\n";
-            // 
             // btConnection
             // 
             this.btConnection.Location = new System.Drawing.Point(12, 66);
             this.btConnection.Name = "btConnection";
             this.btConnection.Size = new System.Drawing.Size(378, 23);
-            this.btConnection.TabIndex = 7;
+            this.btConnection.TabIndex = 2;
             this.btConnection.Text = "Соединение";
             this.btConnection.UseVisualStyleBackColor = true;
             this.btConnection.Click += new System.EventHandler(this.btConnection_Click);
@@ -270,7 +262,6 @@
         private System.Windows.Forms.Button btEraseAll;
         private System.Windows.Forms.Button btSoftReset;
         private System.Windows.Forms.Button btUpdateNetwork;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btConnection;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label lblStatus;

@@ -41,12 +41,12 @@
             this.tbZWValue.Location = new System.Drawing.Point(83, 12);
             this.tbZWValue.Name = "tbZWValue";
             this.tbZWValue.ReadOnly = true;
-            this.tbZWValue.Size = new System.Drawing.Size(240, 20);
+            this.tbZWValue.Size = new System.Drawing.Size(311, 20);
             this.tbZWValue.TabIndex = 0;
             // 
             // btSelectValue
             // 
-            this.btSelectValue.Location = new System.Drawing.Point(329, 10);
+            this.btSelectValue.Location = new System.Drawing.Point(400, 10);
             this.btSelectValue.Name = "btSelectValue";
             this.btSelectValue.Size = new System.Drawing.Size(51, 23);
             this.btSelectValue.TabIndex = 1;
@@ -57,7 +57,7 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(306, 68);
+            this.btCancel.Location = new System.Drawing.Point(376, 68);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 3;
@@ -68,10 +68,10 @@
             // 
             this.btOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btOk.Enabled = false;
-            this.btOk.Location = new System.Drawing.Point(225, 68);
+            this.btOk.Location = new System.Drawing.Point(295, 68);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 4;
+            this.btOk.TabIndex = 2;
             this.btOk.Text = "OK";
             this.btOk.UseVisualStyleBackColor = true;
             // 
@@ -88,7 +88,7 @@
             // 
             this.valueSetter.Location = new System.Drawing.Point(5, 38);
             this.valueSetter.Name = "valueSetter";
-            this.valueSetter.Size = new System.Drawing.Size(368, 24);
+            this.valueSetter.Size = new System.Drawing.Size(453, 24);
             this.valueSetter.TabIndex = 2;
             // 
             // ActionForm
@@ -97,7 +97,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(392, 101);
+            this.ClientSize = new System.Drawing.Size(463, 101);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btOk);
             this.Controls.Add(this.btCancel);

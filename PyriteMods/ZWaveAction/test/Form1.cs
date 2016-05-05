@@ -24,14 +24,20 @@ namespace test
             //var vals = form.ToString();
             //vals = form.ToString();
 
-            var form = new ActionForm();
-            form.Interface = ControllerInterface.Serial;
-            form.Device = "COM4";
-            form.NodeId = 4;
-            form.ParameterId = 72057594109837312;
-            form.TargetValue = false;
-            form.ShowDialog();
-            form.ShowDialog();
+            //var form = new ActionForm();
+            //form.Interface = ControllerInterface.Serial;
+            //form.Device = "COM4";
+            //form.NodeId = 4;
+            //form.ParameterId = 72057594109837312;
+            //form.TargetValue = false;
+            //form.ShowDialog();
+            //form.ShowDialog();
+
+            var zwaction = new ZWaveActionImplementations.ZWaveAction();
+            zwaction.BeginUserSettings();
+
+            while (true)
+                zwaction.Do(zwaction.State);
         }
     }
 }

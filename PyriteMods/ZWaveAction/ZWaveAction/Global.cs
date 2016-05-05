@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,6 +41,22 @@ namespace ZWaveAction
         public static Node GetNodeById(byte id)
         {
             return _zwManagers.SelectMany(x => x.Value.Nodes).FirstOrDefault(x => x.ID.Equals(id));
+        }
+
+        public static string GetNodeLabel(byte id)
+        {
+            var node = GetNodeById(id);
+            if (node == null)
+                return null;
+            return node.Label;
+        }
+
+        public static string GetValueIDLabel(ulong valueID)
+        {
+            var value = _zwManagers.SelectMany(x => x.Value.Nodes).SelectMany(x => x.Values).Where(x => x.GetId().Equals(valueID)).FirstOrDefault();
+            if (value == null)
+                return null;
+            return _mainManager.GetValueLabel(value);
         }
 
         public static ZWValueID GetZWValueById(ulong id)
@@ -269,7 +286,7 @@ namespace ZWaveAction
                 return valCurrent < Convert.ToDecimal(targetValue);
             }
 
-            public static bool SetValue(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object value)
+            public static bool SetValue(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object value, bool invertValueIfBool, AppendType mode)
             {
                 var zwave = PrepareZWave(device, @interface);
                 zwave.WaitForControllerLoaded();
@@ -286,7 +303,43 @@ namespace ZWaveAction
                 if (valueId == null)
                     return false;
 
+                var type = valueId.GetType();
+
+                if (invertValueIfBool && type == ZWValueID.ValueType.Bool)
+                {
+                    value = !(bool)Helper.GetValue(valueId, zwave.Manager);
+                }
+
+                if (mode != AppendType.Equalize &&
+                    (type == ZWValueID.ValueType.Byte ||
+                    type == ZWValueID.ValueType.Decimal ||
+                    type == ZWValueID.ValueType.Int ||
+                    type == ZWValueID.ValueType.Short))
+                {
+                    if (mode == AppendType.Decrement)
+                        value = 0 - Convert.ToDouble(value);
+                    else value = Convert.ToDouble(value);
+
+                    value = Convert.ToDouble(Helper.GetValue(valueId, zwave.Manager)) + Convert.ToDouble(value);
+                }
+
                 return Helper.SetValue(zwave.Manager, valueId, value);
+            }
+
+            public enum AppendType
+            {
+                Increment,
+                Equalize,
+                Decrement
+            }
+
+            public enum CheckerMode
+            {
+                Equals,
+                More,
+                MoreOrEquals,
+                Less,
+                LessOrEquals
             }
         }
     }
