@@ -117,7 +117,12 @@ namespace ZWaveActionImplementations
             try
             {
                 if (!string.IsNullOrEmpty(Device))
-                    ZWGlobal.Simplified.SetValue(Device, Interface, HomeId, NodeId, ParameterId, Value, InvertValueIfBool, Mode);
+                {
+                    if (ZWGlobal.Simplified.SetValue(Device, Interface, HomeId, NodeId, ParameterId, Value, InvertValueIfBool, Mode))
+                    {
+                        ZWGlobal.Simplified.WaitForValueChanged(Device, Interface, HomeId, NodeId, ParameterId);
+                    }
+                }
             }
             catch
             {
