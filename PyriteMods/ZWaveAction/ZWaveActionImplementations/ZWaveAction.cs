@@ -51,6 +51,15 @@ namespace ZWaveActionImplementations
         {
             get
             {
+                if (!string.IsNullOrEmpty(Text))
+                {
+                    if (ZWGlobal.IsValueBoolAndTrue(this.ParameterId))
+                    {
+                        return "Выключить: " + Text.ToLower();
+                    }
+                    return Text;
+                }
+
                 if (Value == null)
                     return DeviceName;
 
@@ -82,6 +91,7 @@ namespace ZWaveActionImplementations
             form.Mode = this.Mode; // set only if ParameterId not null
             form.InvertValueIfBool = this.InvertValueIfBool; // set only if ParameterId not null
             form.TargetValue = this.Value;
+            form.ButtonText = this.Text;
 
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -94,6 +104,7 @@ namespace ZWaveActionImplementations
                 this.ParameterId = form.ParameterId.Value;
                 this.InvertValueIfBool = form.InvertValueIfBool; // set only if ParameterId not null
                 this.Mode = form.Mode; // set only if ParameterId not null
+                this.Text = form.ButtonText;
                 return true;
             }
             return false;
@@ -149,5 +160,7 @@ namespace ZWaveActionImplementations
         public uint HomeId { get; set; }
         public byte NodeId { get; set; }
         public ulong ParameterId { get; set; }
+
+        public string Text { get; set; }
     }
 }

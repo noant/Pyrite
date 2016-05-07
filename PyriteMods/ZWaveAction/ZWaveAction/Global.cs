@@ -43,6 +43,18 @@ namespace ZWaveAction
             return _zwManagers.SelectMany(x => x.Value.Nodes).FirstOrDefault(x => x.ID.Equals(id));
         }
 
+        public static bool IsValueBoolAndTrue(ulong id)
+        {
+            var valueId = GetZWValueById(id);
+            if (valueId != null && valueId.GetType() == ZWValueID.ValueType.Bool)
+            {
+                bool isTrue;
+                _mainManager.GetValueAsBool(valueId, out isTrue);
+                return isTrue;
+            }
+            return false;
+        }
+
         public static string GetNodeLabel(byte id)
         {
             var node = GetNodeById(id);
@@ -51,9 +63,9 @@ namespace ZWaveAction
             return node.Label;
         }
 
-        public static string GetValueIDLabel(ulong valueID)
+        public static string GetValueIDLabel(ulong id)
         {
-            var value = _zwManagers.SelectMany(x => x.Value.Nodes).SelectMany(x => x.Values).Where(x => x.GetId().Equals(valueID)).FirstOrDefault();
+            var value = _zwManagers.SelectMany(x => x.Value.Nodes).SelectMany(x => x.Values).Where(x => x.GetId().Equals(id)).FirstOrDefault();
             if (value == null)
                 return null;
             return _mainManager.GetValueLabel(value);

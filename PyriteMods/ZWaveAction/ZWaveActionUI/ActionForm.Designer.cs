@@ -34,6 +34,8 @@
             this.btOk = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.valueSetter = new ZWaveActionUI.ActionPanels.ValueSetter();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbText = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbZWValue
@@ -57,10 +59,10 @@
             // btCancel
             // 
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(376, 68);
+            this.btCancel.Location = new System.Drawing.Point(377, 110);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 3;
+            this.btCancel.TabIndex = 4;
             this.btCancel.Text = "Отмена";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
@@ -68,10 +70,10 @@
             // 
             this.btOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btOk.Enabled = false;
-            this.btOk.Location = new System.Drawing.Point(295, 68);
+            this.btOk.Location = new System.Drawing.Point(296, 110);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 2;
+            this.btOk.TabIndex = 3;
             this.btOk.Text = "OK";
             this.btOk.UseVisualStyleBackColor = true;
             // 
@@ -91,13 +93,31 @@
             this.valueSetter.Size = new System.Drawing.Size(453, 24);
             this.valueSetter.TabIndex = 2;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 72);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Текст:";
+            // 
+            // tbText
+            // 
+            this.tbText.Location = new System.Drawing.Point(52, 69);
+            this.tbText.Name = "tbText";
+            this.tbText.Size = new System.Drawing.Size(399, 20);
+            this.tbText.TabIndex = 2;
+            // 
             // ActionForm
             // 
             this.AcceptButton = this.btOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(463, 101);
+            this.ClientSize = new System.Drawing.Size(463, 142);
+            this.Controls.Add(this.tbText);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btOk);
             this.Controls.Add(this.btCancel);
@@ -123,5 +143,7 @@
         private System.Windows.Forms.Button btCancel;
         private System.Windows.Forms.Button btOk;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbText;
     }
 }

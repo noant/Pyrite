@@ -107,5 +107,17 @@ namespace ZWaveActionUI
                 valueSetter.Setter.Value = value;
             }
         }
+
+        public string ButtonText
+        {
+            get
+            {
+                return tbText.Text;
+            }
+            set
+            {
+                tbText.Text = value;
+            }
+        }
     }
 }
