@@ -89,9 +89,9 @@ namespace ZWaveActionImplementations
             form.HomeId = this.HomeId;
             form.ParameterId = this.ParameterId;
             form.Mode = this.Mode; // set only if ParameterId not null
-            form.InvertValueIfBool = this.InvertValueIfBool; // set only if ParameterId not null
             form.TargetValue = this.Value;
             form.ButtonText = this.Text;
+            form.InvertValueIfBool = this.InvertValueIfBool; // set only if ParameterId not null
 
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

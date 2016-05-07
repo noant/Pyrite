@@ -17,7 +17,6 @@ namespace ZWaveActionUI.ActionPanels
         {
         }
 
-
         private object _value;
         public object Value
         {
@@ -33,7 +32,20 @@ namespace ZWaveActionUI.ActionPanels
             }
         }
 
-        public bool InvertOnRepeat { get; set; }
+        private bool _invertOnRepeat;
+        public bool InvertOnRepeat
+        {
+            get
+            {
+                return _invertOnRepeat;
+            }
+            set
+            {
+                _invertOnRepeat = true;
+                if (InvertOnRepeatChanged != null)
+                    InvertOnRepeatChanged();
+            }
+        }
 
         private AppendType _mode;
         public AppendType Mode
@@ -52,5 +64,6 @@ namespace ZWaveActionUI.ActionPanels
 
         public event Action ModeChanged;
         public event Action ValueChanged;
+        public event Action InvertOnRepeatChanged;
     }
 }

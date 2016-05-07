@@ -30,6 +30,9 @@ namespace ZWaveActionUI.ActionPanels
                 if (_setterImpl.Value != null)
                     cbValue.SelectedIndex = (bool)_setterImpl.Value ? 0 : 1;
             };
+
+            _setterImpl.InvertOnRepeatChanged += () => this.cbInvert.Checked = _setterImpl.InvertOnRepeat;
+
             _setterImpl.Value = true;
             cbValue.Enabled = !_setterImpl.InvertOnRepeat;
             cbInvert.Checked = _setterImpl.InvertOnRepeat;
