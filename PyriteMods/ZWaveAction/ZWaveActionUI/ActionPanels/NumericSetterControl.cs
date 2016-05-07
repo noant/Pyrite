@@ -25,11 +25,14 @@ namespace ZWaveActionUI.ActionPanels
         {
             InitializeComponent();
 
-            this.ParentForm.FormClosing += (o, e) =>
+            this.Load += (o, e) =>
             {
-                _setterImpl.Value = nudValue.Value;
+                this.ParentForm.FormClosing += (o1, e1) =>
+                {
+                    _setterImpl.Value = nudValue.Value;
+                };
             };
-
+            
             nudValue.Maximum = max;
             nudValue.Minimum = min;
             nudValue.ThousandsSeparator = true;
@@ -66,6 +69,10 @@ namespace ZWaveActionUI.ActionPanels
                 else throw new Exception("unknown mode");
             };
             cbMode.SelectedIndex = 0;
+
+            if (0 >= min && 0 <= max)
+                nudValue.Value = 0;
+            else nudValue.Value = min;
         }
     }
 }

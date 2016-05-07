@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper.cs" />
+    <Compile Include="ZWaveChecker.cs" />
     <Compile Include="ZWaveAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

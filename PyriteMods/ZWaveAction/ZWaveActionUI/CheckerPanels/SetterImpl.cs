@@ -7,10 +7,10 @@ using static ZWaveAction.ZWGlobal.Simplified;
 
 namespace ZWaveActionUI.CheckerPanels
 {
-    public class CheckerImpl
+    public class SetterImpl
     {
         private CheckerMode _checkerMode;
-        public CheckerMode CheckerMode
+        public CheckerMode Mode
         {
             get
             {

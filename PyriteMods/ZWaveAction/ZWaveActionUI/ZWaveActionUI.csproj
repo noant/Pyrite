@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckerForm.Designer.cs">
+      <DependentUpon>CheckerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ActionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,7 +96,44 @@
       <DependentUpon>ValueSetter.cs</DependentUpon>
     </Compile>
     <Compile Include="ActionPanels\SetterImpl.cs" />
-    <Compile Include="CheckerPanels\CheckerImpl.cs" />
+    <Compile Include="CheckerPanels\BoolSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckerPanels\BoolSetterControl.Designer.cs">
+      <DependentUpon>BoolSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckerPanels\ButtonSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckerPanels\ButtonSetterControl.Designer.cs">
+      <DependentUpon>ButtonSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckerPanels\ListSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckerPanels\ListSetterControl.Designer.cs">
+      <DependentUpon>ListSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckerPanels\NumericSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckerPanels\NumericSetterControl.Designer.cs">
+      <DependentUpon>NumericSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckerPanels\SetterImpl.cs" />
+    <Compile Include="CheckerPanels\ISetterControl.cs" />
+    <Compile Include="CheckerPanels\StringSetterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckerPanels\StringSetterControl.Designer.cs">
+      <DependentUpon>StringSetterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CheckerPanels\ValueSetter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CheckerPanels\ValueSetter.Designer.cs">
+      <DependentUpon>ValueSetter.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControllerCommandDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +203,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CheckerForm.resx">
+      <DependentUpon>CheckerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ActionForm.resx">
       <DependentUpon>ActionForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -179,6 +225,24 @@
       <DependentUpon>BoolSetterControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ActionPanels\ValueSetter.resx">
+      <DependentUpon>ValueSetter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckerPanels\BoolSetterControl.resx">
+      <DependentUpon>BoolSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckerPanels\ButtonSetterControl.resx">
+      <DependentUpon>ButtonSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckerPanels\ListSetterControl.resx">
+      <DependentUpon>ListSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckerPanels\NumericSetterControl.resx">
+      <DependentUpon>NumericSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckerPanels\StringSetterControl.resx">
+      <DependentUpon>StringSetterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckerPanels\ValueSetter.resx">
       <DependentUpon>ValueSetter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControllerCommandDlg.resx">

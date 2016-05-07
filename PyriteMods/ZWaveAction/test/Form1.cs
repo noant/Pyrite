@@ -33,11 +33,15 @@ namespace test
             //form.ShowDialog();
             //form.ShowDialog();
 
-            var zwaction = new ZWaveActionImplementations.ZWaveAction();
-            zwaction.BeginUserSettings();
+            //var zwaction = new ZWaveActionImplementations.ZWaveAction();
+            //zwaction.BeginUserSettings();
 
+            //while (true)
+            //    zwaction.Do(zwaction.State);
+
+            var zwchecker = new ZWaveActionImplementations.ZWaveChecker();
             while (true)
-                zwaction.Do(zwaction.State);
+                zwchecker.BeginUserSettings();
         }
     }
 }

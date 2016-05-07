@@ -15,6 +15,13 @@ namespace ZWaveActionImplementations
     [Serializable]
     public class ZWaveAction : ICustomAction
     {
+        public ZWaveAction()
+        {
+            Value = 0;
+            Interface = ControllerInterface.Serial;
+            Mode = AppendType.Equalize;
+        }
+
         [XmlIgnore]
         public bool AllowUserSettings
         {

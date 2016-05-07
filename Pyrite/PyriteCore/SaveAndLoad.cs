@@ -85,6 +85,9 @@ namespace PyriteCore
             catch (Exception e)
             {
                 result.AddWarning(new Warning(e.Message), true);
+#if DEBUG
+                throw e;
+#endif
             }
             return result;
         }
