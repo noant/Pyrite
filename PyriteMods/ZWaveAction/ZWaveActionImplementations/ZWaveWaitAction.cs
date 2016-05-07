@@ -13,13 +13,13 @@ using static ZWaveAction.ZWGlobal.Simplified;
 namespace ZWaveActionImplementations
 {
     [Serializable]
-    public class ZWaveAction : ICustomAction
+    public class ZWaveWaitAction : ICustomAction
     {
-        public ZWaveAction()
+        public ZWaveWaitAction()
         {
             Value = 0;
             Interface = ControllerInterface.Serial;
-            Mode = AppendType.Equalize;
+            Mode = CheckerMode.Equals;
         }
 
         [XmlIgnore]
@@ -32,57 +32,17 @@ namespace ZWaveActionImplementations
         }
 
         [XmlIgnore]
-        public bool IsBusyNow
-        {
-            get; private set;
-        }
-
-        [XmlIgnore]
         public string Name
         {
             get
             {
-                return "ZWave действие";
-            }
-        }
-
-        [XmlIgnore]
-        public string State
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(Text))
-                {
-                    if (ZWGlobal.IsValueBoolAndTrue(this.ParameterId))
-                    {
-                        return "Выключить: " + Text.ToLower();
-                    }
-                    return Text;
-                }
-
-                if (Value == null)
-                    return DeviceName;
-
-                var mode = "Выставить";
-                var operation = "=";
-                if (Mode == AppendType.Increment)
-                {
-                    mode = "Увеличить";
-                    operation = "на";
-                }
-                if (Mode == AppendType.Decrement)
-                {
-                    mode = "Уменьшить";
-                    operation = "на";
-                }
-
-                return string.Format("{0} {1} {2} {3}", mode, DeviceName, operation, Value);
+                return "ZWave ожидание действия";
             }
         }
 
         public bool BeginUserSettings()
         {
-            var form = new ActionForm();
+            var form = new CheckerForm();
             form.Device = this.Device;
             form.Interface = this.Interface;
             form.NodeId = this.NodeId;
@@ -90,8 +50,6 @@ namespace ZWaveActionImplementations
             form.ParameterId = this.ParameterId;
             form.Mode = this.Mode; // set only if ParameterId not null
             form.TargetValue = this.Value;
-            form.ButtonText = this.Text;
-            form.InvertValueIfBool = this.InvertValueIfBool; // set only if ParameterId not null
 
             if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -102,34 +60,27 @@ namespace ZWaveActionImplementations
                 this.HomeId = form.HomeId.Value;
                 this.Value = form.TargetValue;
                 this.ParameterId = form.ParameterId.Value;
-                this.InvertValueIfBool = form.InvertValueIfBool; // set only if ParameterId not null
                 this.Mode = form.Mode; // set only if ParameterId not null
-                this.Text = form.ButtonText;
                 return true;
             }
             return false;
         }
 
-        public string Do(string inputState)
-        {
-            Helper.PrepareController(Device, Interface);
-            IsBusyNow = true;
-            try
-            {
-                if (!string.IsNullOrEmpty(Device))
-                    ZWGlobal.Simplified.SetValue(Device, Interface, HomeId, NodeId, ParameterId, Value, InvertValueIfBool, Mode);
-            }
-            catch
-            {
-                // do nothing
-            }
-            IsBusyNow = false;
-            return State;
-        }
-
         public void Refresh()
         {
             Helper.PrepareController(Device, Interface);
+        }
+
+        public string Do(string inputState)
+        {
+            IsBusyNow = true;
+            try
+            {
+                ZWGlobal.Simplified.WaitForValueChanged(Device, Interface, HomeId, NodeId, ParameterId, Value, Mode);
+            }
+            catch { }
+            IsBusyNow = false;
+            return State;
         }
 
         [HumanFriendlyName("Значение")]
@@ -150,9 +101,7 @@ namespace ZWaveActionImplementations
         }
         private string _tempDeviceName;
 
-        public AppendType Mode { get; set; }
-
-        public bool InvertValueIfBool { get; set; }
+        public CheckerMode Mode { get; set; }
 
         public string Device { get; set; }
         public ControllerInterface Interface { get; set; }
@@ -160,6 +109,19 @@ namespace ZWaveActionImplementations
         public byte NodeId { get; set; }
         public ulong ParameterId { get; set; }
 
-        public string Text { get; set; }
+        [XmlIgnore]
+        public string State
+        {
+            get
+            {
+                return "ZWave ожидание";
+            }
+        }
+
+        [XmlIgnore]
+        public bool IsBusyNow
+        {
+            get; private set;
+        }
     }
 }

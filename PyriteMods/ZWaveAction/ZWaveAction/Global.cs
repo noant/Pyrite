@@ -167,7 +167,7 @@ namespace ZWaveAction
                 ZWGlobal.ZWaveEvent -= handler;
             }
 
-            public static void WaitForValueChanged(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue)
+            public static void WaitForValueChanged(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue, CheckerMode checkerMode)
             {
                 var zwave = PrepareZWave(device, @interface);
 
@@ -175,12 +175,24 @@ namespace ZWaveAction
                 bool flagContinue = false;
                 var handler = new Action<ZWManager, ZWaveEventArgs>(delegate (ZWManager manager, ZWaveEventArgs e)
                 {
-                    if (e.ValueID.GetId() == valueIDID
-                    && e.ZWave.Device.Interface.Equals(@interface)
-                    && e.ZWave.Device.Path.Equals(device)
-                    && e.CurrentValue.Equals(targetValue))
+                    try
                     {
-                        flagContinue = true;
+                        if (e.ValueID.GetId() == valueIDID
+                        && e.ZWave.Device.Interface.Equals(@interface)
+                        && e.ZWave.Device.Path.Equals(device))
+                        {
+                            if ((checkerMode == CheckerMode.Equals && e.CurrentValue.Equals(targetValue)) ||
+                                (checkerMode == CheckerMode.Less && Convert.ToDecimal(e.CurrentValue) < Convert.ToDecimal(targetValue)) ||
+                                (checkerMode == CheckerMode.LessOrEquals && Convert.ToDecimal(e.CurrentValue) <= Convert.ToDecimal(targetValue)) ||
+                                (checkerMode == CheckerMode.More && Convert.ToDecimal(e.CurrentValue) > Convert.ToDecimal(targetValue)) ||
+                                (checkerMode == CheckerMode.MoreOrEquals && Convert.ToDecimal(e.CurrentValue) >= Convert.ToDecimal(targetValue))
+                            )
+                                flagContinue = true;
+                        }
+                    }
+                    catch
+                    {
+                        // do nothing // converting to decimal crutch
                     }
                 });
                 ZWGlobal.ZWaveEvent += handler;
