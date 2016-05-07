@@ -41,7 +41,7 @@ namespace ZWaveActionUI.ActionPanels
             }
             set
             {
-                _invertOnRepeat = true;
+                _invertOnRepeat = value;
                 if (InvertOnRepeatChanged != null)
                     InvertOnRepeatChanged();
             }
