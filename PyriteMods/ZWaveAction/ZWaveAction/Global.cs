@@ -153,6 +153,7 @@ namespace ZWaveAction
             {
                 var zwave = PrepareZWave(device, @interface);
                 zwave.WaitForControllerLoaded();
+
                 bool flagContinue = false;
                 var handler = new Action<ZWManager, ZWaveEventArgs>(delegate (ZWManager manager, ZWaveEventArgs e)
                 {
@@ -170,8 +171,8 @@ namespace ZWaveAction
             public static void WaitForValueChanged(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue, CheckerMode checkerMode)
             {
                 var zwave = PrepareZWave(device, @interface);
-
                 zwave.WaitForControllerLoaded();
+
                 bool flagContinue = false;
                 var handler = new Action<ZWManager, ZWaveEventArgs>(delegate (ZWManager manager, ZWaveEventArgs e)
                 {
@@ -204,7 +205,9 @@ namespace ZWaveAction
             public static bool IsValueEquals(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue)
             {
                 var zwave = PrepareZWave(device, @interface);
-                zwave.WaitForControllerLoaded();
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
+
                 var node = zwave.Nodes.SingleOrDefault(x =>
                     x.ID == nodeId
                     && x.HomeID == homeId);
@@ -225,7 +228,8 @@ namespace ZWaveAction
             public static bool IsValueMoreThan(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue)
             {
                 var zwave = PrepareZWave(device, @interface);
-                zwave.WaitForControllerLoaded();
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
 
                 var node = zwave.Nodes.SingleOrDefault(x =>
                     x.ID == nodeId
@@ -247,7 +251,8 @@ namespace ZWaveAction
             public static bool IsValueMoreThanOrEqual(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue)
             {
                 var zwave = PrepareZWave(device, @interface);
-                zwave.WaitForControllerLoaded();
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
 
                 var node = zwave.Nodes.SingleOrDefault(x =>
                     x.ID == nodeId
@@ -269,7 +274,8 @@ namespace ZWaveAction
             public static bool IsValueLessThanOrEqual(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue)
             {
                 var zwave = PrepareZWave(device, @interface);
-                zwave.WaitForControllerLoaded();
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
 
                 var node = zwave.Nodes.SingleOrDefault(x =>
                     x.ID == nodeId
@@ -291,7 +297,8 @@ namespace ZWaveAction
             public static bool IsValueLessThan(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue)
             {
                 var zwave = PrepareZWave(device, @interface);
-                zwave.WaitForControllerLoaded();
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
 
                 var node = zwave.Nodes.SingleOrDefault(x =>
                     x.ID == nodeId
@@ -313,7 +320,8 @@ namespace ZWaveAction
             public static bool SetValue(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object value, bool invertValueIfBool, AppendType mode)
             {
                 var zwave = PrepareZWave(device, @interface);
-                zwave.WaitForControllerLoaded();
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
 
                 var node = zwave.Nodes.SingleOrDefault(x =>
                     x.ID == nodeId
@@ -347,7 +355,31 @@ namespace ZWaveAction
                     value = Convert.ToDouble(Helper.GetValue(valueId, zwave.Manager)) + Convert.ToDouble(value);
                 }
 
-                return Helper.SetValue(zwave.Manager, valueId, value);
+                if (_mainManager.IsNodeFailed(homeId, nodeId))
+                    return false;
+
+                if (!_mainManager.IsNodeAwake(homeId, nodeId))
+                    return false;
+
+                if (Helper.SetValue(zwave.Manager, valueId, value))
+                {
+                    WaitForValueChanged(device, @interface, homeId, nodeId, valueIDID);
+                    return true;
+                }
+                return false;
+            }
+
+            public static bool SetNodeOn(bool on, string device, ControllerInterface @interface, uint homeId, byte nodeId)
+            {
+                var zwave = PrepareZWave(device, @interface);
+                if (!zwave.WaitForControllerLoaded())
+                    return false;
+
+                if (on)
+                    zwave.Manager.SetNodeOn(homeId, nodeId);
+                else zwave.Manager.SetNodeOff(homeId, nodeId);
+
+                return true;
             }
 
             public enum AppendType

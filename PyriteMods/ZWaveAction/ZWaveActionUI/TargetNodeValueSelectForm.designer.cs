@@ -36,7 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btParameterSelect = new System.Windows.Forms.Button();
             this.tbParameterName = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelParameter = new System.Windows.Forms.Label();
             this.btCancel = new System.Windows.Forms.Button();
             this.btOk = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -110,14 +110,14 @@
             this.tbParameterName.Size = new System.Drawing.Size(336, 20);
             this.tbParameterName.TabIndex = 5;
             // 
-            // label3
+            // labelParameter
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 73);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(61, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Параметр:";
+            this.labelParameter.AutoSize = true;
+            this.labelParameter.Location = new System.Drawing.Point(17, 73);
+            this.labelParameter.Name = "labelParameter";
+            this.labelParameter.Size = new System.Drawing.Size(61, 13);
+            this.labelParameter.TabIndex = 6;
+            this.labelParameter.Text = "Параметр:";
             // 
             // btCancel
             // 
@@ -150,7 +150,7 @@
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btParameterSelect);
             this.Controls.Add(this.tbParameterName);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.labelParameter);
             this.Controls.Add(this.btNodeSelect);
             this.Controls.Add(this.tbNodeName);
             this.Controls.Add(this.label2);
@@ -158,7 +158,7 @@
             this.Controls.Add(this.tbControllerPath);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "TargetNodeValueSelectForm";
             this.ShowIcon = false;
@@ -178,7 +178,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btParameterSelect;
         private System.Windows.Forms.TextBox tbParameterName;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelParameter;
         private System.Windows.Forms.Button btCancel;
         private System.Windows.Forms.Button btOk;
     }

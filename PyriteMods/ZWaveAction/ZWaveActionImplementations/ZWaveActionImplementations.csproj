@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper.cs" />
+    <Compile Include="ZWaveSetNodeOff.cs" />
+    <Compile Include="ZWaveSetNodeOn.cs" />
     <Compile Include="ZWaveWaitAction.cs" />
     <Compile Include="ZWaveChecker.cs" />
     <Compile Include="ZWaveAction.cs" />

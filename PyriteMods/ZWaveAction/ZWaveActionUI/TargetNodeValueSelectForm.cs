@@ -62,6 +62,13 @@ namespace ZWaveActionUI
             };
         }
 
+        public void HideParameterSelect()
+        {
+            tbParameterName.Visible =
+                labelParameter.Visible =
+                btParameterSelect.Visible = false;
+        }
+
         private string _device;
         public string Device
         {
@@ -148,18 +155,23 @@ namespace ZWaveActionUI
                 if (node != null)
                 {
                     this.tbNodeName.Text = node.Label + "/" + node.Product + "/" + node.Manufacturer + "/" + node.Name;
-                    if (_valueId != null)
+                    if (btParameterSelect.Visible)
                     {
-                        var value = ZWGlobal.GetZWValueById(_valueId.Value);
-                        if (value != null)
+                        if (_valueId != null)
                         {
-                            var zwave = ZWGlobal.GetZWaveByValueID(value);
-                            this.tbParameterName.Text = zwave.Manager.GetValueLabel(value) + "/" + zwave.Manager.GetValueUnits(value) + "/" + zwave.Manager.GetValueHelp(value);
-                            btOk.Enabled = true;
+                            var value = ZWGlobal.GetZWValueById(_valueId.Value);
+                            if (value != null)
+                            {
+                                var zwave = ZWGlobal.GetZWaveByValueID(value);
+                                this.tbParameterName.Text = zwave.Manager.GetValueLabel(value) + "/" + zwave.Manager.GetValueUnits(value) + "/" + zwave.Manager.GetValueHelp(value);
+                                btOk.Enabled = true;
+                            }
                         }
+                        else
+                            tbParameterName.Text = string.Empty;
                     }
                     else
-                        tbParameterName.Text = string.Empty;
+                        btOk.Enabled = true;
                 }
             }
             else
