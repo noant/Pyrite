@@ -62,9 +62,12 @@ namespace ZWaveActionUI
                 if (zwave.WaitForControllerLoaded())
                 {
                     var valueID = ZWGlobal.GetZWValueById(ParameterId.Value);
-                    tbZWValue.Text = ZWGlobal.GetNodeById(NodeId.Value).Label + "/" + zwave.Manager.GetValueLabel(valueID);
-                    valueSetter.ValueID = valueID;
-                    btOk.Enabled = true;
+                    if (valueID != null)
+                    {
+                        tbZWValue.Text = ZWGlobal.GetNodeById(NodeId.Value).Label + "/" + zwave.Manager.GetValueLabel(valueID);
+                        valueSetter.ValueID = valueID;
+                        btOk.Enabled = true;
+                    }
                 }
                 else MessageBox.Show("Время ожидания отклика от контроллера истекло.");
             }

@@ -426,6 +426,8 @@ namespace ZWaveAction
         public uint? HomeId { get; internal set; }
         public bool NodesLoaded { get; internal set; }
 
+        public bool? Failed { get; internal set; }
+
         public T GetValue<T>(ZWValueID valueId)
         {
             return Helper.GetValue<T>(valueId, Manager);
@@ -439,7 +441,7 @@ namespace ZWaveAction
         public bool WaitForControllerLoaded()
         {
             var sum = 0;
-            while (!NodesLoaded)
+            while (!NodesLoaded && Failed == null)
             {
                 Thread.Sleep(ZWGlobal.Constants.IterationWaitingInterval);
                 sum += ZWGlobal.Constants.IterationWaitingInterval;

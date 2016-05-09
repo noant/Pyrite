@@ -36,6 +36,15 @@ namespace test
             while (true)
             {
                 var zwaction = new ZWaveActionImplementations.ZWaveAction();
+                zwaction.Mode = ZWGlobal.Simplified.AppendType.Equalize;
+                zwaction.Device = "COM5";
+                zwaction.Interface = ControllerInterface.Serial;
+                zwaction.HomeId = 3684813815;
+                zwaction.NodeId = 4;
+                zwaction.ParameterId = 72057594109837312;
+                zwaction.Value = true;
+                zwaction.Refresh();
+
                 zwaction.BeginUserSettings();
 
                 //while (true)

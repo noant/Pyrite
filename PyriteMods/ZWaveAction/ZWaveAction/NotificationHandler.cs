@@ -122,11 +122,17 @@ namespace ZWaveAction
                 case ZWNotification.Type.AllNodesQueried:
                     {
                         zWave.NodesLoaded = true;
-                        if (!ZWGlobal.GetAllZWaveControllersNames().Where(x => !x.NodesLoaded).Any())
+                        zWave.Failed = false;
+                        if (!ZWGlobal.GetAllZWaveControllersNames().Where(x => !x.NodesLoaded || x.Failed == null).Any())
                             ZWGlobal.ControllersLoaded = true;
                         break;
                     }
 
+                case ZWNotification.Type.DriverFailed:
+                    {
+                        zWave.Failed = true;
+                        break;
+                    }
                     //case ZWNotification.Type.NodeNaming:
                     //    {
                     //        break;
