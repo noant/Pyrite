@@ -149,7 +149,7 @@ namespace ZWaveAction
 
         public static class Simplified
         {
-            public static void WaitForValueChanged(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID)
+            private static bool WaitForValueChanged(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, int maxWaiting)
             {
                 var zwave = PrepareZWave(device, @interface);
                 zwave.WaitForControllerLoaded();
@@ -163,9 +163,15 @@ namespace ZWaveAction
                     }
                 });
                 ZWGlobal.ZWaveEvent += handler;
+                var totalWaiting = 0;
                 while (!flagContinue)
+                {
                     Thread.Sleep(Constants.IterationWaitingInterval);
+                    totalWaiting += Constants.IterationWaitingInterval;
+                    if (totalWaiting >= maxWaiting) return false;
+                }
                 ZWGlobal.ZWaveEvent -= handler;
+                return true;
             }
 
             public static void WaitForValueChanged(string device, ControllerInterface @interface, uint homeId, byte nodeId, ulong valueIDID, object targetValue, CheckerMode checkerMode)
@@ -355,7 +361,7 @@ namespace ZWaveAction
                     value = Convert.ToDouble(Helper.GetValue(valueId, zwave.Manager)) + Convert.ToDouble(value);
                 }
 
-                if (_mainManager.IsNodeFailed(homeId, nodeId) || _mainManager.HasNodeFailed(homeId, nodeId))
+                if (_mainManager.IsNodeFailed(homeId, nodeId))
                     return false;
 
                 if (!_mainManager.IsNodeAwake(homeId, nodeId))
@@ -363,8 +369,7 @@ namespace ZWaveAction
 
                 if (Helper.SetValue(zwave.Manager, valueId, value))
                 {
-                    WaitForValueChanged(device, @interface, homeId, nodeId, valueIDID);
-                    return true;
+                    return WaitForValueChanged(device, @interface, homeId, nodeId, valueIDID, 3000);
                 }
                 return false;
             }
