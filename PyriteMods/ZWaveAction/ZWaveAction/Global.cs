@@ -355,7 +355,7 @@ namespace ZWaveAction
                     value = Convert.ToDouble(Helper.GetValue(valueId, zwave.Manager)) + Convert.ToDouble(value);
                 }
 
-                if (_mainManager.IsNodeFailed(homeId, nodeId))
+                if (_mainManager.IsNodeFailed(homeId, nodeId) || _mainManager.HasNodeFailed(homeId, nodeId))
                     return false;
 
                 if (!_mainManager.IsNodeAwake(homeId, nodeId))

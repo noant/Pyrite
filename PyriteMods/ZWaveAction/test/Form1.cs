@@ -33,12 +33,15 @@ namespace test
             //form.ShowDialog();
             //form.ShowDialog();
 
-            var zwaction = new ZWaveActionImplementations.ZWaveAction();
-            zwaction.BeginUserSettings();
+            while (true)
+            {
+                var zwaction = new ZWaveActionImplementations.ZWaveAction();
+                zwaction.BeginUserSettings();
 
-            //while (true)
-            zwaction.Do(zwaction.State);
-
+                //while (true)
+                zwaction.Do(zwaction.State);
+                MessageBox.Show("done");
+            }
             //var zwchecker = new ZWaveActionImplementations.ZWaveChecker();
             //while (true)
             //    zwchecker.BeginUserSettings();
