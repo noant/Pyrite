@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="color_bt_command">#333333</string>
-    <string name="color_bt_category">#222233</string>
-    <color name="color_bg">#222222</color>
-    <color name="color_font">#AAAAAA</color>
-</resources>
