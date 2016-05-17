@@ -1,0 +1,121 @@
+﻿<!doctype html>
+<html>
+<head>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript">headerTemplate();</script>
+    <script type="text/javascript" src="jquery.mousewheel.min.js"></script>
+    <script type="text/javascript">
+            function scrollTo(id) {
+                $('html, body').animate({
+                    scrollTop: $("#" + id).offset().top - 150
+                }, 1000);
+            };
+            function goto(link)
+            {
+                document.location.href = link;
+            }
+            function userScrollsTo(id) {
+                scrollTo(id);
+                _stopScrollAnimating = true;
+            }
+            $(document).ready(function () {
+                beginGoTo();
+                $(document).mousewheel(function (event, delta) {
+                    _stopScrollAnimating = true; //stop animating on user scrolling
+                });
+            });
+            function beginGoTo() //animate auto scroll
+            {
+                _currentScrollableElement++;
+                if (_currentScrollableElement > _maxScrollableElementCount)
+                    _currentScrollableElement = 1;
+                setTimeout(function callback() {
+                    if (!_stopScrollAnimating) {
+                        scrollTo(_scrollableElementIdPrefix + _currentScrollableElement);
+                        beginGoTo();
+                    }
+                }, _scrollAnimatingInterval);
+            }
+            var _currentScrollableElement = 1;
+            var _maxScrollableElementCount = 6;
+            var _scrollAnimatingInterval = 5000;
+            var _stopScrollAnimating = false;
+            var _scrollableElementIdPrefix = "td";
+    </script>
+</head>
+<body>
+    <script type="text/javascript">
+        beginBodyTemplate();
+    </script>
+    <div>
+        <table style="border-spacing:0px;">
+            <tr>
+                <td id="td1">
+                    <img src="img/smartphone_c.JPG" class="imgs_main"/>
+                    <div class="scroll_item_sector_text">
+                        <span onclick="goto('description.html#part_smartphone')" class="hoverable">Запуск сценариев с помощью смартфона <img src="img/arrow.png" /></span><br />
+                        <img src="img/arrow_down.png" onclick="userScrollsTo('td2')" class="hoverable" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="td2">
+                    <div class="vertical_splitter"></div>
+                    <img src="img/t_algorithms.png" style="padding:0px;margin:0px;width:750px;opacity:0.5;"/>
+                    <div class="scroll_item_sector_text">
+                        <span onclick="goto('description.html#part_complex_scenario')" class="hoverable" >
+                            Простота создания сложных сценарев <img src="img/arrow.png" />
+                        </span><br />
+                        <img src="img/arrow_up.png" onclick="userScrollsTo('td1')" class="hoverable" />
+                        <img src="img/arrow_down.png" onclick="userScrollsTo('td3')" class="hoverable" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="td3">
+                    <div class="vertical_splitter"></div>
+                    <img src="img/zwave_modbus.jpg" class="imgs_main"/>
+                    <div class="scroll_item_sector_text">
+                        <span onclick="goto('description.html#part_zwave')" class="hoverable">Возможность использовать устройства Z-Wave и Modbus <img src="img/arrow.png" /></span><br />
+                        <img src="img/arrow_up.png" onclick="userScrollsTo('td2')" class="hoverable" />
+                        <img src="img/arrow_down.png" onclick="userScrollsTo('td4')" class="hoverable" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="td4">
+                    <div class="vertical_splitter"></div>
+                    <img src="img/use_scenario_in_scenario.jpg" class="imgs_main"/>
+                    <div class="scroll_item_sector_text">
+                        <span onclick="goto('description.html#part_existing_scenario')" class="hoverable">Вложенность сценариев<br/>Используйте созданный сценарий многократно и в разных алгоритмах <img src="img/arrow.png" /></span><br />
+                        <img src="img/arrow_up.png" onclick="userScrollsTo('td3')" class="hoverable" />
+                        <img src="img/arrow_down.png" onclick="userScrollsTo('td5')" class="hoverable" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="td5">
+                    <div class="vertical_splitter"></div>
+                    <img src="img/remote_scenario.jpg" class="imgs_main"/>
+                    <div class="scroll_item_sector_text">
+                        <span onclick="goto('description.html#part_remote_scenario')" class="hoverable">Запуск удаленных сценариев<br />Создайте сеть из устройств с Pyrite <img src="img/arrow.png" /></span><br />
+                        <img src="img/arrow_up.png" onclick="userScrollsTo('td4')" class="hoverable" />
+                        <img src="img/arrow_down.png" onclick="userScrollsTo('td6')" class="hoverable" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="td6">
+                    <div class="vertical_splitter"></div>
+                    <img src="img/modules_creation.jpg" class="imgs_main"/>
+                    <div class="scroll_item_sector_text">
+                        <span onclick="goto('description.html#part_modules_adding')" class="hoverable">Поддержка сторонних модулей<br />Создавайте свои модули для Pyrite в C# и добавляйте их "на горячую" <img src="img/arrow.png" /></span><br />
+                        <img src="img/arrow_up.png" onclick="userScrollsTo('td5')" class="hoverable" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript">endBodyTemplate();</script>
+</body>
+</html>

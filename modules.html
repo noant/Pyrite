@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript">headerTemplate();</script>
+</head>
+<body>
+    <script type="text/javascript">
+        beginBodyTemplate();
+        $("#tab_description").attr("class", "selected_tab");
+        $(document).ready(function() {
+            $(".custom_link").click(function (sender) {
+                var tag = $(sender.currentTarget).attr("tag");
+                scrollTo(tag);
+            });
+
+            var id = getCurrentPageIdToScroll();
+            if (id)
+                scrollTo(id);
+        });
+    </script>
+    <div style="background-color:lightgray;padding-top:20px;">
+        <ul>
+            <li class="custom_link" tag="part_begin">Начало работы</li>
+            <li class="custom_link_header">
+                Сценарии
+                <ul>
+                    <li class="custom_link" tag="part_complex_scenario">Сложный сценарий</li>
+                    <li class="custom_link" tag="part_single_scenario">Одиночное действие</li>
+                    <li class="custom_link" tag="part_scen_settings">Панель параметров сценария</li>
+                </ul>
+            </li>
+            <li class="custom_link" tag="part_fast_window">Меню быстрого запуска </li>
+            <li class="custom_link" tag="part_settings">Настройки</li>
+            <li class="custom_link_header">
+                Модули
+                <ul>
+                    <li class="custom_link" tag="part_modules_adding">Добавление модулей в Pyrite</li>
+                    <li class="custom_link"><a href="PyriteMods.htm#modules_checkers">Создание модулей проверки</a></li>
+                    <li class="custom_link"><a href="PyriteMods.htm#modules_actions">Создание модулей действия</a></li>
+                </ul>
+            </li>
+        </ul>
+        <table class="table_ui_description" id="part_begin">
+            <tr>
+                <td>После запуска PyriteUI.exe, в трее Windows появится лого программы.</td>
+                <td class="image_back">
+                    <img src="PyriteUI/tray_icon.png" />
+                </td>
+            </tr>
+        </table>  
+    <script type="text/javascript">endBodyTemplate();</script>
+</body>
+</html>

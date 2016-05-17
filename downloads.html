@@ -1,0 +1,59 @@
+﻿<!doctype html>
+<html>
+<head>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript">headerTemplate();</script>
+</head>
+<body>
+    <script type="text/javascript">
+        beginBodyTemplate();
+        $(document).ready(function () {
+            $(".custom_link").click(function (sender) {
+                var tag = $(sender.currentTarget).attr("tag");
+                scrollTo(tag);
+            });
+            var id = getCurrentPageIdToScroll();
+            if (id)
+                scrollTo(id);
+        });
+        $("#tab_download").attr("class", "selected_tab");
+    </script>
+    <div style="background:lightgray;padding:10px">
+        <center>
+            <table cellspacing="10" style="font-family: Calibri">
+                <tr>
+                    <td><b>Основное</b></td>
+                </tr>
+                <tr>
+                    <td>Сервер Pyrite для Windows</td>
+                    <td><a href="archives/pyrite.zip">Cкачать</a></td>
+                </tr>
+                <tr>
+                    <td id="android">Приложение для Android</td>
+                    <td><a href="archives/pyriteAndroid.apk">Cкачать</a></td>
+                </tr>
+                <tr>
+                    <td><b>Модули</b></td>
+                </tr>
+                <tr>
+                    <td id="wakeonlan">Модуль WakeOnLan</td>
+                    <td><a href="archives/wakeOnLanPyriteModule.zip">Cкачать</a></td>
+                </tr>
+                <tr>
+                    <td>Модуль VolumeAction</td>
+                    <td><a href="archives/modbusPyriteModule.zip">Cкачать</a></td>
+                </tr>
+                <tr>
+                    <td id="modbus">Модуль Modbus</td>
+                    <td><a href="archives/modbusPyriteModule.zip">Cкачать</a></td>
+                </tr>
+                <tr>
+                    <td id="zwave">Модуль ZWave</td>
+                    <td><a href="archives/zwavePyriteModule.zip">Cкачать</a></td>
+                </tr>
+            </table>
+        </center>
+    </div>
+    <script type="text/javascript">endBodyTemplate();</script>
+</body>
+</html>

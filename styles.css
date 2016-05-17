@@ -1,0 +1,125 @@
+﻿html {
+    overflow: -moz-scrollbars-vertical; /*make scrollbar visible*/
+    overflow-y: scroll; /*make scrollbar visible*/
+}
+
+.tab, .selected_tab, .button {
+    padding: 7px;
+    margin-left: 0px;
+    width: 100px;
+    height: auto;
+    cursor: pointer;
+    background-color: steelblue;
+    color: white;
+    font-family: Calibri;
+    text-align: center;
+}
+
+.button {
+    width: auto;
+    margin-left: 0px;
+}
+
+.tab {
+    height: auto;
+    vertical-align: bottom;
+    margin-top: -5px;
+}
+
+    .tab:hover {
+        background-color: Highlight;
+        color: black;
+    }
+
+.imgs_main {
+    padding: 0px;
+    margin: 0px;
+    width: 750px;
+    opacity: 0.7;
+}
+
+.shadow_element {
+    -moz-box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.selected_tab {
+    background-color: transparent;
+    color: steelblue;
+    height: auto;
+    vertical-align: bottom;
+    margin-top: -5px;
+}
+
+body {
+    background: white;
+    margin: 0px;
+    padding: 0px;
+}
+
+.compact_table_cell {
+    padding: 0px;
+    text-align: center;
+}
+
+.scroll_item_sector_text {
+    margin: 0px;
+    padding: 0px;
+    margin-top: -200px;
+    height: 200px;
+    opacity: 0.7;
+    background-color: black;
+    color: white;
+    font-family: Calibri;
+    font-weight: 100;
+    font-size: large;
+    word-wrap: normal;
+    text-align: center;
+    width: 750px;
+}
+
+.hoverable {
+    z-index: 99;
+}
+
+    .hoverable:hover {
+        opacity: 0.7;
+        cursor: pointer;
+    }
+
+.vertical_splitter {
+    height: 20px;
+    background-color: white;
+}
+
+.custom_link {
+    font-family: Calibri;
+    cursor: pointer;
+    color: steelblue;
+}
+
+    .custom_link:hover {
+        color: blue;
+    }
+
+.custom_link_header {
+    font-family: Calibri;
+}
+
+.table_ui_description {
+    table-layout: fixed;
+    font-family: Calibri;
+    width: 100%;
+}
+
+    .table_ui_description td:not(.image_back) {
+        text-align: justify;
+        padding: 10px;
+    }
+
+.image_back {
+    background-color: lightsteelblue;
+    text-align: center;
+    padding: 10px;
+}
