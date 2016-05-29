@@ -430,7 +430,8 @@ namespace PyriteCore
                         state = remoteAction.CheckState();
                     state = remoteAction.Execute(state, false);
                     SendString(stream, state);
-                    ShareState(remoteAction, ((IPEndPoint)client.Client.RemoteEndPoint).Address);
+                    //ShareState(remoteAction, ((IPEndPoint)client.Client.RemoteEndPoint).Address);
+                    ShareState();
                 }
             }
         }
