@@ -108,7 +108,7 @@ namespace PyriteCore.ScenarioCreation
             get
             {
                 if (UseOnOffState)
-                    return "Завершить: " + this.Name;
+                    return "Выключить: " + this.Name.ToLower();
                 else return this.Name;
             }
         }
@@ -118,7 +118,9 @@ namespace PyriteCore.ScenarioCreation
             get
             {
                 if (UseOnOffState)
-                    return "Начать: " + this.Name;
+                    return this.Name.Length > 0
+                        ? this.Name.Substring(0, 1).ToUpper() + this.Name.Substring(1).ToLower()
+                        : string.Empty;
                 else return this.Name;
             }
         }
