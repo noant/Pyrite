@@ -441,32 +441,35 @@ namespace PyriteCore
             {
                 new Thread(() =>
                 {
-                    try
-                    {
-                        var tcpClient = new TcpClient(address.ToString(), this.Settings.SharingPort);
-                        tcpClient.ReceiveTimeout = (int)ServerThreadingSettings.Defaults.ReceiveTimout;
-                        tcpClient.SendTimeout = (int)ServerThreadingSettings.Defaults.SendTimout;
-
-                        var stream = tcpClient.GetStream();
-
-                        SendString(stream, VAC.ServerCommands.Command_NeedUpdate);
-
-                        if (exceptItem != null && exceptAddress != null && address.Equals(exceptAddress))
+                    for (var i = 0; i < 3; i++)
+                        try
                         {
-                            SendString(stream, VAC.ServerCommands.Command_Except);
-                            SendString(stream, exceptItem.ServerCommand);
+                            var tcpClient = new TcpClient(address.ToString(), this.Settings.SharingPort);
+                            tcpClient.ReceiveTimeout = (int)ServerThreadingSettings.Defaults.ReceiveTimout;
+                            tcpClient.SendTimeout = (int)ServerThreadingSettings.Defaults.SendTimout;
+
+                            var stream = tcpClient.GetStream();
+
+                            SendString(stream, VAC.ServerCommands.Command_NeedUpdate);
+
+                            if (exceptItem != null && exceptAddress != null && address.Equals(exceptAddress))
+                            {
+                                SendString(stream, VAC.ServerCommands.Command_Except);
+                                SendString(stream, exceptItem.ServerCommand);
+                            }
+                            else
+                                SendString(stream, VAC.ServerCommands.Command_All);
+
+                            Thread.Sleep(1000);
                         }
-                        else
-                            SendString(stream, VAC.ServerCommands.Command_All);
-                    }
-                    catch
-                    {
-                        lock (address)
+                        catch
                         {
-                            if (_activeClients.Contains(address))
-                                _activeClients.Remove(address);
+                            lock (address)
+                            {
+                                if (_activeClients.Contains(address))
+                                    _activeClients.Remove(address);
+                            }
                         }
-                    }
                 })
                 {
                     IsBackground = true
