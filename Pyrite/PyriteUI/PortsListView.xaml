@@ -16,10 +16,6 @@
                 <Label Width="140" HorizontalContentAlignment="Center">Порт распределения</Label>
                 <TextBox Name="tbDistributionPort" Style="{StaticResource TextBoxSimpleStyle}" Width="100"></TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Width="140" HorizontalContentAlignment="Center">Порт раздачи статусов</Label>
-                <TextBox IsEnabled="False" Name="tbSharingPort" Style="{StaticResource TextBoxSimpleStyle}" Width="100"></TextBox>
-            </StackPanel>
         </StackPanel>
         <ListView Grid.Row="1" Style="{StaticResource FlatSimpleListView}" x:Name="listPort"/>
         <Grid Grid.Row="2">

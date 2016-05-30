@@ -18,14 +18,13 @@ namespace PyriteCore
             {
                 public static readonly ushort DistributionPort = 6001;
                 public static readonly bool ResolveAll = true;
-                public static readonly uint ReceiveTimout = 1000;
-                public static readonly uint SendTimout = 1000;
+                public static readonly uint ReceiveTimout = 2000;
+                public static readonly uint SendTimout = 2000;
 
                 public static readonly IEnumerable<ushort> ActionPorts = new List<ushort>() {
                     6002,6003,6004,6005,6006,6007,6008,6009,6010
                 };
 
-                public static readonly ushort SharingPort = 6000;
                 public static readonly Encoding ServerEncoding = Encoding.UTF8;
             }
 
@@ -38,17 +37,14 @@ namespace PyriteCore
                 }
                 set
                 {
-                    if (value != _sharingPort)
+                    if (ActionsPorts != null)
                     {
-                        if (ActionsPorts != null)
-                        {
-                            if (!ActionsPorts.Contains(value))
-                                _distributionPort = value;
-                        }
-                        else
-                        {
+                        if (!ActionsPorts.Contains(value))
                             _distributionPort = value;
-                        }
+                    }
+                    else
+                    {
+                        _distributionPort = value;
                     }
                 }
             }
@@ -69,37 +65,12 @@ namespace PyriteCore
                     value.ItemAdd += (sender, args) =>
                     {
                         if (args.Item == this.DistributionPort ||
-                            args.Item == Defaults.SharingPort ||
                             _actionsPorts.Any(x => x.Equals(args.Item))
                             )
                             args.Cancel = true;
                     };
 
                     _actionsPorts = value;
-                }
-            }
-
-            public ushort _sharingPort;
-            public ushort SharingPort
-            {
-                get
-                {
-                    return _sharingPort;
-                }
-                set
-                {
-                    if (value != _distributionPort)
-                    {
-                        if (ActionsPorts != null)
-                        {
-                            if (!ActionsPorts.Contains(value))
-                                _sharingPort = value;
-                        }
-                        else
-                        {
-                            _sharingPort = value;
-                        }
-                    }
                 }
             }
         }
@@ -195,13 +166,13 @@ namespace PyriteCore
             this.Settings = new ServerThreadingSettings();
             this.Settings.ResolvedIp = new SkeddedList<IPAddress>();
             this.Settings.ActionsPorts = SkeddedList<ushort>.Create(ServerThreadingSettings.Defaults.ActionPorts);
-            this.Settings.SharingPort = ServerThreadingSettings.Defaults.SharingPort;
             IsStopped = true;
         }
 
         private TcpListenerEx _listenerPortDistribution;
         private Thread _threadPortDistribution;
         private List<IPAddress> _activeClients;
+        private volatile List<IPAddress> _needUpdate = new List<IPAddress>();
 
         public VoidResult BeginStart()
         {
@@ -390,29 +361,19 @@ namespace PyriteCore
                     SendString(stream, action.CheckState());
                 }
             }
-            else if (command == VAC.ServerCommands.Command_GetAllStatuses)
-            {
-                var actions = Pyrite.ScenariosPool.Scenarios
-                    .Where(x => x.UseServerThreading && !string.IsNullOrEmpty(x.ServerCommand)).ToList();
-                SendString(stream, actions.Count().ToString());
-                foreach (var action in Pyrite.ScenariosPool.Scenarios)
-                {
-                    SendString(stream, action.ServerCommand);
-                    SendString(stream, action.CheckState());
-                }
-            }
-            else if (command == VAC.ServerCommands.Command_GetCommandStatus)
-            {
-                var serverCommand = GetNextString(stream);
-                var action = Pyrite.ScenariosPool.Scenarios
-                    .SingleOrDefault(x => x.UseServerThreading && x.ServerCommand.Equals(serverCommand));
-                if (action != null)
-                    SendString(stream, action.CheckState());
-                else SendString(stream, VAC.ServerCommands.NotExist);
-            }
             else if (command == VAC.ServerCommands.Command_Ping)
             {
                 SendString(stream, VAC.ServerCommands.Command_PingResponse);
+            }
+            else if (command == VAC.ServerCommands.Command_NeedUpdate)
+            {
+                var ip = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
+                if (_needUpdate.Any(x => x.ToString().Equals(ip.ToString())))
+                {
+                    SendString(stream, VAC.ServerCommands.Command_Yes);
+                    _needUpdate.RemoveAll(x => x.ToString().Equals(ip.ToString()));
+                }
+                else SendString(stream, VAC.ServerCommands.Command_No);
             }
             else
             {
@@ -430,57 +391,17 @@ namespace PyriteCore
                         state = remoteAction.CheckState();
                     state = remoteAction.Execute(state, false);
                     SendString(stream, state);
-                    //ShareState(remoteAction, ((IPEndPoint)client.Client.RemoteEndPoint).Address);
-                    ShareState();
+
+                    UpdateClients();
                 }
             }
         }
 
-        public void ShareState(Scenario exceptItem, IPAddress exceptAddress)
+        public void UpdateClients()
         {
-            foreach (var address in _activeClients.ToArray())
-            {
-                new Thread(() =>
-                {
-                    for (var i = 0; i < 3; i++)
-                        try
-                        {
-                            var tcpClient = new TcpClient(address.ToString(), this.Settings.SharingPort);
-                            tcpClient.ReceiveTimeout = (int)ServerThreadingSettings.Defaults.ReceiveTimout;
-                            tcpClient.SendTimeout = (int)ServerThreadingSettings.Defaults.SendTimout;
-
-                            var stream = tcpClient.GetStream();
-
-                            SendString(stream, VAC.ServerCommands.Command_NeedUpdate);
-
-                            if (exceptItem != null && exceptAddress != null && address.Equals(exceptAddress))
-                            {
-                                SendString(stream, VAC.ServerCommands.Command_Except);
-                                SendString(stream, exceptItem.ServerCommand);
-                            }
-                            else
-                                SendString(stream, VAC.ServerCommands.Command_All);
-
-                            Thread.Sleep(1000);
-                        }
-                        catch
-                        {
-                            lock (address)
-                            {
-                                if (_activeClients.Contains(address))
-                                    _activeClients.Remove(address);
-                            }
-                        }
-                })
-                {
-                    IsBackground = true
-                }.Start();
-            }
-        }
-
-        public void ShareState()
-        {
-            ShareState(null, null);
+            //share state handling
+            _needUpdate.Clear();
+            _needUpdate.AddRange(_activeClients);
         }
 
         public event Action ServerStarted;

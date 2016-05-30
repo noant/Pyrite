@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
     public void beginTimer()
     {
         final LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
+
+        UpdateHandler.Tcp.AllActivities.add(this);
+
+        if (!UpdateHandler.Tcp.isStarted())
+            UpdateHandler.Tcp.beginHandling();
+
         new Thread(new Runnable() {
             @Override
             public void run() {

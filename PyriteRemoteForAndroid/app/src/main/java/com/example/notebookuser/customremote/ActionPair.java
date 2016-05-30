@@ -41,7 +41,6 @@ public class ActionPair {
 
     public void Do()
     {
-        final ActionPair _this = this;
         new Thread(new Runnable() {
             public void run() {
                 setStatus(

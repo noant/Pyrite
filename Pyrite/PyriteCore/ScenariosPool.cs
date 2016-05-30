@@ -59,7 +59,7 @@ namespace PyriteCore
 
             item.AfterActionServerEvent += (x) =>
             {
-                Pyrite.ServerThreading.ShareState();
+                Pyrite.ServerThreading.UpdateClients();
             };
 
             return result;

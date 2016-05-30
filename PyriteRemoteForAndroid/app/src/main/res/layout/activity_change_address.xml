@@ -19,12 +19,7 @@
     <EditText android:id="@+id/edit_port" android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:inputType="number"
         android:textColor="#ffffff" />
-    <TextView
-        android:layout_width="fill_parent" android:enabled="false"
-        android:layout_height="wrap_content" android:text="@string/tcpSharingPort" />
-    <EditText android:id="@+id/edit_udp_port" android:enabled="false" android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:inputType="number"
-        android:textColor="#ffffff" />
+
     <Button android:id="@+id/bt_ok"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

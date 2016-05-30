@@ -30,7 +30,6 @@ public class TcpHelper {
     public static class Strings{
         public static final String command_getAllCommand="getallcommands";
         public static final String command_getCategoryCommands="getcategorycommands";
-        public static final String command_getState="getstate";
         public static final String command_endFastActions="endfastactions";
     }
     public static String Do(String command, String state)
@@ -48,29 +47,6 @@ public class TcpHelper {
 
             sendString(out, command);
             sendString(out, state);
-
-            return getNextString(in);
-        }
-        catch (Exception e1){
-            e1.printStackTrace();
-            return e1.getMessage();
-        }
-    }
-
-    public static String checkState(String command)
-    {
-        try {
-            Statics pars = new Statics();
-
-            InetAddress address = InetAddress.getByName(pars.getAddress());
-
-            Socket socketAction = new Socket(address, getNextActionPort());
-
-            InputStream in = socketAction.getInputStream();
-            OutputStream out = socketAction.getOutputStream();
-
-            sendString(out, Strings.command_getState);
-            sendString(out, command);
 
             return getNextString(in);
         }
@@ -183,7 +159,6 @@ public class TcpHelper {
                 else{
                     actionPairs[i] = new ActionPair(command, false);
                     actionPairs[i].setStatus(getNextString(in));
-                    TcpSharingHandler.append(actionPairs[i]);
                 }
             }
 
@@ -194,30 +169,5 @@ public class TcpHelper {
         }
 
         return actionPairs;
-    }
-
-    public static HashMap<String, String> getAllCommandsStates()
-    {
-        HashMap<String, String> _commandsStates = new HashMap<>();
-        try {
-            Statics pars = new Statics();
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 500);
-
-            OutputStream out = socket.getOutputStream();
-            InputStream in = socket.getInputStream();
-            sendString(out, Strings.command_getState);
-            int actionPairsCnt = getNextInteger(in);
-
-            for (int i=0;i<actionPairsCnt;i++)
-            {
-                _commandsStates.put(getNextString(in), getNextString(in));
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return _commandsStates;
     }
 }

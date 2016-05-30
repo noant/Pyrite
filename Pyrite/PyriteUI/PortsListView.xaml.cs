@@ -59,7 +59,6 @@ namespace PyriteUI
             _tempPort.Clear();
             _tempPort.AddRange(App.Pyrite.ServerThreading.Settings.ActionsPorts);
             tbDistributionPort.Text = App.Pyrite.ServerThreading.Settings.DistributionPort.ToString();
-            tbSharingPort.Text = App.Pyrite.ServerThreading.Settings.SharingPort.ToString();
             RefreshList();
             ProcessButtonsEnabled();
         }
@@ -74,7 +73,6 @@ namespace PyriteUI
         public void Confirm()
         {
             App.Pyrite.ServerThreading.Settings.DistributionPort = tbDistributionPort.GetUShort();
-            App.Pyrite.ServerThreading.Settings.SharingPort = tbSharingPort.GetUShort();
             App.Pyrite.ServerThreading.Settings.ActionsPorts.Clear();
             App.Pyrite.ServerThreading.Settings.ActionsPorts.AddRange(_tempPort);
         }
