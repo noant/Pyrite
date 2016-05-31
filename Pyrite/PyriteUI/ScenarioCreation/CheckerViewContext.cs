@@ -159,7 +159,10 @@ namespace PyriteUI.ScenarioCreation
             set
             {
                 _operatorCheckerPair.Not = value.Not;
-                _operatorCheckerPair.Operator = value.Operator;
+                if (!this.IsFirst)
+                    _operatorCheckerPair.Operator = value.Operator;
+                else
+                    _operatorCheckerPair.Operator = Operator.And; // crutch
                 this.ParamsVisibility = this._operatorCheckerPair.Checker.AllowUserSettings ? Visibility.Visible : Visibility.Collapsed;
                 RaiseChanged();
             }

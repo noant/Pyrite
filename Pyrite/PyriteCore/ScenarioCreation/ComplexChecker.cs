@@ -96,7 +96,7 @@ namespace PyriteCore.ScenarioCreation
         {
             return false;
         }
-        
+
         public void ForAllActionAndChecker(Action<object> action)
         {
             if (OperatorCheckers != null)
@@ -104,7 +104,7 @@ namespace PyriteCore.ScenarioCreation
                 {
                     if (operatorPair.Checker is IHasCheckerAction)
                     {
-                        ((IHasCheckerAction)operatorPair).ForAllActionAndChecker(action);
+                        ((IHasCheckerAction)operatorPair.Checker).ForAllActionAndChecker(action);
                     }
                     else
                     {
