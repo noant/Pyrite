@@ -361,6 +361,15 @@ namespace PyriteCore
                     SendString(stream, action.CheckState());
                 }
             }
+            else if (command == VAC.ServerCommands.Command_GetCommandStatus)
+            {
+                var serverCommand = GetNextString(stream);
+                var action = Pyrite.ScenariosPool.Scenarios
+                    .SingleOrDefault(x => x.UseServerThreading && x.ServerCommand.Equals(serverCommand));
+                if (action != null)
+                    SendString(stream, action.CheckState());
+                else SendString(stream, VAC.ServerCommands.NotExist);
+            }
             else if (command == VAC.ServerCommands.Command_Ping)
             {
                 SendString(stream, VAC.ServerCommands.Command_PingResponse);

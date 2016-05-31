@@ -29,6 +29,8 @@ namespace PyriteCore
             public static readonly string Command_GetStartCommands = "getallcommands";
             public static readonly string Command_GetCategoryCommands = "getcategorycommands";
             public static readonly string Command_EndFastActions = "endfastactions";
+            
+            public static readonly string Command_GetCommandStatus = "getcommandstate";
 
             public static readonly string Command_No = "no";
             public static readonly string Command_Yes = "yes";
