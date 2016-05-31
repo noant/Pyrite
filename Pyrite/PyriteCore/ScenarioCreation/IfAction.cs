@@ -12,11 +12,14 @@ namespace PyriteCore.ScenarioCreation
             if (Checker != null)
             {
                 if (Checker.IsCanDoNow)
+                {
                     if (ActionIf != null)
                         ActionIf.Do(ActionIf.State);
-                    else
-                    if (ActionElse != null)
-                        ActionElse.Do(ActionElse.State);
+                }
+                else if (ActionElse != null)
+                {
+                    ActionElse.Do(ActionElse.State);
+                }
             }
             return State;
         }
