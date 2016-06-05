@@ -54,6 +54,7 @@ public class Statics {
             FileInputStream fin = new FileInputStream(key);
             byte[] buff = new byte[(int)new File(key).length()];
             fin.read(buff);
+            fin.close();
             return new String(buff);
         }
         catch (FileNotFoundException e)
@@ -72,6 +73,7 @@ public class Statics {
         try {
             FileOutputStream fos = new FileOutputStream(key);
             fos.write(value.getBytes());
+            fos.close();
         }catch (FileNotFoundException e)
         {
             e.printStackTrace();
@@ -87,12 +89,10 @@ public class Statics {
         File f_addr = new File(Temp.fn_addr);
         File f_port = new File(Temp.fn_port);
         try {
-            //f_addr.delete();
             if (!f_addr.exists()) {
                 f_addr.createNewFile();
                 setAddress("127.0.0.1");
             }
-            //f_port.delete();
             if (!f_port.exists()) {
                 f_port.createNewFile();
                 setPort(6001);

@@ -13,6 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_CATEGORY = "com.example.notebookuser.customremote.Ca";
 
@@ -38,6 +43,19 @@ public class MainActivity extends AppCompatActivity {
         refresh(false);
     }
 
+    private LinearLayout _main_layout;
+    private LinearLayout getMainLayout(){
+        if (_main_layout != null)
+            return _main_layout;
+
+        LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        if (main_layout == null) {
+            setContentView(R.layout.activity_main);
+            main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        }
+        return main_layout;
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -57,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
     boolean _timerStarted;
     public void beginTimer()
     {
-        final LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
-
         UpdateHandler.Tcp.AllActivities.add(this);
 
         if (!UpdateHandler.Tcp.isStarted())
@@ -70,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 while (true) {
                     try {
                         Thread.sleep(1000 * 60);
-                        main_layout.post(new Runnable() {
+                        getMainLayout().post(new Runnable() {
                             @Override
                             public void run() {
                                 refresh(false);
@@ -92,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     {
         try {
             String category = this.getIntent().getStringExtra(MainActivity.EXTRA_CATEGORY);
-            LinearLayout main_layout = (LinearLayout)findViewById(R.id.main_layout);
+            LinearLayout main_layout = getMainLayout();
             main_layout.removeAllViews();
             for (final ActionPair actionPair : new TcpHelper().getAllCommands(category)) {
                 final Button b = new Button(this);
@@ -138,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 120);
-
                 main_layout.addView(b, lParams);
             }
         }

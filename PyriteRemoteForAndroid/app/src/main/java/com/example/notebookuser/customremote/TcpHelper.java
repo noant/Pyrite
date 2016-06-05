@@ -40,7 +40,7 @@ public class TcpHelper {
             InetAddress address = InetAddress.getByName(pars.getAddress());
 
             Socket socketAction = new Socket();
-            socketAction.connect(new InetSocketAddress(address, getNextActionPort()), 500);
+            socketAction.connect(new InetSocketAddress(address, getNextActionPort()), 2000);
 
             InputStream in = socketAction.getInputStream();
             OutputStream out = socketAction.getOutputStream();
@@ -64,7 +64,7 @@ public class TcpHelper {
             //get action port
             InetAddress address = InetAddress.getByName(pars.getAddress());
             Socket socketGetActionPort = new Socket();
-            socketGetActionPort.connect(new InetSocketAddress(address, Integer.parseInt(pars.getPort())), 500);
+            socketGetActionPort.connect(new InetSocketAddress(address, Integer.parseInt(pars.getPort())), 2000);
             InputStream inGetActionPort = socketGetActionPort.getInputStream();
             int port = Integer.parseInt(getNextString(inGetActionPort));
             //
@@ -121,7 +121,7 @@ public class TcpHelper {
 
             Statics pars = new Statics();
             Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 500);
+            socket.connect(new InetSocketAddress(InetAddress.getByName(pars.getAddress()), getNextActionPort()), 2000);
 
             OutputStream out = socket.getOutputStream();
 
