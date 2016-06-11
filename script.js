@@ -30,7 +30,6 @@ function getXmlHttp(){
 
 function httpGet(url) {
 	var xmlHttp = getXmlHttp();
-	alert(url);
     xmlHttp.open("GET", url, false);
 	xmlhttp.send(null);
     return xmlHttp.responseText;
