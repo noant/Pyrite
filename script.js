@@ -12,11 +12,8 @@ $(document).ready(function () {
 });
 
 function httpGet(url) {
-    var xmlHttp;
-	if (window.XMLHttpRequest) {
-		xmlHttp = new XMLHttpRequest();
-	}
-	else if (window.ActiveXObject) {
+	var xmlHttp = new XMLHttpRequest();
+	if (!xmlHttp) {
 		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
     xmlHttp.open("GET", url, false);
