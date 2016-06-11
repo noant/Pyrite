@@ -26,6 +26,9 @@
                 $(document).mousewheel(function (event, delta) {
                     _stopScrollAnimating = true; //stop animating on user scrolling
                 });
+                $(window).scroll(function () {
+                    _stopScrollAnimating = true; //stop animating on user scrolling
+                });
             });
             function beginGoTo() //animate auto scroll
             {
