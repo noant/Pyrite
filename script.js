@@ -31,7 +31,6 @@ function getXmlHttp(){
 function httpGet(url) {
 	var xmlHttp = getXmlHttp();
     xmlHttp.open("GET", url, false);
-    xmlHttp.send(null);
     return xmlHttp.responseText;
 }
 
