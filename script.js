@@ -12,7 +12,13 @@ $(document).ready(function () {
 });
 
 function httpGet(url) {
-    var xmlHttp = new XMLHttpRequest();
+    var xmlHttp;
+	if (window.XMLHttpRequest) {
+		xmlHttp = new XMLHttpRequest();
+	}
+	else if (window.ActiveXObject) {
+		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
     xmlHttp.open("GET", url, false);
     xmlHttp.send(null);
     return xmlHttp.responseText;
