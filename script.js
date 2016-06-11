@@ -11,11 +11,25 @@ $(document).ready(function () {
     });
 });
 
+function getXmlHttp(){
+  var xmlhttp;
+  try {
+    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  } catch (e) {
+    try {
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    } catch (E) {
+      xmlhttp = false;
+    }
+  }
+  if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+    xmlhttp = new XMLHttpRequest();
+  }
+  return xmlhttp;
+}
+
 function httpGet(url) {
-	var xmlHttp = new XMLHttpRequest();
-	if (!xmlHttp) {
-		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	var xmlHttp = getXmlHttp();
     xmlHttp.open("GET", url, false);
     xmlHttp.send(null);
     return xmlHttp.responseText;
