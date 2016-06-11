@@ -39,7 +39,7 @@ function getBaseUri() {
 	var getUrl = window.location;
 	var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
     //var baseUri = document.baseURI.substr(0, document.baseURI.lastIndexOf("/"));
-    return baseUri;
+    return baseUrl;
 }
 
 function getCurrentPageIdToScroll() {
