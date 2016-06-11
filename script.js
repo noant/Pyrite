@@ -42,7 +42,7 @@ function getBaseUri() {
 }
 
 function getCurrentPageIdToScroll() {
-    return window.location.pathname.split('#')[1];
+    return window.location.href.split('#')[1];
 }
 
 function headerTemplate() {
