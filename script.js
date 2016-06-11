@@ -37,12 +37,12 @@ function httpGet(url) {
 
 function getBaseUri() {
 	var getUrl = window.location;
-	var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+	var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
     return baseUrl;
 }
 
 function getCurrentPageIdToScroll() {
-    return window.location.split('#')[1];
+    return window.location.pathname.split('#')[1];
 }
 
 function headerTemplate() {
