@@ -11,26 +11,38 @@ $(document).ready(function () {
     });
 });
 
+function getXmlHttp(){
+  var xmlhttp;
+  try {
+    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  } catch (e) {
+    try {
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    } catch (E) {
+      xmlhttp = false;
+    }
+  }
+  if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+    xmlhttp = new XMLHttpRequest();
+  }
+  return xmlhttp;
+}
+
 function httpGet(url) {
-    var xmlHttp;
-	if (window.XMLHttpRequest) {
-		xmlHttp = new XMLHttpRequest();
-	}
-	else if (window.ActiveXObject) {
-		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	var xmlHttp = getXmlHttp();
     xmlHttp.open("GET", url, false);
-    xmlHttp.send(null);
+	xmlHttp.send(null);
     return xmlHttp.responseText;
 }
 
 function getBaseUri() {
-    var baseUri = document.baseURI.substr(0, document.baseURI.lastIndexOf("/"));
-    return baseUri;
+	var getUrl = window.location;
+	var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    return baseUrl;
 }
 
 function getCurrentPageIdToScroll() {
-    return document.baseURI.split('#')[1];
+    return window.location.href.split('#')[1];
 }
 
 function headerTemplate() {
