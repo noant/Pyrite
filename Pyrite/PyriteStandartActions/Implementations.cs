@@ -1,9 +1,7 @@
-﻿using PyriteStandartActions.CoreActionsUI;
+using System.Linq;
+using PyriteStandartActions.CoreActionsUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PyriteStandartActions
 {

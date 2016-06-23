@@ -1,9 +1,9 @@
-﻿using System;
+﻿using PyriteClientIntefaces;
+using PyriteCore.ScenarioCreation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using PyriteClientIntefaces;
-using PyriteCore.ScenarioCreation;
 
 namespace PyriteUI.ScenarioCreation
 {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace WakeOnLanAction
 {
@@ -18,7 +13,8 @@ namespace WakeOnLanAction
             InitializeComponent();
 
             string prevText = "";
-            tbValue.TextChanged += (o, e) => {
+            tbValue.TextChanged += (o, e) =>
+            {
                 if (string.IsNullOrEmpty(tbValue.Text))
                 {
                     tbValue.Text = "00";
@@ -62,7 +58,7 @@ namespace WakeOnLanAction
             {
                 if (string.IsNullOrEmpty(value))
                     value = "00";
-                tbValue.Text = Convert.ToString(byte.Parse(value, NumberStyles.HexNumber), 16).ToUpper();
+                tbValue.Text = Convert.ToString(byte.Parse(value, NumberStyles.HexNumber, CultureInfo.InvariantCulture), 16).ToUpper();
             }
         }
 
@@ -70,7 +66,7 @@ namespace WakeOnLanAction
         {
             get
             {
-                return byte.Parse(tbValue.Text, NumberStyles.HexNumber);
+                return byte.Parse(tbValue.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
             }
             set
             {

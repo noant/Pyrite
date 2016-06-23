@@ -1,5 +1,5 @@
-﻿using System;
-using PyriteClientIntefaces;
+﻿using PyriteClientIntefaces;
+using System;
 
 namespace PyriteCore.ScenarioCreation
 {

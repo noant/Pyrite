@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PyriteCore.ScenarioCreation;
+using PyriteUI.ScenarioCreation;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using PyriteCore.ScenarioCreation;
-using PyriteUI.ScenarioCreation;
 
 namespace PyriteUI
 {
@@ -184,7 +184,7 @@ namespace PyriteUI
         {
             if ((string)value == "-" || string.IsNullOrEmpty((string)value))
                 value = "-1";
-            return int.Parse((string)value);
+            return int.Parse((string)value, CultureInfo.InvariantCulture);
         }
     }
 }

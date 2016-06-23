@@ -1,8 +1,9 @@
-﻿using System;
+﻿using PyriteCore.ScenarioCreation;
+using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using PyriteCore.ScenarioCreation;
 
 namespace PyriteUI
 {
@@ -64,7 +65,7 @@ namespace PyriteUI
         {
             get
             {
-                return int.Parse(lblNumber.Content.ToString());
+                return int.Parse(lblNumber.Content.ToString(), CultureInfo.InvariantCulture);
             }
             set
             {

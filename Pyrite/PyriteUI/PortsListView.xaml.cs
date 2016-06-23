@@ -1,5 +1,6 @@
-﻿using System.Windows.Controls;
-using PyriteCore;
+﻿using PyriteCore;
+using System.Globalization;
+using System.Windows.Controls;
 
 namespace PyriteUI
 {
@@ -26,7 +27,7 @@ namespace PyriteUI
 
             btDelete.Click += (o, e) =>
             {
-                var portToDelete = ushort.Parse(listPort.SelectedItem.ToString());
+                var portToDelete = ushort.Parse(listPort.SelectedItem.ToString(), CultureInfo.InvariantCulture);
                 _tempPort.RemoveAll(x =>
                     x == portToDelete
                     );

@@ -1,13 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace WakeOnLanAction
 {
@@ -22,7 +18,7 @@ namespace WakeOnLanAction
         {
             get
             {
-                return new byte[] { 
+                return new byte[] {
                     hexByteBox1.Value,
                     hexByteBox2.Value,
                     hexByteBox3.Value,
@@ -58,7 +54,7 @@ namespace WakeOnLanAction
             {
                 MacAddress = value
                 .Split("-:".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => byte.Parse(x, NumberStyles.HexNumber))
+                .Select(x => byte.Parse(x, NumberStyles.HexNumber, CultureInfo.InvariantCulture))
                 .ToArray();
             }
         }

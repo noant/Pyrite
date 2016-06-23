@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using PyriteClientIntefaces;
+﻿using PyriteClientIntefaces;
 using PyriteCore.ScenarioCreation;
+using System.Collections.Generic;
 
 namespace PyriteUI.ScenarioCreation
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Controls;
 
 namespace PyriteUI
@@ -21,7 +22,7 @@ namespace PyriteUI
             {
                 var futureText = tb.Text.Insert(tb.CaretIndex, e.Text);
                 int r;
-                var handled = !int.TryParse(futureText, out r);
+                var handled = !int.TryParse(futureText, NumberStyles.Number, CultureInfo.InvariantCulture, out r);
 
                 if (!handled)
                 {
@@ -42,7 +43,7 @@ namespace PyriteUI
                 return 0;
 
             int res;
-            if (!int.TryParse(tb.Text, out res))
+            if (!int.TryParse(tb.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out res))
                 throw new Exception("Not int");
             else return res;
         }
@@ -53,7 +54,7 @@ namespace PyriteUI
                 return 0;
 
             ushort res;
-            if (!ushort.TryParse(tb.Text, out res))
+            if (!ushort.TryParse(tb.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out res))
                 throw new Exception("Not short");
             else return res;
         }

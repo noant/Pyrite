@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using PyriteCore;
+using System.Linq;
 using System.Net;
 using System.Windows.Controls;
-using PyriteCore;
 
 namespace PyriteUI
 {

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PyriteUI
@@ -29,7 +30,7 @@ namespace PyriteUI
         {
             var keyStr = key.ToString();
             int num;
-            if (keyStr[0] == 'F' && int.TryParse(keyStr.Replace("F", ""), out num))
+            if (keyStr[0] == 'F' && int.TryParse(keyStr.Replace("F", ""), NumberStyles.Number, CultureInfo.InvariantCulture, out num))
             {
                 cItems.Run(num);
                 Close();

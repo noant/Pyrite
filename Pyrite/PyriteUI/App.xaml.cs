@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Windows;
-using System.Windows.Media;
+using System;
 using PyriteCore;
 using PyriteCore.ScenarioCreation;
-using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 
 namespace PyriteUI
 {

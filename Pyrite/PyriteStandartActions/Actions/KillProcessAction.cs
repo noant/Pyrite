@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PyriteClientIntefaces;
+using PyriteStandartActions.Actions.Utils;
+using System;
 using System.Diagnostics;
 using System.Xml.Serialization;
-using PyriteClientIntefaces;
-using PyriteStandartActions.Actions.Utils;
 
 namespace PyriteStandartActions.Actions
 {

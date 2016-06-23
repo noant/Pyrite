@@ -1,11 +1,9 @@
-﻿using HierarchicalData;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PyriteCore.ScenarioCreation;
+using System.Collections.Generic;
+using HierarchicalData;
 using PyriteCore.CoreStandartActions;
+using PyriteCore.ScenarioCreation;
 
 namespace PyriteCore
 {

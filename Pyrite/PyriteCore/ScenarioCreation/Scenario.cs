@@ -1,10 +1,10 @@
 ﻿using Logging;
+using PyriteClientIntefaces;
+using PyriteCore.CoreStandartActions;
 using System;
 using System.Threading;
 using System.Windows.Threading;
 using System.Xml.Serialization;
-using PyriteClientIntefaces;
-using PyriteCore.CoreStandartActions;
 
 namespace PyriteCore.ScenarioCreation
 {

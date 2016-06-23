@@ -1,5 +1,5 @@
-﻿using System;
-using PyriteCore.ScenarioCreation;
+﻿using PyriteCore.ScenarioCreation;
+using System;
 
 namespace PyriteUI.ScenarioCreation
 {

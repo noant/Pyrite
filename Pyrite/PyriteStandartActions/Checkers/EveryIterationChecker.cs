@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PyriteClientIntefaces;
+using System;
 using System.Xml.Serialization;
-using PyriteClientIntefaces;
 
 namespace PyriteStandartActions.Checkers
 {

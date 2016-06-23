@@ -4,8 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WakeOnLanAction
 {
@@ -26,7 +24,7 @@ namespace WakeOnLanAction
         {
             var macAddrBytes = macAddress
                 .Split("-:".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => byte.Parse(x, NumberStyles.HexNumber));
+                .Select(x => byte.Parse(x, NumberStyles.HexNumber, CultureInfo.InvariantCulture));
 
             WakeOnLan(macAddrBytes.ToArray(), tryCnt, port);
         }
@@ -38,10 +36,10 @@ namespace WakeOnLanAction
 
             var bytes = new List<byte>() { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
-            for (int i = 0; i < 16;i++ )
+            for (int i = 0; i < 16; i++)
                 bytes.AddRange(macAddress);
 
-            for (int i = 0; i < tryCnt; i++ )
+            for (int i = 0; i < tryCnt; i++)
                 this.Send(bytes.ToArray(), bytes.Count);
         }
 

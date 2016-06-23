@@ -1,10 +1,10 @@
-﻿using PyriteClientIntefaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using PyriteClientIntefaces;
+using System;
+using System.Globalization;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace PyriteStandartActions.Actions
@@ -158,7 +158,7 @@ namespace PyriteStandartActions.Actions
                 }
                 var stream = client.GetStream();
                 var value = GetNextString(stream);
-                return ushort.Parse(value);
+                return ushort.Parse(value, CultureInfo.InvariantCulture);
             }
         }
 

@@ -1,11 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WakeOnLanAction
@@ -16,11 +12,12 @@ namespace WakeOnLanAction
         {
             InitializeComponent();
             var textPrev = "";
-            tbValue.TextChanged += (o, e) => {
+            tbValue.TextChanged += (o, e) =>
+            {
                 if (tbValue.Text.Count() == 0)
                     tbValue.Text = "0";
                 byte bt;
-                if (!byte.TryParse(tbValue.Text, out bt))
+                if (!byte.TryParse(tbValue.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out bt))
                 {
                     tbValue.Text = textPrev;
                     tbValue.SelectionStart = tbValue.Text.Length;
@@ -35,7 +32,7 @@ namespace WakeOnLanAction
         {
             get
             {
-                return byte.Parse(tbValue.Text);
+                return byte.Parse(tbValue.Text, CultureInfo.InvariantCulture);
             }
             set
             {

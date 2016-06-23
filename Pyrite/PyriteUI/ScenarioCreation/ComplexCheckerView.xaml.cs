@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PyriteCore.ScenarioCreation;
+using System;
 using System.Windows;
-using PyriteCore.ScenarioCreation;
 
 namespace PyriteUI.ScenarioCreation
 {

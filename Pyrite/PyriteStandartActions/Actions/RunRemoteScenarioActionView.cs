@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PyriteStandartActions.Actions
@@ -101,7 +97,7 @@ namespace PyriteStandartActions.Actions
 
                     RunRemoteScenarioAction.SendString(stream, RunRemoteScenarioAction.Constants.Command_GetStartCommands);
 
-                    var count = int.Parse(RunRemoteScenarioAction.GetNextString(stream));
+                    var count = int.Parse(RunRemoteScenarioAction.GetNextString(stream), CultureInfo.InvariantCulture);
 
                     bool fastActionsEnded = false;
 
@@ -143,9 +139,7 @@ namespace PyriteStandartActions.Actions
                             RunRemoteScenarioAction.SendString(streamToGetCategoryScens, RunRemoteScenarioAction.Constants.Command_GetCategoryCommands);
                             RunRemoteScenarioAction.SendString(streamToGetCategoryScens, category);
 
-                            var categoryCommandsCountcnt = RunRemoteScenarioAction.GetNextString(streamToGetCategoryScens);
-
-                            var categoryCommandsCount = int.Parse(categoryCommandsCountcnt);
+                            var categoryCommandsCount = int.Parse(RunRemoteScenarioAction.GetNextString(streamToGetCategoryScens), CultureInfo.InvariantCulture);
 
                             for (int j = 0; j < categoryCommandsCount; j++)
                             {

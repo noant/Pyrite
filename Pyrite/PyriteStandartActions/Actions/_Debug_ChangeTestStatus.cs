@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Xml.Serialization;
-using PyriteClientIntefaces;
-
+using System;
 namespace PyriteStandartActions.Actions
 {
 #if DEBUG

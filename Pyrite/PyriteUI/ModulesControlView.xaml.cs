@@ -1,9 +1,9 @@
 ﻿using Microsoft.Win32;
+using PyriteCore.ScenarioCreation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using PyriteCore.ScenarioCreation;
 
 namespace PyriteUI
 {

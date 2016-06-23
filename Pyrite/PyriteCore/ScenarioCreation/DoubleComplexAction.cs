@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PyriteClientIntefaces;
+using System;
 using System.Xml.Serialization;
-using PyriteClientIntefaces;
 
 namespace PyriteCore.ScenarioCreation
 {
@@ -113,7 +113,7 @@ namespace PyriteCore.ScenarioCreation
                 return (ComplexAction)ActionBagEnd.Action;
             }
         }
-        
+
         public void ForAllActionAndChecker(Action<object> action)
         {
             ActionBegin.ForAllActionAndChecker(action);
