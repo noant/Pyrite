@@ -84,14 +84,25 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" width="400" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" width="338" alt="image"/></a>
 </td>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" width="400" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" width="338" alt="image"/></a>
 </td>
 </tr>
 </table>
-
+<table>
+<tr>
+<td>
+Тела ЕСЛИ, ИНАЧЕ и ПОКА нужно чем-то заполнять. Собственно, это содержимое и есть самое важное в сценарии.
+</td>
+</tr>
+<tr>
+<td>
+<a href="http://noant.github.io/Pyrite/Paper/Img/action_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/action_example.jpg" alt="image"/></a>
+</td>
+</tr>
+</table>
 <table>
 <tr>
 <td>
@@ -100,7 +111,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/complex_scenario.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/complex_scenario.png" width="400" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/constructor_window.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/constructor_window.jpg" alt="image"/></a>
 </td>
 </tr>
 </table>
