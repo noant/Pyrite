@@ -69,7 +69,7 @@
 </td>
 </tr>
 </table>
-<i>ЕСЛИ и ИНАЧЕ в конструкторе</i>. В данных конструкциях можно создавать цепочки условий с логическими операторами НЕ, ИЛИ, И. Также, можно создавать группу условий и использовать операторы непосредственно с группой. Если условие остается пустым, то оно автоматом вычисляется как ЛОЖЬ. 
+<i>ЕСЛИ и ИНАЧЕ в конструкторе</i>. В данных конструкциях можно создавать цепочки условий с логическими операторами НЕ, ИЛИ, И. Также, можно создавать группу условий и использовать операторы непосредственно с группой. Если условие остается пустым, то оно автоматом вычисляется как ложь. 
 Есть некоторое количество встроенных проверок (такие как проверка на дату, время и т.д.), а так же несколько в качестве подключаемых модулей.
 
 <i>Цикл ПОКА в конструкторе</i>. Цикл состоит из условия и тела. Условие создается аналогично тому, как он создается в конструкции ЕСЛИ (группы условий, операторы НЕ, ИЛИ, И).
@@ -84,22 +84,20 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" width="338" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/if_example.jpg" alt="image"/></a>
 </td>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" width="338" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/while_example.jpg" alt="image"/></a>
 </td>
 </tr>
 </table>
 <table>
 <tr>
 <td>
-Тела ЕСЛИ, ИНАЧЕ и ПОКА нужно чем-то заполнять. Собственно, это содержимое и есть самое важное в сценарии.
-</td>
-</tr>
-<tr>
-<td>
 <a href="http://noant.github.io/Pyrite/Paper/Img/action_example.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/action_example.jpg" alt="image"/></a>
+</td>
+<td>
+Тела ЕСЛИ, ИНАЧЕ и ПОКА нужно чем-то заполнять.<br/> Собственно, это содержимое и есть самое важное в сценарии.
 </td>
 </tr>
 </table>
@@ -115,7 +113,6 @@
 </td>
 </tr>
 </table>
-
 Так же можно настроить следующие параметры сценариев:
 - Запуск извне (вкл/выкл), позволяет запретить или разрешить запуск сценария с другой машины или из клиента;
 - Автоматический запуск сценария при старте системы;
@@ -130,10 +127,10 @@
 <table>
 <tr>
 <td>
-//
+<a href="http://noant.github.io/Pyrite/Paper/Img/zwave.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/zwave.jpg" alt="image" /></a>
 </td>
 <td>
-В качестве контроллера ZWave можно использовать USB stick
+Рынок ZWave устройств достаточно широк. Имеется множество исполнительных устройств, таких как релейные модули, лампочки, устройства для работы с кондиционером, терморегуляторы, регуляторы теплого пола, розетки, переключатели. Так же существует множество датчиков: датчик открытия двери, температуры, датчик протечки, датчик присутствия и т.д. В качестве контроллера ZWave можно использовать USB stick
 </td>
 </tr>
 <tr>
@@ -184,7 +181,7 @@
 <a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" alt="image"  width="300"/></a>
 </td>
 <td>
-Основное окно Mosbus RTU модуля
+Основное окно Modbus RTU модуля
 </td>
 </tr>
 </table>
