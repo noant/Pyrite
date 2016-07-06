@@ -135,7 +135,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_main_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_main_window.png" alt="image"  width="300"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_main_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_main_window.png" alt="image"></a>
 </td>
 <td>
 Основное окно ZWave модуля
@@ -143,7 +143,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" alt="image"  width="300"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" alt="image"></a>
 </td>
 <td>
 Окно выбора контроллера и операций с ним
@@ -151,7 +151,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" alt="image"></a>
 </td>
 <td>
 Выбор узла (датчики, переключатели и т.д.)
@@ -159,7 +159,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" alt="image"></a>
 </td>
 <td>
 Выбор параметра узла (включен/выключен, различные числовые параметры, такие как температура, влажность и т.д.)
@@ -170,15 +170,15 @@
 <table>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/relay_module_modbus.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/relay_module_modbus.jpg" alt="image"  width="300"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/relay_module_modbus.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/relay_module_modbus.jpg" alt="image"  width="200"/></a>
 </td>
 <td>
-Релейный модуль Modbus, соединяется с контроллером через COM-порт
+Релейный модуль Modbus. Соединяется с контроллером через COM-порт
 </td>
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/module_modbus_action.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/module_modbus_action.png" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/module_modbus_action.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/module_modbus_action.png" alt="image" width="200"/></a>
 </td>
 <td>
 Основное окно Modbus RTU модуля
@@ -190,26 +190,39 @@
 <table>
 <tr>
 <td>
-///
+Действие "Существующий сценарий" в списке
 </td>
 <td>
-Шаг 0. Создаем сценарий.
-</td>
-</tr>
-<tr>
-<td>
-///
-</td>
-<td>
-Шаг 1. Выбираем его в целевом сценарии.
+Выбор существующего сценария
 </td>
 </tr>
 <tr>
 <td>
-///
+<a href="http://noant.github.io/Pyrite/Paper/Img/existing_scen.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/existing_scen.jpg" alt="image"  width="200"/></a>
 </td>
 <td>
-Шаг 2. Используем.
+<a href="http://noant.github.io/Pyrite/Paper/Img/existing_scen_window.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/existing_scen_window.jpg" alt="image"  width="200"/></a>
+</td>
+</tr>
+</table>
+<H3><font color="steelblue">Запуск удаленных сценариев</font></H3>
+Посредством запуска удаленных сценариев можно запускать сценарий одного сервера в сценарии другого. В качестве примера хочу привести мой вариант использования этого функционала: <i>создал сценарий (на домашнем сервере) под называется “свет+мультимедиа”, который включает свет в помещении, запускает мой десктоп используя WakeOnLan, включает тв, к которому подключен десктоп и ждет пока на нем (десктопе) запустится экземпляр нашей программы, затем запускает на ней сценарии “включить музыку” и “звук на 20 единиц” с помощью запуска удаленных сценариев.
+</i>
+<table>
+<tr>
+<td>
+"Запуск удаленного сценария" в списке
+</td>
+<td>
+Выбор сервера и его сценария
+</td>
+</tr>
+<tr>
+<td>
+<a href="http://noant.github.io/Pyrite/Paper/Img/remote_scenario.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/remote_scenario.jpg" alt="image"  width="200"/></a>
+</td>
+<td>
+<a href="http://noant.github.io/Pyrite/Paper/Img/remote_scenario_window.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/remote_scenario_window.jpg" alt="image"  width="200"/></a>
 </td>
 </tr>
 </table>
