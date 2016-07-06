@@ -229,7 +229,8 @@
 <H3><font color="steelblue">Написание собственных модулей</font></H3>
 Помимо того, что пользователь может создавать сложные сценарии штатными средствами, программа позволяет “расширять” ее пользовательскими модулями на C#. Все элементы действий и проверок в сценариях (такие как “Проверка по дате”, “Показать сообщение”, “Действие Modbus”, “Действие ZWave” и т.п.) это классы, унаследованные от ICustomAction и ICustomChecker. Следуя определенным правилам, любой пользователь может создать свой модуль, который может быть очень простым (например, озвучивание текущей температуры воздуха за окном), так и сложным, за которым может крыться целый фреймворк. Достаточно наследоваться от интерфейсов ICustomAction или ICustomChecker, расставить несколько атрибутов, скомпилировать DLL и добавить в программу через вкладку “МОДУЛИ” (полная инструкция создания модулей <a href="http://noant.github.io/Pyrite/PyriteMods.htm"  target="_blank">http://noant.github.io/Pyrite/PyriteMods.htm</a>).
 
-<H3><font color="steelblue">Запуск сценариев с помощью смартфона</font></H3> (пока только OS Android)
+<H3><font color="steelblue">Запуск сценариев с помощью смартфона</font></H3>*пока только OS Android
+
 Сценарии отображаются на главном экране и в категориях. Категория является виртуальной “папкой”. При запуске сценария обновляется статус соответствующей кнопки.
 <table>
 <tr>
@@ -242,10 +243,24 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/android_0.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_0.jpg" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/android_0.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_0.jpg" alt="image" width="300"/></a>
 </td>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/android_1.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_1.jpg" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/android_1.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_1.jpg" alt="image" width="300"/></a>
 </td>
 </tr>
 </table>
+В дальнейшем планируется клиент для UWP, IOS, web, а так же модуль для управления устройствами (планы на ближайшее будущее) и создания сценариев с помощью голоса (стратегические планы).
+
+
+
+Видео напоследок:
+<video>https://www.youtube.com/watch?v=kjGzwHfzssI</video>
+
+Страничка программы: http://noant.github.io/Pyrite/
+Ссылка для скачивания: http://noant.github.io/Pyrite/downloads.html
+Инструкция для пользования: http://noant.github.io/Pyrite/description.html
+Инструкция для создания собственных модулей: http://noant.github.io/Pyrite/PyriteMods.htm
+
+
+P.S.: Если нашли ошибку в программе, то пожалуйста, перешлите ее на <a href="mailto:noant1@yandex.ru" target="_top">noant1@yandex.ru</a>.
