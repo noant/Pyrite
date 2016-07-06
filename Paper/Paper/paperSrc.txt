@@ -170,7 +170,7 @@
 <table>
 <tr>
 <td>
-///
+<a href="http://noant.github.io/Pyrite/Paper/Img/relay_module_modbus.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/relay_module_modbus.jpg" alt="image"  width="300"/></a>
 </td>
 <td>
 Релейный модуль Modbus, соединяется с контроллером через COM-порт
@@ -178,7 +178,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_controller_window.png" alt="image"  width="300"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/module_modbus_action.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/module_modbus_action.png" alt="image"/></a>
 </td>
 <td>
 Основное окно Modbus RTU модуля
