@@ -243,7 +243,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/android_0.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_0.jpg" alt="image" width="300"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/android_2.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_2.jpg" alt="image" width="300"/></a>
 </td>
 <td>
 <a href="http://noant.github.io/Pyrite/Paper/Img/android_1.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/android_1.jpg" alt="image" width="300"/></a>
