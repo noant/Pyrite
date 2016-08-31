@@ -61,10 +61,10 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/scen_example_view.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/scen_example_view.jpg" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/scen_example_view.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/scen_example_view.jpg" width="450" alt="image"/></a>
 </td>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/scen_example_edit.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/scen_example_edit.jpg" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/scen_example_edit.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/scen_example_edit.jpg" width="450" alt="image"/></a>
 </td>
 </tr>
 </table>
@@ -107,7 +107,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/constructor_window.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/constructor_window.jpg" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/constructor_window.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/constructor_window.jpg" width="960" alt="image"/></a>
 </td>
 </tr>
 </table>
@@ -128,7 +128,7 @@
 <a href="http://noant.github.io/Pyrite/Paper/Img/zwave.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/zwave.jpg" alt="image" /></a>
 </td>
 <td>
-Рынок ZWave устройств достаточно широк. Имеется множество исполнительных устройств, таких как релейные модули, лампочки, устройства для работы с кондиционером, терморегуляторы, регуляторы теплого пола, розетки, переключатели. Так же существует множество датчиков: датчик открытия двери, температуры, датчик протечки, датчик присутствия и т.д. В качестве контроллера ZWave можно использовать USB stick
+Рынок ZWave устройств достаточно широк. Имеется множество исполнительных устройств, таких как релейные модули, лампочки, устройства для работы с кондиционером, <br/>терморегуляторы, регуляторы теплого пола, розетки, переключатели. Так же существует множество датчиков: датчик открытия двери, температуры, датчик протечки, датчик присутствия и т.д. В качестве контроллера ZWave можно использовать USB stick
 </td>
 </tr>
 <tr>
@@ -149,7 +149,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" alt="image"></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" target="_blank"><img width="450" src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_node_window.png" alt="image"></a>
 </td>
 <td>
 Выбор узла (датчики, переключатели и т.д.)
@@ -157,7 +157,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" alt="image"></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" target="_blank"><img width="450" src="http://noant.github.io/Pyrite/PyriteUI/zwave_select_value_window.png" alt="image"></a>
 </td>
 <td>
 Выбор параметра узла (включен/выключен, различные числовые параметры, такие как температура, влажность и т.д.)
@@ -220,7 +220,7 @@
 <a href="http://noant.github.io/Pyrite/Paper/Img/remote_scenario.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/remote_scenario.jpg" alt="image"/></a>
 </td>
 <td>
-<a href="http://noant.github.io/Pyrite/Paper/Img/remote_scenario_window.jpg" target="_blank"><img src="http://noant.github.io/Pyrite/Paper/Img/remote_scenario_window.jpg" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/Paper/Img/remote_scenario_window.jpg" target="_blank"><img width="500" src="http://noant.github.io/Pyrite/Paper/Img/remote_scenario_window.jpg" alt="image"/></a>
 </td>
 </tr>
 </table>
@@ -234,7 +234,7 @@
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/module.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/module.png" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/module.png" target="_blank"><img width="950" src="http://noant.github.io/Pyrite/PyriteUI/module.png" alt="image"/></a>
 </td>
 </tr>
 </table>
@@ -264,12 +264,12 @@
 <table>
 <tr>
 <td>
-Меню быстрого запуска.
+Меню быстрого запуска
 </td>
 </tr>
 <tr>
 <td>
-<a href="http://noant.github.io/Pyrite/PyriteUI/fast_window.png" target="_blank"><img src="http://noant.github.io/Pyrite/PyriteUI/fast_window.png" alt="image"/></a>
+<a href="http://noant.github.io/Pyrite/PyriteUI/fast_window.png" target="_blank"><img width="950" src="http://noant.github.io/Pyrite/PyriteUI/fast_window.png" alt="image"/></a>
 </td>
 </tr>
 </table>
